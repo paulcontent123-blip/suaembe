@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SữaEmbe — Hệ sinh thái Mẹ & Bé Việt Nam</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#E8547A;--pink2:#C43A62;--pink-l:rgba(232,84,122,.08);--pink-b:rgba(232,84,122,.22);
+  --teal:#0D9488;--teal-l:rgba(13,148,136,.08);--teal-b:rgba(13,148,136,.2);
+  --purple:#7C3AED;--purple-l:rgba(124,58,237,.07);
+  --amber:#D97706;--amber-l:rgba(217,119,6,.08);
+  --navy:#0F172A;--navy2:#1E293B;
+  --green:#16A34A;--green-l:rgba(22,163,74,.08);
+  --white:#fff;--bg:#FDF8FA;--bg2:#FFF0F5;--bg3:#F1F5F9;
+  --ink:#1E293B;--muted:#64748B;--muted2:#94A3B8;--border:#E2E8F0;--border2:#CBD5E1;
+  --sh:0 2px 12px rgba(15,23,42,.07);--sh2:0 8px 32px rgba(15,23,42,.12);--r:10px;
+  --font:'Be Vietnam Pro',sans-serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.6}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:62px;display:flex;align-items:center;padding:0 28px;gap:8px}
+.nav-brand{display:flex;align-items:center;gap:8px;margin-right:16px;flex-shrink:0}
+.nav-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--navy)}
+.nav-logo em{color:var(--pink);font-style:normal}
+.nav-ico-wrap{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--pink),var(--pink2));display:flex;align-items:center;justify-content:center;font-size:17px}
+.nav-c{display:flex;gap:1px;flex:1;overflow:hidden}
+.nl{padding:6px 10px;border-radius:7px;border:none;background:transparent;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;font-family:var(--font);white-space:nowrap;transition:all .18s}
+.nl:hover,.nl.on{color:var(--pink);background:var(--pink-l)}
+.nl-has::after{content:'▾';font-size:9px;margin-left:3px;opacity:.5}
+.nav-drop{position:relative}
+.nav-drop:hover .dmenu{display:flex}.nav-drop:hover .dmenu[style*="min-width:560px"]{display:flex!important}
+.dmenu{display:none;position:absolute;top:calc(100% + 6px);left:0;background:var(--white);border:1px solid var(--border);border-radius:12px;box-shadow:var(--sh2);padding:6px;flex-direction:column;gap:2px;min-width:220px;z-index:300}
+.di{padding:9px 13px;border-radius:7px;font-size:12.5px;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:9px;border:none;background:transparent;font-family:var(--font);width:100%;text-align:left;transition:all .18s;white-space:nowrap}
+.di:hover{background:var(--pink-l);color:var(--pink)}
+.di-ico{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.nav-r{display:flex;gap:8px;align-items:center;flex-shrink:0;margin-left:8px}
+.btn-ghost{border:1px solid var(--border2);background:transparent;color:var(--muted);padding:7px 14px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;white-space:nowrap}
+.btn-ghost:hover{border-color:var(--pink);color:var(--pink)}
+.btn-pink{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);white-space:nowrap;transition:all .2s}
+.btn-pink:hover{filter:brightness(1.08)}
+
+/* ── PAGES ── */
+.page{display:none}.page.on{display:block}
+
+/* ── SECTION COMMON ── */
+.section{max-width:1120px;margin:0 auto;padding:56px 28px}
+.sec-eye{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pink);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec-eye::before{content:'';width:20px;height:1.5px;background:var(--pink)}
+.sec-h{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--navy);line-height:1.15;margin-bottom:12px}
+.sec-h em{font-style:italic;color:var(--pink)}
+.sec-p{font-size:15px;color:var(--muted);line-height:1.75;max-width:600px;margin-bottom:28px}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#FDF0F4 0%,#FFF8FA 50%,#F0FDF9 100%);padding:80px 28px 60px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(232,84,122,.1),transparent 70%)}
+.hero::after{content:'';position:absolute;bottom:-40px;left:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(13,148,136,.08),transparent 70%)}
+.hero-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:48px;align-items:center;position:relative;z-index:1}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:var(--pink-l);border:1px solid var(--pink-b);color:var(--pink);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:16px}
+.hero-h{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;color:var(--navy);line-height:1.08;margin-bottom:18px}
+.hero-h em{font-style:italic;color:var(--pink)}
+.hero-sub{font-size:16px;color:var(--muted);line-height:1.75;margin-bottom:28px;max-width:520px}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn-lg{padding:13px 26px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);border:none;transition:all .2s}
+.btn-pink-lg{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff}
+.btn-pink-lg:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn-teal-lg{background:linear-gradient(135deg,var(--teal),#0a7c72);color:#fff}
+.btn-outline-lg{background:transparent;border:1.5px solid var(--border2);color:var(--muted)}
+.btn-outline-lg:hover{border-color:var(--pink);color:var(--pink)}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:32px}
+.hstat{background:rgba(255,255,255,.7);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;backdrop-filter:blur(8px)}
+.hstat-n{font-size:22px;font-weight:900;color:var(--navy);font-family:monospace}
+.hstat-l{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* Hero card (right) */
+.hero-card{background:var(--white);border-radius:18px;box-shadow:var(--sh2);padding:20px;border:1px solid var(--border)}
+.hc-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px}
+.hc-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.hc-row:last-of-type{border-bottom:none}
+.hc-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.hc-name{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:1px}
+.hc-sub{font-size:11px;color:var(--muted)}
+.hc-badge{margin-left:auto;font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;white-space:nowrap}
+
+/* ── TABS ── */
+.tab-bar{display:flex;gap:0;border-bottom:1.5px solid var(--border);margin-bottom:22px}
+.tb{padding:10px 18px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all .18s;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--font)}
+.tb.on{color:var(--pink);border-bottom-color:var(--pink);font-weight:700}
+.ts{display:none}.ts.on{display:block}
+
+/* ── TOOL CARDS (Công cụ) ── */
+.tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.tool-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:20px;cursor:pointer;transition:all .25s}
+.tool-card:hover{border-color:var(--pink);transform:translateY(-3px);box-shadow:var(--sh2)}
+.tool-card.active{border-color:var(--pink);background:var(--pink-l)}
+.tc-ico{font-size:28px;margin-bottom:10px}
+.tc-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.tc-desc{font-size:12.5px;color:var(--muted);line-height:1.6}
+.tc-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--pink-l);color:var(--pink);border:1px solid var(--pink-b);margin-top:8px;display:inline-block}
+
+/* AI Tool panel */
+.tool-panel{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:24px;box-shadow:var(--sh)}
+.tool-panel-title{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.fg label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.fg input,.fg select,.fg textarea{padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:13.5px;font-family:var(--font);background:var(--bg3);color:var(--ink);outline:none;transition:border .2s;width:100%}
+.fg input:focus,.fg select:focus{border-color:var(--pink);background:var(--white)}
+.fg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fg-full{grid-column:span 2}
+.tags-pick{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.tag-opt{font-size:12px;padding:5px 12px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:all .18s;font-family:var(--font)}
+.tag-opt.on{background:var(--pink-l);border-color:var(--pink-b);color:var(--pink);font-weight:700}
+.btn-submit{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;border:none;padding:12px 24px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);width:100%;margin-top:8px;transition:all .2s}
+.btn-submit:hover{filter:brightness(1.08)}
+
+/* AI result */
+.ai-result{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:14px;padding:20px;margin-top:18px;display:none}
+.ai-result.on{display:block}
+.air-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(232,84,122,.7);margin-bottom:12px}
+.air-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start}
+.air-rank{width:28px;height:28px;border-radius:50%;background:var(--pink);color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.air-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:3px}
+.air-sub{font-size:12px;color:rgba(255,255,255,.55);line-height:1.5}
+.air-match{margin-left:auto;font-size:12px;font-weight:700;color:#86efac;flex-shrink:0}
+.air-note{font-size:13px;color:rgba(255,255,255,.65);margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);line-height:1.65}
+
+/* ── CHỢ MẸ BỈM ── */
+.chop-filter{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.cf-pill{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;color:var(--muted)}
+.cf-pill.on{background:var(--pink-l);border-color:var(--pink-b);color:var(--pink)}
+.listing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.listing-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .22s;box-shadow:var(--sh)}
+.listing-card:hover{border-color:var(--pink);transform:translateY(-3px);box-shadow:var(--sh2)}
+.lc-thumb{height:130px;background:linear-gradient(135deg,var(--bg2),var(--bg3));display:flex;align-items:center;justify-content:center;font-size:44px;position:relative}
+.lc-cat{position:absolute;top:7px;left:7px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(15,23,42,.7);color:rgba(255,255,255,.85)}
+.lc-esc{position:absolute;top:7px;right:7px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(13,148,136,.85);color:#fff}
+.lc-body{padding:11px 13px}
+.lc-name{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lc-meta{font-size:11px;color:var(--muted);margin-bottom:7px}
+.lc-price{font-size:15px;font-weight:800;color:var(--pink);font-family:monospace}
+.lc-orig{font-size:11px;color:var(--muted2);text-decoration:line-through;margin-left:5px}
+.lc-seller{font-size:11px;color:var(--teal);font-weight:600;margin-top:4px}
+
+/* ── BS NHI ── */
+.bs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.bs-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--sh);transition:all .22s}
+.bs-card:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:var(--sh2)}
+.bs-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--teal),#0a7c72);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;font-weight:800;font-family:var(--font);margin-bottom:12px}
+.bs-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.bs-spec{font-size:12px;color:var(--teal);font-weight:600;margin-bottom:6px}
+.bs-exp{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+.bs-stats{display:flex;gap:14px;margin-bottom:12px}
+.bs-stat-n{font-size:16px;font-weight:800;color:var(--navy);font-family:monospace}
+.bs-stat-l{font-size:10px;color:var(--muted)}
+.btn-teal{background:linear-gradient(135deg,var(--teal),#0a7c72);color:#fff;border:none;padding:9px 18px;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);width:100%}
+
+/* ── NHẬT KÝ BÉ ── */
+.nk-layout{display:grid;grid-template-columns:300px 1fr;gap:20px}
+.nk-sidebar{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--sh)}
+.nk-baby-card{text-align:center;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.nk-baby-ico{font-size:44px;margin-bottom:8px}
+.nk-baby-name{font-size:16px;font-weight:800;color:var(--navy)}
+.nk-baby-age{font-size:12px;color:var(--muted)}
+.nk-stat{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.nk-stat:last-child{border-bottom:none}
+.nk-stat-l{font-size:12.5px;color:var(--muted)}
+.nk-stat-v{font-size:13px;font-weight:700;color:var(--navy)}
+.nk-main{display:flex;flex-direction:column;gap:14px}
+.nk-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--sh)}
+.nk-card-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.progress-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.progress-label{font-size:12px;color:var(--muted);width:80px;flex-shrink:0}
+.progress-bar{flex:1;height:7px;background:var(--border);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--teal));border-radius:4px}
+.progress-val{font-size:12px;font-weight:700;color:var(--navy);width:50px;text-align:right;flex-shrink:0}
+.milestone-list{display:flex;flex-direction:column;gap:8px}
+.milestone{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--muted)}
+.milestone.done{color:var(--green)}
+.milestone.done::before{content:'✓';color:var(--green);font-weight:800;flex-shrink:0}
+.milestone.todo::before{content:'○';color:var(--muted2);flex-shrink:0}
+
+/* ── BÁCH HÓA ── */
+.cat-tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.cat-pill{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;color:var(--muted);display:flex;align-items:center;gap:6px}
+.cat-pill.on{background:var(--pink-l);border-color:var(--pink-b);color:var(--pink)}
+.shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.shop-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .22s;box-shadow:var(--sh)}
+.shop-card:hover{border-color:var(--pink);transform:translateY(-2px);box-shadow:var(--sh2)}
+.sc-thumb{height:140px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:48px;position:relative}
+.sc-badge{position:absolute;top:7px;left:7px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:4px}
+.sc-sale{background:var(--pink);color:#fff}
+.sc-new{background:var(--teal);color:#fff}
+.sc-body{padding:11px 13px}
+.sc-cat{font-size:10px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.sc-name{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sc-price{font-size:15px;font-weight:800;color:var(--pink);font-family:monospace}
+.sc-orig{font-size:11px;color:var(--muted2);text-decoration:line-through;margin-left:4px}
+.sc-rating{font-size:11px;color:var(--amber);margin-top:4px}
+
+/* ── ĐỐI TÁC ── */
+.partner-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.partner-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.partner-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--sh);transition:all .22s}
+.partner-card:hover{border-color:var(--pink);transform:translateY(-2px);box-shadow:var(--sh2)}
+.pc-head{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.pc-ico{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.pc-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.pc-cat{font-size:10.5px;color:var(--muted)}
+.pc-body{padding:14px 18px}
+.pc-tag{font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:4px;display:inline-block;margin-bottom:8px}
+.pc-tag.bv{background:rgba(22,163,74,.1);color:var(--green);border:1px solid rgba(22,163,74,.2)}
+.pc-tag.bh{background:var(--teal-l);color:var(--teal);border:1px solid var(--teal-b)}
+.pc-tag.tb{background:var(--amber-l);color:var(--amber);border:1px solid rgba(217,119,6,.2)}
+.pc-tag.sp{background:var(--pink-l);color:var(--pink);border:1px solid var(--pink-b)}
+.pc-desc{font-size:12.5px;color:var(--muted);line-height:1.65;margin-bottom:10px}
+.pc-pkgs{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.pc-pkg{font-size:12px;color:var(--muted);display:flex;gap:5px}
+.pc-pkg::before{content:"•";color:var(--pink);flex-shrink:0}
+.btn-partner{width:100%;background:var(--pink-l);border:1px solid var(--pink-b);color:var(--pink);padding:9px;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s}
+.btn-partner:hover{background:var(--pink);color:#fff}
+
+/* ── MARQUEE ── */
+.marquee-wrap{overflow:hidden;margin-bottom:10px;mask-image:linear-gradient(to right,transparent,black 8%,black 92%,transparent)}
+.marquee-track{display:flex;gap:12px;width:max-content}
+.marquee-track.run1{animation:mq1 30s linear infinite}
+.marquee-track.run2{animation:mq2 25s linear infinite}
+@keyframes mq1{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes mq2{0%{transform:translateX(-50%)}100%{transform:translateX(0)}}
+.mq-pill{background:var(--white);border:1px solid var(--border);padding:8px 16px;border-radius:24px;font-size:12.5px;font-weight:600;white-space:nowrap;color:var(--navy)}
+
+/* ── ADMIN ── */
+.admin-overlay{position:fixed;inset:0;background:rgba(15,23,42,.88);z-index:2000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.admin-overlay.on{display:flex}
+.login-box{background:var(--white);border-radius:18px;padding:32px;width:100%;max-width:400px;box-shadow:0 24px 80px rgba(0,0,0,.35);position:relative}
+.login-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--pink),var(--teal));border-radius:18px 18px 0 0}
+.lb-logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--navy);text-align:center;margin-bottom:4px}
+.lb-logo em{color:var(--pink);font-style:normal}
+.lb-sub{font-size:12.5px;color:var(--muted);text-align:center;margin-bottom:20px}
+.lb-roles{display:flex;gap:6px;margin-bottom:16px}
+.lb-role{flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:transparent;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);color:var(--muted);transition:all .2s}
+.lb-role.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.lbf{margin-bottom:10px}
+.lbf label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px}
+.lbf input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:13.5px;font-family:var(--font);background:var(--bg3);color:var(--ink);outline:none;transition:all .2s}
+.lbf input:focus{border-color:var(--pink);background:var(--white)}
+.lb-btn{width:100%;background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;border:none;padding:12px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);margin-top:4px}
+.lb-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:none;background:var(--bg3);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.admin-panel{display:none;padding-top:62px;min-height:100vh;background:var(--bg3)}
+.admin-panel.on{display:block}
+.admin-topbar{background:var(--navy);padding:13px 28px;display:flex;align-items:center;justify-content:space-between}
+.atb-brand{font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:#fff}
+.atb-brand em{color:var(--pink);font-style:normal}
+.atb-right{display:flex;align-items:center;gap:10px}
+.atb-role{font-size:10px;padding:3px 10px;border-radius:4px;background:rgba(232,84,122,.25);color:#F9A8BE;font-weight:700}
+.atb-logout{font-size:12px;color:rgba(255,255,255,.4);cursor:pointer;border:1px solid rgba(255,255,255,.15);padding:4px 12px;border-radius:5px;background:transparent;font-family:var(--font)}
+.admin-layout{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 110px)}
+.admin-sb{background:var(--white);border-right:1px solid var(--border);padding:14px 0}
+.sb-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);padding:0 14px;margin:12px 0 4px;display:block}
+.sb-item{display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:12.5px;color:var(--muted);cursor:pointer;border-left:2px solid transparent;border:none;background:none;font-family:var(--font);width:100%;text-align:left;transition:all .18s}
+.sb-item:hover{color:var(--pink);background:var(--pink-l)}
+.sb-item.on{color:var(--pink);background:var(--pink-l);border-left:2px solid var(--pink);font-weight:700}
+.sb-ico{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.admin-main{padding:22px 28px;background:var(--bg3)}
+.admin-sec{display:none}.admin-sec.on{display:block}
+.sec-title{font-size:17px;font-weight:800;color:var(--navy);margin-bottom:16px}
+.stat-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.astat{background:var(--white);border:1px solid var(--border);border-radius:11px;padding:15px}
+.astat-n{font-size:24px;font-weight:900;color:var(--navy);font-family:monospace;margin-bottom:2px}
+.astat-l{font-size:11.5px;color:var(--muted)}
+.astat-d{font-size:11px;color:var(--green);font-weight:700;margin-top:2px}
+.admin-tbl{width:100%;border-collapse:collapse;background:var(--white);border-radius:10px;overflow:hidden;box-shadow:var(--sh)}
+.admin-tbl th{padding:9px 12px;font-size:10px;font-weight:700;text-align:left;color:var(--muted);background:var(--bg3);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border)}
+.admin-tbl td{padding:9px 12px;font-size:12.5px;color:var(--ink);border-bottom:1px solid var(--border)}
+.admin-tbl tr:last-child td{border-bottom:none}
+.admin-tbl tr:hover td{background:var(--bg3)}
+.ta-btn{font-size:11px;font-weight:700;padding:3px 9px;border-radius:4px;border:none;cursor:pointer;font-family:var(--font)}
+.ta-edit{background:var(--pink-l);color:var(--pink)}
+.ta-del{background:rgba(220,38,38,.08);color:#DC2626}
+.ta-ok{background:rgba(22,163,74,.1);color:var(--green)}
+.badge-ok{background:rgba(22,163,74,.1);color:var(--green);font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.badge-pend{background:var(--pink-l);color:var(--pink);font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.sec-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.mini-search{padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--font);background:var(--white);outline:none;width:200px}
+.mini-search:focus{border-color:var(--pink)}
+.new-btn{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;border:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)}
+
+/* ── PAYMENT MODAL ── */
+.pay-overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:900;display:none;align-items:center;justify-content:center;padding:20px}
+.pay-overlay.on{display:flex}
+.pay-modal{background:var(--white);border-radius:16px;width:100%;max-width:440px;box-shadow:0 24px 80px rgba(0,0,0,.2)}
+.pm-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.pm-title{font-size:15px;font-weight:800;color:var(--navy)}
+.pm-close{width:30px;height:30px;border-radius:50%;border:none;background:var(--bg3);font-size:15px;cursor:pointer}
+.pm-body{padding:20px 22px}
+.pm-price{font-size:28px;font-weight:900;color:var(--pink);font-family:monospace;margin:10px 0 14px}
+.pm-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.pm-method{padding:10px 8px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;text-align:center;font-size:12px;font-weight:600;transition:all .2s;background:var(--white);font-family:var(--font)}
+.pm-method.on,.pm-method:hover{border-color:var(--pink);background:var(--pink-l)}
+.pm-submit{width:100%;background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;border:none;padding:12px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--green);color:#fff;padding:13px 20px;border-radius:10px;font-size:14px;font-weight:700;z-index:9999;display:none;align-items:center;gap:8px;box-shadow:var(--sh2)}
+.toast.on{display:flex}
+
+/* ── FOOTER ── */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px 28px 24px}
+.ft-inner{max-width:1120px;margin:0 auto}
+.ft-top{display:grid;grid-template-columns:1fr repeat(4,auto);gap:40px;margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,.08)}
+.ft-brand{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#fff;margin-bottom:8px}
+.ft-brand em{color:var(--pink);font-style:normal}
+.ft-about{font-size:12.5px;line-height:1.7;color:rgba(255,255,255,.45);max-width:220px}
+.ft-col h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.5);margin-bottom:12px}
+.ft-col a{display:block;font-size:12.5px;color:rgba(255,255,255,.45);margin-bottom:7px;cursor:pointer;transition:color .18s}
+.ft-col a:hover{color:#fff}
+.ft-bottom{display:flex;justify-content:space-between;font-size:11.5px;flex-wrap:wrap;gap:8px}
+
+/* ── MEGA MENU BÁCH HÓA ── */
+.nav-drop:hover .dmenu.mega{display:flex!important;flex-direction:row}
+.nav-drop .dmenu.mega{min-width:560px;padding:14px;flex-direction:row;gap:0}
+.mega-col{flex:1;padding:0 10px}
+.mega-col:not(:last-child){border-right:1px solid var(--border)}
+.mega-col-title{font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);margin-bottom:8px;padding:0 4px}
+
+
+/* ── BÁCH HÓA CATALOG ── */
+.cat-sb-item{display:flex;align-items:center;gap:9px;padding:9px 18px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .18s;border-left:2px solid transparent;background:transparent}
+.cat-sb-item:hover{color:var(--pink);background:var(--pink-l);border-left-color:var(--pink-b)}
+.cat-sb-item.on{color:var(--pink);background:var(--pink-l);border-left-color:var(--pink);font-weight:700}
+.cat-sb-ico{font-size:16px;width:22px;text-align:center;flex-shrink:0}
+.subcat-section{margin-bottom:22px}
+.subcat-title{font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:8px;padding-bottom:6px;border-bottom:1.5px solid var(--border)}
+.subcat-items{display:flex;flex-direction:column;gap:4px}
+.subcat-item{font-size:13px;color:var(--muted);cursor:pointer;padding:5px 0;transition:color .18s;padding-left:8px;border-left:2px solid transparent}
+.subcat-item:hover{color:var(--pink);border-left-color:var(--pink)}
+.subcat-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.bh-prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px}
+.bh-prod{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .2s}
+.bh-prod:hover{border-color:var(--pink);transform:translateY(-2px);box-shadow:var(--sh2)}
+.bh-prod-thumb{height:110px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:38px;position:relative}
+.bh-prod-badge{position:absolute;top:5px;left:5px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px}
+.bh-prod-body{padding:9px 10px}
+.bh-prod-brand{font-size:9.5px;color:var(--muted2);font-weight:700;text-transform:uppercase;margin-bottom:2px}
+.bh-prod-name{font-size:12px;font-weight:600;color:var(--navy);line-height:1.35;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bh-prod-price{font-size:14px;font-weight:800;color:var(--pink);font-family:monospace}
+.bh-prod-orig{font-size:10.5px;color:var(--muted2);text-decoration:line-through;margin-left:4px}
+.bh-prod-rating{font-size:10.5px;color:var(--amber);margin-top:3px}
+.brand-logo{border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s;margin-bottom:7px;height:42px;background:#fff;font-size:12px;font-weight:700;color:var(--navy);text-align:center}
+.brand-logo:hover{border-color:var(--pink);box-shadow:var(--sh)}
+.brand-logo.on{border-color:var(--pink);background:var(--pink-l);color:var(--pink)}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-ico-wrap">🍼</div>
+    <div class="nav-logo">Sữa<em>Embe</em></div>
+  </div>
+  <div class="nav-c">
+    <button class="nl on" onclick="go('home',this)">Trang chủ</button>
+    <div class="nav-drop">
+      <button class="nl nl-has" onclick="go('cong-cu',this)">🤖 Công cụ cho Mẹ</button>
+      <div class="dmenu">
+        <button class="di" onclick="go('cong-cu',null);switchCC('ai-sua')"><span class="di-ico">🍼</span>Gợi ý sữa theo AI</button>
+        <button class="di" onclick="go('cong-cu',null);switchCC('du-sinh')"><span class="di-ico">📅</span>Tính ngày dự sinh</button>
+        <button class="di" onclick="go('cong-cu',null);switchCC('cam-nang')"><span class="di-ico">📖</span>Cẩm nang sinh con</button>
+      </div>
+    </div>
+    <div class="nav-drop">
+      <button class="nl nl-has" onclick="go('cho',this)">♻️ Chợ Mẹ &amp; Bé</button>
+      <div class="dmenu">
+        <button class="di" onclick="go('cho',null);filterChop('all')"><span class="di-ico">🛍</span>Tất cả mặt hàng</button>
+        <button class="di" onclick="go('cho',null);filterChop('sua')"><span class="di-ico">🥛</span>Sữa dư / Sữa mẹ</button>
+        <button class="di" onclick="go('cho',null);filterChop('quan-ao')"><span class="di-ico">👕</span>Quần áo trẻ em</button>
+        <button class="di" onclick="go('cho',null);filterChop('xe-day')"><span class="di-ico">🛒</span>Xe đẩy / Địu / Địu</button>
+        <button class="di" onclick="go('cho',null);filterChop('do-choi')"><span class="di-ico">🧸</span>Đồ chơi & Phụ kiện</button>
+        <button class="di" onclick="go('cho',null);filterChop('do-dung')"><span class="di-ico">🍼</span>Đồ dùng mẹ bé</button>
+      </div>
+    </div>
+    <div class="nav-drop">
+      <button class="nl nl-has" onclick="go('bachoa',this)">🛍 Bách Hóa Mẹ &amp; Bé</button>
+      <div class="dmenu mega">
+        <div class="mega-col">
+          <div class="mega-col-title">Sữa & Dinh dưỡng</div>
+          <button class="di" onclick="go('bachoa',null);filterShop('sua-bot')"><span class="di-ico">🥛</span>Sữa bột 0–6 tháng</button>
+          <button class="di" onclick="go('bachoa',null);filterShop('sua-lon')"><span class="di-ico">🥛</span>Sữa bột 6–36 tháng</button>
+          <button class="di" onclick="go('bachoa',null);filterShop('sua-bau')"><span class="di-ico">🤰</span>Sữa bầu & Vitamin</button>
+          <button class="di" onclick="go('bachoa',null);filterShop('an-dam')"><span class="di-ico">🍽</span>Đồ ăn dặm & Cháo</button>
+        </div>
+        <div class="mega-col">
+          <div class="mega-col-title">Chăm sóc bé</div>
+          <button class="di" onclick="go('bachoa',null);filterShop('bim')"><span class="di-ico">👶</span>Tã bỉm & Khăn ướt</button>
+          <button class="di" onclick="go('bachoa',null);filterShop('my-pham')"><span class="di-ico">🧴</span>Mỹ phẩm & Tắm gội</button>
+          <button class="di" onclick="go('bachoa',null);filterShop('quan-ao-moi')"><span class="di-ico">👕</span>Quần áo & Yếm bé</button>
+          <button class="di" onclick="go('bachoa',null);filterShop('do-choi')"><span class="di-ico">🧸</span>Đồ chơi phát triển</button>
+        </div>
+        <div class="mega-col">
+          <div class="mega-col-title">Dụng cụ & Tiện ích</div>
+          <button class="di" onclick="go('bachoa',null);filterShop('binh-sua')"><span class="di-ico">🍼</span>Bình sữa & Núm ti</button>
+          <button class="di" onclick="go('bachoa',null);filterShop('may-hut')"><span class="di-ico">⚡</span>Máy hút sữa & Trữ sữa</button>
+          <button class="di" onclick="go('bachoa',null);filterShop('xe-day-moi')"><span class="di-ico">🛒</span>Xe đẩy & Địu</button>
+          <button class="di" onclick="go('bachoa',null);filterShop('giu-re')"><span class="di-ico">🏠</span>Đồ dùng phòng bé</button>
+        </div>
+      </div>
+    </div>
+    <button class="nl" onclick="go('tintuc',this)">📰 Tin tức Mẹ &amp; Bé</button>
+    <div class="nav-drop">
+      <button class="nl nl-has" onclick="go('doi-tac',this)">🤝 Đối tác</button>
+      <div class="dmenu">
+        <button class="di" onclick="go('doi-tac',null);filterPartner('benh-vien',null)"><span class="di-ico">🏥</span>Bệnh viện phụ sản</button>
+        <button class="di" onclick="go('doi-tac',null);filterPartner('bao-hiem',null)"><span class="di-ico">🛡</span>Bảo hiểm thai sản & Bé</button>
+        <button class="di" onclick="go('doi-tac',null);filterPartner('tu-van-bs',null)"><span class="di-ico">👨‍⚕️</span>Tư vấn Bác sĩ</button>
+        <button class="di" onclick="go('doi-tac',null);filterPartner('trang-thiet-bi',null)"><span class="di-ico">🛒</span>Trang thiết bị hành trang</button>
+        <button class="di" onclick="go('doi-tac',null);filterPartner('dich-vu',null)"><span class="di-ico">💆</span>Dịch vụ Mẹ &amp; Bé</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-r">
+    <button class="btn-pink" onclick="openLogin()">Đăng ký / Đăng nhập</button>
+  </div>
+</nav>
+
+<!-- ═══ TRANG CHỦ ═══ -->
+<div class="page on" id="pg-home">
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-tag">🇻🇳 Dành riêng cho mẹ bỉm Việt Nam</div>
+        <h1 class="hero-h">Hành trình<br>nuôi con —<br><em>trọn vẹn hơn.</em></h1>
+        <p class="hero-sub">So sánh sữa bằng AI · Chợ mẹ bỉm đa ngành · Hỏi BS Nhi · Nhật ký dinh dưỡng · Đối tác từ A đến Z trong hành trình mang thai và nuôi con.</p>
+        <div class="hero-btns">
+          <button class="btn-lg btn-pink-lg" onclick="go('cong-cu',null)">🤖 Gợi ý sữa miễn phí</button>
+          <button class="btn-lg btn-teal-lg" onclick="go('cho',null)">♻️ Vào Chợ Mẹ Bỉm</button>
+          <button class="btn-lg btn-outline-lg" onclick="go('bachoa',null)">🛍 Bách Hóa Mẹ &amp; Bé</button>
+        </div>
+        <div class="hero-stats">
+          <div class="hstat"><div class="hstat-n">200+</div><div class="hstat-l">Loại sữa so sánh</div></div>
+          <div class="hstat"><div class="hstat-n">12K+</div><div class="hstat-l">Review xác minh</div></div>
+          <div class="hstat"><div class="hstat-n">45+</div><div class="hstat-l">BS Nhi xác minh</div></div>
+          <div class="hstat"><div class="hstat-n">50K+</div><div class="hstat-l">Mẹ bỉm tham gia</div></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-title">⚡ Hoạt động gần đây</div>
+        <div class="hc-row">
+          <div class="hc-ico" style="background:var(--pink-l)">🥛</div>
+          <div><div class="hc-name">Aptamil Pronutra 2 · 800g</div><div class="hc-sub">Mẹ Linh · HCM · 2h trước</div></div>
+          <div class="hc-badge" style="background:var(--teal-l);color:var(--teal)">Vừa bán</div>
+        </div>
+        <div class="hc-row">
+          <div class="hc-ico" style="background:rgba(22,163,74,.1)">👕</div>
+          <div><div class="hc-name">Set quần áo bé 3-6 tháng</div><div class="hc-sub">Mẹ Hoa · Hà Nội · 4h trước</div></div>
+          <div class="hc-badge" style="background:var(--pink-l);color:var(--pink)">Mới đăng</div>
+        </div>
+        <div class="hc-row">
+          <div class="hc-ico" style="background:var(--amber-l)">🛒</div>
+          <div><div class="hc-name">Xe đẩy Joie Chrome</div><div class="hc-sub">Mẹ Mai · ĐN · 5h trước</div></div>
+          <div class="hc-badge" style="background:rgba(22,163,74,.1);color:var(--green)">Escrow ✓</div>
+        </div>
+        <div class="hc-row">
+          <div class="hc-ico" style="background:var(--teal-l)">👨‍⚕️</div>
+          <div><div class="hc-name">BS. Nguyễn Thị Thanh</div><div class="hc-sub">Phản hồi tư vấn · 1h trước</div></div>
+          <div class="hc-badge" style="background:var(--teal-l);color:var(--teal)">Online</div>
+        </div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+          <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">AI đang gợi ý sữa cho bé 7 tháng hay táo bón...</div>
+          <div style="background:var(--pink-l);border:1px solid var(--pink-b);border-radius:8px;padding:10px 12px">
+            <div style="font-size:11px;font-weight:700;color:var(--pink);margin-bottom:4px">#1 Phù hợp 96%</div>
+            <div style="font-size:12.5px;font-weight:600;color:var(--navy)">Aptamil Pronutra Advance 2</div>
+            <div style="font-size:11.5px;color:var(--muted)">GOS/FOS prebiotics · Hỗ trợ tiêu hoá</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Partner marquee -->
+  <div style="background:var(--white);padding:28px 0;border-bottom:1px solid var(--border)">
+    <div style="max-width:1120px;margin:0 auto;padding:0 28px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);text-align:center;margin-bottom:16px">Nhãn sữa & Đối tác tin cậy</div>
+      <div class="marquee-wrap">
+        <div class="marquee-track run1">
+          <div class="mq-pill">🥛 Aptamil</div><div class="mq-pill">🥛 Nan Nestlé</div><div class="mq-pill">🥛 Enfamil</div><div class="mq-pill">🥛 Friso Gold</div><div class="mq-pill">🥛 Vinamilk</div><div class="mq-pill">🥛 HiPP Organic</div><div class="mq-pill">🥛 Abbott Similac</div><div class="mq-pill">🥛 Meiji</div><div class="mq-pill">🥛 Wakodo</div><div class="mq-pill">🥛 Morinaga</div>
+          <div class="mq-pill">🥛 Aptamil</div><div class="mq-pill">🥛 Nan Nestlé</div><div class="mq-pill">🥛 Enfamil</div><div class="mq-pill">🥛 Friso Gold</div><div class="mq-pill">🥛 Vinamilk</div><div class="mq-pill">🥛 HiPP Organic</div><div class="mq-pill">🥛 Abbott Similac</div><div class="mq-pill">🥛 Meiji</div>
+        </div>
+      </div>
+      <div class="marquee-wrap" style="margin-top:8px">
+        <div class="marquee-track run2">
+          <div class="mq-pill" style="background:var(--pink-l);border-color:var(--pink-b);color:var(--pink)">🏥 BV Từ Dũ</div><div class="mq-pill" style="background:var(--teal-l);border-color:var(--teal-b);color:var(--teal)">🛡 Prudential</div><div class="mq-pill" style="background:var(--amber-l);border-color:rgba(217,119,6,.2);color:var(--amber)">🛒 Mamago</div><div class="mq-pill" style="background:var(--green-l);border-color:rgba(22,163,74,.2);color:var(--green)">📦 Pampers</div><div class="mq-pill" style="background:var(--pink-l);border-color:var(--pink-b);color:var(--pink)">🏥 BV Nhi Đồng</div><div class="mq-pill" style="background:var(--purple-l);border-color:rgba(124,58,237,.15);color:var(--purple)">🛡 FWD BH</div><div class="mq-pill" style="background:var(--teal-l);border-color:var(--teal-b);color:var(--teal)">🧸 Fisher-Price</div><div class="mq-pill" style="background:var(--amber-l);border-color:rgba(217,119,6,.2);color:var(--amber)">👶 Huggies</div>
+          <div class="mq-pill" style="background:var(--pink-l);border-color:var(--pink-b);color:var(--pink)">🏥 BV Từ Dũ</div><div class="mq-pill" style="background:var(--teal-l);border-color:var(--teal-b);color:var(--teal)">🛡 Prudential</div><div class="mq-pill" style="background:var(--amber-l);border-color:rgba(217,119,6,.2);color:var(--amber)">🛒 Mamago</div><div class="mq-pill" style="background:var(--green-l);border-color:rgba(22,163,74,.2);color:var(--green)">📦 Pampers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features grid -->
+  <div class="section">
+    <div class="sec-eye">Tính năng nổi bật</div>
+    <h2 class="sec-h">Mọi thứ mẹ cần —<br><em>ở một nơi</em></h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px">
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--sh);cursor:pointer;transition:all .22s" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'" onclick="go('cong-cu',null)">
+        <div style="font-size:28px;margin-bottom:10px">🤖</div>
+        <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">AI Gợi ý sữa thông minh</div>
+        <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Nhập tuổi, cân nặng, tình trạng bé → AI gợi ý top 3 loại sữa phù hợp nhất. Tính ngày dự sinh và cẩm nang sinh con.</div>
+        <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--pink)">Dùng ngay →</div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--sh);cursor:pointer;transition:all .22s" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'" onclick="go('cho',null)">
+        <div style="font-size:28px;margin-bottom:10px">♻️</div>
+        <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">Chợ Mẹ Bỉm C2C</div>
+        <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Mua bán/trao đổi đồ mẹ bỉm: sữa dư, quần áo, xe đẩy, đồ chơi... Thanh toán escrow an toàn — tiền giữ đến khi nhận hàng.</div>
+        <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--pink)">Vào chợ →</div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--sh);cursor:pointer;transition:all .22s" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'" onclick="go('bachoa',null)">
+        <div style="font-size:28px;margin-bottom:10px">🛍</div>
+        <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">Bách Hóa Mẹ &amp; Bé</div>
+        <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Sữa bột, tã bỉm, đồ dùng ăn dặm, mỹ phẩm mẹ bé, đồ chơi phát triển — tất cả từ các nhãn uy tín với giá tốt.</div>
+        <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--pink)">Mua ngay →</div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--sh);cursor:pointer;transition:all .22s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'" onclick="go('bs-nhi',null)">
+        <div style="font-size:28px;margin-bottom:10px">👨‍⚕️</div>
+        <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">Hỏi BS Nhi xác minh</div>
+        <div style="font-size:12.5px;color:var(--muted);line-height:1.65">45+ Bác sĩ Nhi khoa xác minh từ DanhBaBacSi.com.vn. Tư vấn chọn sữa, dinh dưỡng và phát triển bé — phản hồi trong 2h.</div>
+        <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--teal)">Hỏi ngay →</div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--sh);cursor:pointer;transition:all .22s" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'" onclick="go('tintuc',null)">
+        <div style="font-size:28px;margin-bottom:10px">📊</div>
+        <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">Nhật ký dinh dưỡng bé</div>
+        <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Theo dõi chiều cao, cân nặng bé theo tháng. Hệ thống nhắc đổi giai đoạn sữa tự động. Biểu đồ phát triển chuẩn WHO.</div>
+        <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--pink)">Mở nhật ký →</div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--sh);cursor:pointer;transition:all .22s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'" onclick="go('doi-tac',null)">
+        <div style="font-size:28px;margin-bottom:10px">🤝</div>
+        <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">Đối tác đồng hành</div>
+        <div style="font-size:12.5px;color:var(--muted);line-height:1.65">Bệnh viện phụ sản, bảo hiểm sinh con, trang thiết bị hành trang mẹ bỉm — đối tác uy tín cho từng giai đoạn.</div>
+        <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--teal)">Xem đối tác →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CÔNG CỤ MẸ ═══ -->
+<div class="page" id="pg-cong-cu">
+  <div class="section">
+    <div class="sec-eye">Công cụ thông minh</div>
+    <h2 class="sec-h">Công cụ dành cho <em>Mẹ & Gia đình</em></h2>
+    <div class="tool-grid">
+      <div class="tool-card active" id="tc-ai-sua" onclick="switchCC('ai-sua')">
+        <div class="tc-ico">🍼</div>
+        <div class="tc-name">Gợi ý sữa theo AI</div>
+        <div class="tc-desc">Đề xuất sữa phù hợp theo thể trạng, tuổi và nhu cầu của bé</div>
+        <span class="tc-tag">AI-powered</span>
+      </div>
+      <div class="tool-card" id="tc-du-sinh" onclick="switchCC('du-sinh')">
+        <div class="tc-ico">📅</div>
+        <div class="tc-name">Tính ngày dự sinh</div>
+        <div class="tc-desc">Tính ngày sinh dự kiến, tuần thai và các mốc quan trọng</div>
+        <span class="tc-tag">Cẩm nang</span>
+      </div>
+      <div class="tool-card" id="tc-cam-nang" onclick="switchCC('cam-nang')">
+        <div class="tc-ico">📖</div>
+        <div class="tc-name">Cẩm nang sinh con</div>
+        <div class="tc-desc">Checklist hành trang, chuẩn bị sinh và chăm sóc sau sinh</div>
+        <span class="tc-tag">Mới</span>
+      </div>
+    </div>
+
+    <!-- Panel: Gợi ý sữa -->
+    <div class="ts on" id="ts-ai-sua">
+      <div class="tool-panel">
+        <div class="tool-panel-title">🤖 AI Gợi ý sữa phù hợp cho bé</div>
+        <div class="fg-grid">
+          <div class="fg"><label>Tuổi của bé</label><select><option>0–3 tháng</option><option>3–6 tháng</option><option selected>6–12 tháng</option><option>1–2 tuổi</option><option>2–3 tuổi</option></select></div>
+          <div class="fg"><label>Cân nặng hiện tại (kg)</label><input type="number" value="8" min="2" max="30"/></div>
+          <div class="fg"><label>Tình trạng bé</label><select><option>Bình thường, khoẻ mạnh</option><option>Biếng ăn / Chậm tăng cân</option><option selected>Táo bón thường xuyên</option><option>Hay bị ốm, sức đề kháng yếu</option><option>Sinh non / nhẹ cân</option></select></div>
+          <div class="fg"><label>Ngân sách / hộp 900g</label><select><option>Dưới 300.000đ</option><option selected>300.000–500.000đ</option><option>500.000–800.000đ</option><option>Trên 800.000đ</option></select></div>
+          <div class="fg fg-full"><label>Ưu tiên đặc biệt</label>
+            <div class="tags-pick">
+              <span class="tag-opt on">Hỗ trợ tiêu hoá</span>
+              <span class="tag-opt">DHA cao</span>
+              <span class="tag-opt">Tăng chiều cao</span>
+              <span class="tag-opt">Sức đề kháng</span>
+              <span class="tag-opt">Ít đường</span>
+              <span class="tag-opt">Hữu cơ</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-submit" onclick="runAI()">🤖 Phân tích & Gợi ý sữa phù hợp →</button>
+        <div class="ai-result on" id="ai-result">
+          <div class="air-label">Kết quả AI — Bé 7 tháng · 8kg · Hay táo bón</div>
+          <div class="air-card"><div class="air-rank">1</div><div><div class="air-name">Aptamil Pronutra Advance 2</div><div class="air-sub">6–12 tháng · Prebiotics GOS/FOS · Hỗ trợ tiêu hoá tốt nhất phân khúc</div></div><div class="air-match">96% ✓</div></div>
+          <div class="air-card"><div class="air-rank">2</div><div><div class="air-name">Nan Optipro 2 HM-O</div><div class="air-sub">6–12 tháng · HM-O prebiotics · Miễn dịch + tiêu hoá</div></div><div class="air-match">91%</div></div>
+          <div class="air-card"><div class="air-rank">3</div><div><div class="air-name">Vinamilk Optimum Gold 2</div><div class="air-sub">6–12 tháng · FOS prebiotics · Giá tốt nhất phân khúc</div></div><div class="air-match">87%</div></div>
+          <div class="air-note">💡 Bé 7 tháng hay táo bón cần sữa có hàm lượng prebiotics cao (GOS/FOS/HM-O) để hỗ trợ vi khuẩn có ích đường ruột. Aptamil Pronutra Advance 2 có hàm lượng GOS cao nhất trong phân khúc giá 300–500K.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Dự sinh -->
+    <div class="ts" id="ts-du-sinh">
+      <div class="tool-panel">
+        <div class="tool-panel-title">📅 Tính ngày dự sinh & Lịch thai kỳ</div>
+        <div class="fg-grid">
+          <div class="fg"><label>Ngày đầu kỳ kinh cuối (LMP)</label><input type="date" id="lmp-date" value="2026-01-15"/></div>
+          <div class="fg"><label>Chu kỳ kinh (ngày)</label><input type="number" value="28" min="20" max="45"/></div>
+          <div class="fg fg-full"><button class="btn-submit" onclick="calcDueDate()" style="margin-top:4px">📅 Tính ngày dự sinh →</button></div>
+        </div>
+        <div id="due-result" style="background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:12px;padding:20px;margin-top:4px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(232,84,122,.7);margin-bottom:14px">Kết quả tính toán</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px">
+            <div style="text-align:center"><div style="font-size:20px;font-weight:900;color:#F9A8BE;font-family:monospace" id="res-date">22/10/2026</div><div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:3px">Ngày dự sinh</div></div>
+            <div style="text-align:center"><div style="font-size:20px;font-weight:900;color:#6EE7B7;font-family:monospace" id="res-week">28 tuần</div><div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:3px">Tuần thai hiện tại</div></div>
+            <div style="text-align:center"><div style="font-size:20px;font-weight:900;color:#FDE68A;font-family:monospace" id="res-days">84 ngày</div><div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:3px">Còn lại</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:10px 13px;display:flex;justify-content:space-between"><span style="font-size:12.5px;color:rgba(255,255,255,.6)">🔬 Khám thai lần 4 (28–32 tuần)</span><span style="font-size:12px;font-weight:700;color:#FDE68A">Sắp đến</span></div>
+            <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:10px 13px;display:flex;justify-content:space-between"><span style="font-size:12.5px;color:rgba(255,255,255,.6)">💉 Tiêm uốn ván mũi 2</span><span style="font-size:12px;font-weight:700;color:#86efac">Đã xong</span></div>
+            <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:10px 13px;display:flex;justify-content:space-between"><span style="font-size:12.5px;color:rgba(255,255,255,.6)">🏥 Đăng ký sinh tại bệnh viện</span><span style="font-size:12px;font-weight:700;color:#F9A8BE">Chưa làm</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Cẩm nang -->
+    <div class="ts" id="ts-cam-nang">
+      <div class="tool-panel">
+        <div class="tool-panel-title">📖 Cẩm nang hành trang sinh con</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+          <div style="background:var(--bg3);border-radius:10px;padding:16px">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px">🏥 Chuẩn bị sinh</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" checked style="accent-color:var(--pink)"/>Đăng ký bệnh viện sinh</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" checked style="accent-color:var(--pink)"/>Khám thai định kỳ đủ</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" style="accent-color:var(--pink)"/>Mua bảo hiểm thai sản</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" style="accent-color:var(--pink)"/>Chuẩn bị túi đồ đi sinh</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" style="accent-color:var(--pink)"/>Học lớp tiền sản</label>
+            </div>
+          </div>
+          <div style="background:var(--bg3);border-radius:10px;padding:16px">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px">🍼 Đồ dùng cho bé</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" checked style="accent-color:var(--pink)"/>Sữa bột dự phòng</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" checked style="accent-color:var(--pink)"/>Tã bỉm sơ sinh</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" style="accent-color:var(--pink)"/>Quần áo bé (0–3 tháng)</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" style="accent-color:var(--pink)"/>Bình sữa + núm ti</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" style="accent-color:var(--pink)"/>Địu / Xe đẩy</label>
+            </div>
+          </div>
+          <div style="background:var(--bg3);border-radius:10px;padding:16px">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px">💊 Sức khoẻ mẹ</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" checked style="accent-color:var(--pink)"/>Uống acid folic</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" checked style="accent-color:var(--pink)"/>Tiêm uốn ván đủ mũi</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" style="accent-color:var(--pink)"/>Xét nghiệm máu đủ</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" style="accent-color:var(--pink)"/>Siêu âm 4D</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" style="accent-color:var(--pink)"/>Đăng ký lớp yoga bầu</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CHỢ MẸ BỈM ═══ -->
+<div class="page" id="pg-cho">
+  <div class="section">
+    <div class="sec-eye">Mua bán C2C · Escrow an toàn</div>
+    <h2 class="sec-h">Chợ <em>Mẹ Bỉm</em> — Đa ngành hàng</h2>
+    <p class="sec-p">Mua bán trao đổi đồ mẹ bỉm: sữa dư, quần áo, xe đẩy, đồ chơi... Thanh toán Escrow — tiền giữ đến khi nhận hàng ổn mới thanh toán người bán.</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+      <div class="chop-filter">
+        <div class="cf-pill on" onclick="filterChop('all',this)">Tất cả</div>
+        <div class="cf-pill" onclick="filterChop('sua',this)">🥛 Sữa dư</div>
+        <div class="cf-pill" onclick="filterChop('quan-ao',this)">👕 Quần áo</div>
+        <div class="cf-pill" onclick="filterChop('xe-day',this)">🛒 Xe đẩy/Địu</div>
+        <div class="cf-pill" onclick="filterChop('do-choi',this)">🧸 Đồ chơi</div>
+        <div class="cf-pill" onclick="filterChop('do-dung',this)">🍼 Đồ dùng</div>
+      </div>
+      <button class="btn-pink" style="font-size:13px;padding:9px 18px" onclick="var f=document.getElementById('sell-form');f.style.display=f.style.display==='none'?'block':'none';f.scrollIntoView({behavior:'smooth'})">+ Đăng bán / Trao đổi đồ</button>
+    </div>
+    <div class="listing-grid" id="listing-grid"></div>
+    <div style="text-align:center;margin-top:22px"><button style="background:var(--pink-l);border:1px solid var(--pink-b);color:var(--pink);padding:11px 28px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--font)">Xem thêm 2.400+ tin đăng →</button></div>
+
+    <!-- ĐĂNG BÁN form -->
+    <div id="sell-form" style="display:none;background:var(--white);border:1.5px solid var(--pink-b);border-radius:16px;padding:28px;margin-top:28px;box-shadow:var(--sh2)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+        <div style="font-size:16px;font-weight:800;color:var(--navy)">📋 Đăng bán / Trao đổi đồ mẹ bé</div>
+        <button onclick="document.getElementById('sell-form').style.display='none'" style="border:none;background:var(--bg3);border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:16px">✕</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg fg-full"><label>Tiêu đề tin đăng</label><input placeholder="VD: Aptamil 2 · 800g · Còn 85% · Hộp mới mở 1 tuần"/></div>
+        <div class="fg"><label>Danh mục</label>
+          <select>
+            <option>🥛 Sữa dư / Sữa mẹ</option>
+            <option>👕 Quần áo trẻ em</option>
+            <option>🛒 Xe đẩy / Địu / Ghế ô tô</option>
+            <option>🧸 Đồ chơi & Phụ kiện</option>
+            <option>🍼 Bình sữa / Núm ti / Máy hút sữa</option>
+            <option>🏠 Đồ dùng phòng bé (cũi, nệm...)</option>
+            <option>🧴 Mỹ phẩm / Kem dưỡng (còn hạn)</option>
+            <option>🎒 Túi mẹ / Phụ kiện mang thai</option>
+            <option>📚 Sách & Tài liệu nuôi con</option>
+          </select>
+        </div>
+        <div class="fg"><label>Tình trạng sản phẩm</label>
+          <select>
+            <option>Mới 100% (chưa dùng)</option>
+            <option>Như mới (95%+)</option>
+            <option>Tốt (80–94%) · Có dấu hiệu dùng nhẹ</option>
+            <option>Còn tốt (60–79%) · Dùng nhiều</option>
+          </select>
+        </div>
+        <div class="fg"><label>Giá bán (VNĐ)</label><input type="number" placeholder="VD: 420000"/></div>
+        <div class="fg"><label>Giá gốc (VNĐ) — để so sánh</label><input type="number" placeholder="VD: 680000"/></div>
+        <div class="fg"><label>Tỉnh / Thành phố</label>
+          <select><option>TP. Hồ Chí Minh</option><option>Hà Nội</option><option>Đà Nẵng</option><option>Bình Dương</option><option>Đồng Nai</option><option>Cần Thơ</option><option>Hải Phòng</option><option>Tỉnh khác</option></select>
+        </div>
+        <div class="fg"><label>Hình thức giao dịch</label>
+          <select>
+            <option>Gặp mặt trực tiếp</option>
+            <option>Ship toàn quốc (có phí ship)</option>
+            <option>Cả hai đều được</option>
+          </select>
+        </div>
+        <div class="fg fg-full"><label>Mô tả chi tiết</label>
+          <textarea rows="3" placeholder="Mô tả tình trạng, lý do bán, thông tin thêm về sản phẩm..."></textarea>
+        </div>
+        <div class="fg fg-full">
+          <label>Ảnh sản phẩm (tối đa 5 ảnh)</label>
+          <div style="border:2px dashed var(--border2);border-radius:10px;padding:20px;text-align:center;cursor:pointer;background:var(--bg3)" onclick="this.querySelector('input').click()">
+            <div style="font-size:28px;margin-bottom:6px">📸</div>
+            <div style="font-size:13px;color:var(--muted)">Kéo thả hoặc click để chọn ảnh</div>
+            <div style="font-size:11px;color:var(--muted2);margin-top:3px">JPG, PNG · Tối đa 5MB/ảnh</div>
+            <input type="file" accept="image/*" multiple style="display:none"/>
+          </div>
+        </div>
+        <div class="fg fg-full">
+          <label style="margin-bottom:8px;display:block">Bật Thanh toán Escrow (khuyên dùng)</label>
+          <div style="background:linear-gradient(135deg,rgba(13,148,136,.06),rgba(13,148,136,.02));border:1px solid var(--teal-b);border-radius:10px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:3px">🛡 Escrow Protection</div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.6">Tiền người mua sẽ được giữ lại cho đến khi xác nhận nhận hàng ổn. Giúp cả hai bên an tâm — SữaEmbe thu phí 2% giao dịch thành công.</div>
+            </div>
+            <label style="position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0">
+              <input type="checkbox" checked style="opacity:0;width:0;height:0"/>
+              <span style="position:absolute;cursor:pointer;inset:0;background:var(--teal);border-radius:24px;transition:.3s"></span>
+            </label>
+          </div>
+        </div>
+        <div class="fg"><label>SĐT người bán (ẩn, chỉ hiện khi mua)</label><input type="tel" placeholder="0909 123 456"/></div>
+        <div class="fg"><label>Zalo liên hệ</label><input placeholder="0909 123 456 hoặc link Zalo"/></div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px">
+        <button class="btn-submit" style="flex:1" onclick="showToast('Tin đăng đã được gửi duyệt! Sẽ hiển thị trong 1–2 giờ.')">🚀 Đăng tin ngay (Miễn phí)</button>
+        <button style="background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:12px 20px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font)">Lưu nháp</button>
+      </div>
+      <div style="font-size:12px;color:var(--muted2);text-align:center;margin-top:10px">Tin đăng miễn phí · Duyệt trong 1–2 giờ · Hiển thị 30 ngày</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BÁCH HÓA ═══ -->
+<div class="page" id="pg-bachoa">
+  <!-- HERO BAR -->
+  <div style="background:linear-gradient(135deg,var(--pink),var(--pink2));padding:14px 28px;display:flex;align-items:center;justify-content:space-between;margin-top:0">
+    <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#fff">🛍 Bách Hóa <em style="font-style:italic">Mẹ & Bé</em></div>
+    <div style="display:flex;gap:8px">
+      <input placeholder="🔍 Tìm sản phẩm, nhãn hàng..." style="padding:8px 16px;border:none;border-radius:8px;font-size:13px;font-family:var(--font);width:300px;outline:none"/>
+      <button style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)">Tìm</button>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:260px 1fr 180px;min-height:calc(100vh - 120px)">
+
+    <!-- SIDEBAR: DANH MỤC CHÍNH -->
+    <div style="background:#fff;border-right:1px solid var(--border);padding:12px 0;overflow-y:auto">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);padding:8px 18px 6px">Danh mục sản phẩm</div>
+      <div id="cat-sidebar"></div>
+    </div>
+
+    <!-- MAIN: DANH MỤC CON + SẢN PHẨM -->
+    <div style="padding:20px 24px;background:var(--bg3);overflow-y:auto" id="bh-main">
+      <div id="bh-subcats"></div>
+      <div id="bh-products" style="margin-top:20px"></div>
+    </div>
+
+    <!-- RIGHT: NHÃN HÀNG -->
+    <div style="background:#fff;border-left:1px solid var(--border);padding:14px;overflow-y:auto">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);margin-bottom:10px">Nhãn hàng</div>
+      <div id="brand-panel"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BS NHI ═══ -->
+<div class="page" id="pg-bs-nhi">
+  <div class="section">
+    <div class="sec-eye">45+ Bác sĩ xác minh · Từ DanhBaBacSi.com.vn</div>
+    <h2 class="sec-h">Hỏi <em>BS Nhi</em> — Phản hồi trong 2h</h2>
+    <p class="sec-p">Bác sĩ Nhi khoa xác minh chuyên tư vấn chọn sữa, dinh dưỡng và phát triển bé. Không cần đặt lịch tại bệnh viện.</p>
+    <div style="display:flex;gap:8px;margin-bottom:20px">
+      <input placeholder="🔍 Tìm theo tên, chuyên khoa..." style="flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:var(--font);background:var(--white);outline:none"/>
+      <select style="padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:var(--font);background:var(--white);outline:none"><option>Tất cả chuyên khoa</option><option>Dinh dưỡng trẻ em</option><option>Tiêu hoá</option><option>Sơ sinh & Sinh non</option></select>
+    </div>
+    <div class="bs-grid">
+      <div class="bs-card"><div class="bs-avatar">NT</div><div class="bs-name">BS. Nguyễn Thị Thanh</div><div class="bs-spec">Nhi khoa · Dinh dưỡng trẻ em</div><div class="bs-exp">15 năm kinh nghiệm · BV Nhi Đồng 1 TP.HCM · Chuyên gia dinh dưỡng trẻ dưới 3 tuổi</div><div class="bs-stats"><div><div class="bs-stat-n">2.4K+</div><div class="bs-stat-l">Tư vấn</div></div><div><div class="bs-stat-n">4.9⭐</div><div class="bs-stat-l">Đánh giá</div></div></div><button class="btn-teal">Hỏi ngay · Phản hồi trong 2h</button></div>
+      <div class="bs-card"><div class="bs-avatar" style="background:linear-gradient(135deg,var(--pink),var(--pink2))">TH</div><div class="bs-name">BS. Trần Văn Hùng</div><div class="bs-spec">Nhi khoa · Tiêu hoá & Dinh dưỡng</div><div class="bs-exp">12 năm kinh nghiệm · BV Nhi TW Hà Nội · Chuyên gia táo bón, biếng ăn trẻ em</div><div class="bs-stats"><div><div class="bs-stat-n">1.8K+</div><div class="bs-stat-l">Tư vấn</div></div><div><div class="bs-stat-n">4.8⭐</div><div class="bs-stat-l">Đánh giá</div></div></div><button class="btn-teal">Hỏi ngay · Phản hồi trong 2h</button></div>
+      <div class="bs-card"><div class="bs-avatar" style="background:linear-gradient(135deg,var(--amber),#b45309)">LM</div><div class="bs-name">BS. Lê Thị Mai</div><div class="bs-spec">Nhi khoa · Sơ sinh & Sinh non</div><div class="bs-exp">10 năm kinh nghiệm · BV Từ Dũ · Chuyên gia chăm sóc bé sơ sinh và sinh non</div><div class="bs-stats"><div><div class="bs-stat-n">1.2K+</div><div class="bs-stat-l">Tư vấn</div></div><div><div class="bs-stat-n">4.9⭐</div><div class="bs-stat-l">Đánh giá</div></div></div><button class="btn-teal">Hỏi ngay · Phản hồi trong 2h</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TIN TỨC MẸ & BÉ ═══ -->
+<div class="page" id="pg-tintuc">
+  <div class="section">
+    <div class="sec-eye">Kiến thức · Nhật ký · Mẹo hay</div>
+    <h2 class="sec-h">Tin tức <em>Mẹ & Bé</em></h2>
+    <div class="tab-bar">
+      <button class="tb on" id="tb-tt-news" onclick="switchTT('news')">📰 Tin tức & Cập nhật</button>
+      <button class="tb" id="tb-tt-nk" onclick="switchTT('nhatky')">📊 Nhật ký Dinh dưỡng Bé</button>
+      <button class="tb" id="tb-tt-meo" onclick="switchTT('meo')">💡 Học viện Làm Mẹ</button>
+    </div>
+
+    <!-- TAB: TIN TỨC -->
+    <div class="ts on" id="ts-tt-news">
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
+        <div>
+          <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+            <span class="cf-pill on">Tất cả</span>
+            <span class="cf-pill">🥛 Dinh dưỡng</span>
+            <span class="cf-pill">💊 Sức khoẻ</span>
+            <span class="cf-pill">👶 Phát triển</span>
+            <span class="cf-pill">🤰 Mang thai</span>
+            <span class="cf-pill">⚖ Pháp lý mẹ</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;gap:0;cursor:pointer;transition:all .22s;box-shadow:var(--sh)" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'">
+              <div style="width:180px;flex-shrink:0;background:linear-gradient(135deg,var(--pink-l),var(--bg2));display:flex;align-items:center;justify-content:center;font-size:44px">🥛</div>
+              <div style="padding:16px">
+                <div style="font-size:10px;font-weight:700;color:var(--pink);text-transform:uppercase;margin-bottom:5px">Dinh dưỡng · Nổi bật</div>
+                <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.35">So sánh Aptamil vs Nan Nestlé 2025 — Loại nào phù hợp bé 6 tháng táo bón?</div>
+                <div style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:8px">Phân tích chi tiết thành phần GOS/FOS, tỷ lệ whey:casein và phản hồi thực tế từ 500+ mẹ...</div>
+                <div style="font-size:11px;color:var(--muted2)">📅 12/08/2026 · ⏱ 8 phút đọc · 👁 12.4K lượt xem</div>
+              </div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;gap:0;cursor:pointer;transition:all .22s;box-shadow:var(--sh)" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'">
+              <div style="width:180px;flex-shrink:0;background:linear-gradient(135deg,rgba(13,148,136,.1),rgba(13,148,136,.04));display:flex;align-items:center;justify-content:center;font-size:44px">🤰</div>
+              <div style="padding:16px">
+                <div style="font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;margin-bottom:5px">Mang thai · Mới cập nhật</div>
+                <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.35">Danh sách 15 thứ cần chuẩn bị trước sinh — Checklist đầy đủ nhất 2026</div>
+                <div style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:8px">Từ hồ sơ bệnh viện, đồ cho mẹ, đồ cho bé đến các giấy tờ pháp lý cần thiết...</div>
+                <div style="font-size:11px;color:var(--muted2)">📅 08/08/2026 · ⏱ 6 phút đọc · 👁 8.2K lượt xem</div>
+              </div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;gap:0;cursor:pointer;transition:all .22s;box-shadow:var(--sh)" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'">
+              <div style="width:180px;flex-shrink:0;background:linear-gradient(135deg,var(--amber-l),rgba(217,119,6,.04));display:flex;align-items:center;justify-content:center;font-size:44px">👶</div>
+              <div style="padding:16px">
+                <div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;margin-bottom:5px">Phát triển · Chuyên gia</div>
+                <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.35">Cột mốc phát triển bé 6–12 tháng — Khi nào cần lo lắng?</div>
+                <div style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:8px">BS Nhi khoa phân tích 12 cột mốc quan trọng và dấu hiệu cần gặp bác sĩ ngay...</div>
+                <div style="font-size:11px;color:var(--muted2)">📅 05/08/2026 · ⏱ 10 phút đọc · 👁 15.1K lượt xem</div>
+              </div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;gap:0;cursor:pointer;transition:all .22s;box-shadow:var(--sh)" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'">
+              <div style="width:180px;flex-shrink:0;background:linear-gradient(135deg,var(--purple-l),rgba(124,58,237,.04));display:flex;align-items:center;justify-content:center;font-size:44px">⚖</div>
+              <div style="padding:16px">
+                <div style="font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;margin-bottom:5px">Pháp lý · Quyền lợi Mẹ</div>
+                <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.35">Thai sản 2026: Mức hưởng, thời gian và cách tính — Cập nhật mới nhất</div>
+                <div style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:8px">Chế độ thai sản theo Luật BHXH mới, mức lương tính hưởng và các quyền lợi đặc biệt...</div>
+                <div style="font-size:11px;color:var(--muted2)">📅 01/08/2026 · ⏱ 7 phút đọc · 👁 22.3K lượt xem</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sidebar -->
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--sh)">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">🔥 Đọc nhiều nhất</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;gap:8px;cursor:pointer"><span style="font-size:22px;font-weight:900;color:var(--pink-b);font-family:monospace">01</span><div><div style="font-size:12.5px;font-weight:600;color:var(--navy);line-height:1.35">Nên mua sữa Aptamil hay Nan cho bé 6 tháng?</div><div style="font-size:11px;color:var(--muted2)">32.1K lượt xem</div></div></div>
+              <div style="display:flex;gap:8px;cursor:pointer"><span style="font-size:22px;font-weight:900;color:var(--pink-b);font-family:monospace">02</span><div><div style="font-size:12.5px;font-weight:600;color:var(--navy);line-height:1.35">Ăn dặm BLW hay truyền thống: Mẹ nên chọn cách nào?</div><div style="font-size:11px;color:var(--muted2)">28.4K lượt xem</div></div></div>
+              <div style="display:flex;gap:8px;cursor:pointer"><span style="font-size:22px;font-weight:900;color:var(--pink-b);font-family:monospace">03</span><div><div style="font-size:12.5px;font-weight:600;color:var(--navy);line-height:1.35">Bé 3 tháng chưa biết lẫy: Có bình thường không?</div><div style="font-size:11px;color:var(--muted2)">21.7K lượt xem</div></div></div>
+              <div style="display:flex;gap:8px;cursor:pointer"><span style="font-size:22px;font-weight:900;color:var(--pink-b);font-family:monospace">04</span><div><div style="font-size:12.5px;font-weight:600;color:var(--navy);line-height:1.35">Cách tăng tiết sữa sau sinh hiệu quả nhất 2026</div><div style="font-size:11px;color:var(--muted2)">19.2K lượt xem</div></div></div>
+            </div>
+          </div>
+          <div style="background:linear-gradient(135deg,var(--pink),var(--pink2));border-radius:12px;padding:18px;color:#fff">
+            <div style="font-size:13px;font-weight:700;margin-bottom:6px">📧 Nhận tin tức mới nhất</div>
+            <div style="font-size:12px;opacity:.8;margin-bottom:12px">Bài viết hay về dinh dưỡng, phát triển bé mỗi tuần</div>
+            <input placeholder="Email của mẹ..." style="width:100%;padding:9px 12px;border:none;border-radius:7px;font-size:13px;font-family:var(--font);margin-bottom:8px;outline:none"/>
+            <button style="width:100%;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;padding:9px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)">Đăng ký →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: NHẬT KÝ -->
+    <div class="ts" id="ts-tt-nhatky">
+      <div style="display:grid;grid-template-columns:280px 1fr;gap:20px">
+        <div class="nk-sidebar">
+          <div class="nk-baby-card">
+            <div class="nk-baby-ico">👶</div>
+            <div class="nk-baby-name">Bé Minh</div>
+            <div class="nk-baby-age">7 tháng tuổi · Nam</div>
+          </div>
+          <div class="nk-stat"><span class="nk-stat-l">Cân nặng</span><span class="nk-stat-v">8.2 kg ✓</span></div>
+          <div class="nk-stat"><span class="nk-stat-l">Chiều cao</span><span class="nk-stat-v">68 cm ✓</span></div>
+          <div class="nk-stat"><span class="nk-stat-l">Giai đoạn sữa</span><span class="nk-stat-v" style="color:var(--pink)">Số 2 (6–12T)</span></div>
+          <div class="nk-stat"><span class="nk-stat-l">Đổi giai đoạn</span><span class="nk-stat-v">Còn 5 tháng</span></div>
+          <div style="margin-top:14px"><button class="btn-pink" style="width:100%;font-size:12.5px">+ Cập nhật thông số</button></div>
+        </div>
+        <div class="nk-main">
+          <div class="nk-card">
+            <div class="nk-card-title">📈 Biểu đồ phát triển (so chuẩn WHO)</div>
+            <div class="progress-row"><span class="progress-label">Cân nặng</span><div class="progress-bar"><div class="progress-fill" style="width:68%"></div></div><span class="progress-val">P68 WHO</span></div>
+            <div class="progress-row"><span class="progress-label">Chiều cao</span><div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div><span class="progress-val">P72 WHO</span></div>
+            <div class="progress-row"><span class="progress-label">Vòng đầu</span><div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div><span class="progress-val">P55 WHO</span></div>
+            <div style="font-size:12px;color:var(--green);font-weight:600;margin-top:10px">✓ Bé phát triển đều, nằm trong ngưỡng bình thường WHO</div>
+          </div>
+          <div class="nk-card">
+            <div class="nk-card-title">🍽 Lịch ăn dặm hôm nay</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--bg3);border-radius:8px"><span style="font-size:13px">6:00 — Sữa công thức (200ml)</span><span style="font-size:11px;font-weight:700;color:var(--green)">✓ Xong</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--bg3);border-radius:8px"><span style="font-size:13px">10:00 — Cháo rau củ ăn dặm</span><span style="font-size:11px;font-weight:700;color:var(--green)">✓ Xong</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--pink-l);border:1px solid var(--pink-b);border-radius:8px"><span style="font-size:13px">14:00 — Sữa công thức (200ml)</span><span style="font-size:11px;font-weight:700;color:var(--pink)">Sắp đến</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--bg3);border-radius:8px"><span style="font-size:13px">18:00 — Cháo thịt + rau</span><span style="font-size:11px;color:var(--muted2)">Chưa đến</span></div>
+            </div>
+          </div>
+          <div class="nk-card">
+            <div class="nk-card-title">🎯 Cột mốc phát triển 7 tháng</div>
+            <div class="milestone-list">
+              <div class="milestone done">Biết ngồi không cần đỡ</div>
+              <div class="milestone done">Nhận ra tên gọi và quay đầu lại</div>
+              <div class="milestone done">Bập bẹ các âm đơn giản (ba-ba, ma-ma)</div>
+              <div class="milestone todo">Biết bò hoặc trườn (đang phát triển)</div>
+              <div class="milestone todo">Cầm đồ vật bằng 2 tay chuyền nhau</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: HỌC VIỆN LÀM MẸ -->
+    <div class="ts" id="ts-tt-meo">
+      <p style="font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.75">Kho kiến thức thực chiến từ các chuyên gia và mẹ bỉm có kinh nghiệm — không lý thuyết, toàn mẹo hay áp dụng ngay.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:13px;overflow:hidden;box-shadow:var(--sh);cursor:pointer;transition:all .22s" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="height:120px;background:linear-gradient(135deg,var(--pink),var(--pink2));display:flex;align-items:center;justify-content:center;font-size:40px">🍼</div>
+          <div style="padding:16px"><div style="font-size:10px;font-weight:700;color:var(--pink);margin-bottom:6px">NUÔI CON BẰNG SỮA MẸ</div><div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">5 mẹo tăng tiết sữa trong tuần đầu sau sinh</div><div style="font-size:12px;color:var(--muted)">Gồm: cho bú đúng tư thế · kích sữa · dinh dưỡng mẹ</div><div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--pink)">Xem bài →</div></div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:13px;overflow:hidden;box-shadow:var(--sh);cursor:pointer;transition:all .22s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="height:120px;background:linear-gradient(135deg,var(--teal),#0a7c72);display:flex;align-items:center;justify-content:center;font-size:40px">🍽</div>
+          <div style="padding:16px"><div style="font-size:10px;font-weight:700;color:var(--teal);margin-bottom:6px">ĂN DẶM</div><div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">Bắt đầu ăn dặm đúng cách từ 6 tháng — Lịch 30 ngày đầu</div><div style="font-size:12px;color:var(--muted)">Thực đơn chi tiết · Lượng ăn phù hợp · Dấu hiệu dị ứng</div><div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--teal)">Xem bài →</div></div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:13px;overflow:hidden;box-shadow:var(--sh);cursor:pointer;transition:all .22s" onmouseover="this.style.borderColor='var(--amber)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="height:120px;background:linear-gradient(135deg,var(--amber),#b45309);display:flex;align-items:center;justify-content:center;font-size:40px">😴</div>
+          <div style="padding:16px"><div style="font-size:10px;font-weight:700;color:var(--amber);margin-bottom:6px">GIẤC NGỦ</div><div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">Luyện bé ngủ xuyên đêm từ 4 tháng — Phương pháp Ferber cho người Việt</div><div style="font-size:12px;color:var(--muted)">Không để bé khóc mãi · Thích hợp bé Việt</div><div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--amber)">Xem bài →</div></div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:13px;overflow:hidden;box-shadow:var(--sh);cursor:pointer;transition:all .22s" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="height:120px;background:linear-gradient(135deg,var(--purple),#5b21b6);display:flex;align-items:center;justify-content:center;font-size:40px">🧠</div>
+          <div style="padding:16px"><div style="font-size:10px;font-weight:700;color:var(--purple);margin-bottom:6px">PHÁT TRIỂN TRÍ NÃO</div><div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">10 hoạt động kích thích não bé 0–12 tháng — Đơn giản, không tốn tiền</div><div style="font-size:12px;color:var(--muted)">Đọc sách · Âm nhạc · Chơi cùng bé</div><div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--purple)">Xem bài →</div></div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:13px;overflow:hidden;box-shadow:var(--sh);cursor:pointer;transition:all .22s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="height:120px;background:linear-gradient(135deg,var(--green),#15803d);display:flex;align-items:center;justify-content:center;font-size:40px">💆‍♀️</div>
+          <div style="padding:16px"><div style="font-size:10px;font-weight:700;color:var(--green);margin-bottom:6px">SỨC KHOẺ MẸ SAU SINH</div><div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">Phục hồi sau sinh: Ăn gì, làm gì trong 30 ngày đầu?</div><div style="font-size:12px;color:var(--muted)">Kiêng cữ đúng cách · Phục hồi thể hình · Tâm lý sau sinh</div><div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--green)">Xem bài →</div></div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:13px;overflow:hidden;box-shadow:var(--sh);cursor:pointer;transition:all .22s" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="height:120px;background:linear-gradient(135deg,#BE185D,#9D174D);display:flex;align-items:center;justify-content:center;font-size:40px">💰</div>
+          <div style="padding:16px"><div style="font-size:10px;font-weight:700;color:#BE185D;margin-bottom:6px">TÀI CHÍNH CHO MẸ BỈM</div><div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px">Lập kế hoạch tài chính nuôi con từ 0–3 tuổi — Chi phí thực tế</div><div style="font-size:12px;color:var(--muted)">Sữa · Tã · Học phí · Bảo hiểm · Tiết kiệm giáo dục</div><div style="margin-top:10px;font-size:11px;font-weight:700;color:#BE185D">Xem bài →</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ĐỐI TÁC ═══ -->
+<div class="page" id="pg-doi-tac">
+  <div class="section">
+    <div class="sec-eye">Đối tác đồng hành trong hành trình mẹ bỉm</div>
+    <h2 class="sec-h">Đối tác <em>tin cậy</em> từ A đến Z</h2>
+    <p class="sec-p">Từ lúc mang thai đến khi nuôi con lớn — SữaEmbe kết nối mẹ với các đối tác uy tín theo từng giai đoạn.</p>
+
+    <div class="tab-bar">
+      <button class="tb on" id="tb-dt-all" onclick="switchDT('all')">🤝 Tất cả</button>
+      <button class="tb" id="tb-dt-bv" onclick="switchDT('benh-vien')">🏥 Bệnh viện</button>
+      <button class="tb" id="tb-dt-bh" onclick="switchDT('bao-hiem')">🛡 Bảo hiểm</button>
+      <button class="tb" id="tb-dt-bs" onclick="switchDT('tu-van-bs')">👨‍⚕️ Tư vấn Bác sĩ</button>
+      <button class="tb" id="tb-dt-ttb" onclick="switchDT('trang-thiet-bi')">🛒 Trang thiết bị</button>
+      <button class="tb" id="tb-dt-dv" onclick="switchDT('dich-vu')">💆 Dịch vụ Mẹ & Bé</button>
+    </div>
+
+    <div class="partner-grid" id="partner-grid"></div>
+
+    <!-- TV BS section (shown when tab = tu-van-bs) -->
+    <div id="sec-tv-bs" style="display:none;margin-top:24px">
+      <div style="background:linear-gradient(135deg,rgba(13,148,136,.06),rgba(13,148,136,.02));border:1px solid var(--teal-b);border-radius:14px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:var(--teal);margin-bottom:5px">👨‍⚕️ 45+ Bác sĩ Nhi khoa xác minh</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.65">Liên kết từ DanhBaBacSi.com.vn — hệ thống danh bạ bác sĩ uy tín. Tư vấn chọn sữa, dinh dưỡng và phát triển bé, phản hồi trong 2 giờ làm việc.</div>
+        </div>
+        <button class="btn-teal" style="white-space:nowrap;width:auto;padding:11px 22px">Hỏi BS Nhi ngay →</button>
+      </div>
+      <div class="bs-grid">
+        <div class="bs-card"><div class="bs-avatar">NT</div><div class="bs-name">BS. Nguyễn Thị Thanh</div><div class="bs-spec">Nhi khoa · Dinh dưỡng trẻ em</div><div class="bs-exp">15 năm kinh nghiệm · BV Nhi Đồng 1 TP.HCM. Chuyên gia dinh dưỡng trẻ dưới 3 tuổi, tư vấn lựa chọn sữa phù hợp thể trạng.</div><div class="bs-stats"><div><div class="bs-stat-n">2.4K+</div><div class="bs-stat-l">Tư vấn</div></div><div><div class="bs-stat-n">4.9⭐</div><div class="bs-stat-l">Đánh giá</div></div></div><button class="btn-teal">Hỏi ngay · Phản hồi trong 2h</button></div>
+        <div class="bs-card"><div class="bs-avatar" style="background:linear-gradient(135deg,var(--pink),var(--pink2))">TH</div><div class="bs-name">BS. Trần Văn Hùng</div><div class="bs-spec">Nhi khoa · Tiêu hoá & Dinh dưỡng</div><div class="bs-exp">12 năm kinh nghiệm · BV Nhi TW Hà Nội. Chuyên gia xử lý táo bón, biếng ăn và rối loạn tiêu hoá ở trẻ nhỏ.</div><div class="bs-stats"><div><div class="bs-stat-n">1.8K+</div><div class="bs-stat-l">Tư vấn</div></div><div><div class="bs-stat-n">4.8⭐</div><div class="bs-stat-l">Đánh giá</div></div></div><button class="btn-teal">Hỏi ngay · Phản hồi trong 2h</button></div>
+        <div class="bs-card"><div class="bs-avatar" style="background:linear-gradient(135deg,var(--amber),#b45309)">LM</div><div class="bs-name">BS. Lê Thị Mai</div><div class="bs-spec">Nhi khoa · Sơ sinh & Sinh non</div><div class="bs-exp">10 năm kinh nghiệm · BV Từ Dũ. Chuyên gia chăm sóc bé sơ sinh và sinh non, tư vấn dinh dưỡng đặc trị.</div><div class="bs-stats"><div><div class="bs-stat-n">1.2K+</div><div class="bs-stat-l">Tư vấn</div></div><div><div class="bs-stat-n">4.9⭐</div><div class="bs-stat-l">Đánh giá</div></div></div><button class="btn-teal">Hỏi ngay · Phản hồi trong 2h</button></div>
+      </div>
+    </div>
+
+    <!-- Dịch vụ Mẹ & Bé section (shown when tab = dich-vu) -->
+    <div id="sec-dich-vu" style="display:none;margin-top:24px">
+      <p style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.75">Các dịch vụ thiết thực dành riêng cho mẹ bỉm — từ chăm sóc sau sinh, massage bé, đến dịch vụ tại nhà và ứng dụng hỗ trợ.</p>
+      <div class="partner-grid" id="dichvu-grid">
+        <div class="partner-card">
+          <div class="pc-head"><div class="pc-ico" style="background:var(--pink-l)">💆‍♀️</div><div><div class="pc-name">Dịch vụ Massage Sau Sinh</div><div class="pc-cat">Phục hồi · Tại nhà</div></div></div>
+          <div class="pc-body"><span class="pc-tag sp">Dịch vụ</span><div class="pc-desc">Massage phục hồi sau sinh tại nhà: giảm đau lưng, thông tắc tia sữa, giảm phù nề. Kỹ thuật viên được đào tạo chuyên sâu.</div><div class="pc-pkgs"><div class="pc-pkg">Gói 1 buổi: từ 350.000đ (60–90 phút)</div><div class="pc-pkg">Gói 10 buổi: từ 3.000.000đ (tiết kiệm 15%)</div><div class="pc-pkg">Thông tắc tia sữa: từ 250.000đ/buổi</div></div><button class="btn-partner">Đặt lịch tại nhà →</button></div>
+        </div>
+        <div class="partner-card">
+          <div class="pc-head"><div class="pc-ico" style="background:rgba(13,148,136,.1)">👶</div><div><div class="pc-name">Dịch vụ Tắm Bé & Chăm Sóc Sơ Sinh</div><div class="pc-cat">Chăm sóc · Tại nhà</div></div></div>
+          <div class="pc-body"><span class="pc-tag sp">Dịch vụ</span><div class="pc-desc">Điều dưỡng đến nhà tắm, massage bé sơ sinh, hướng dẫn mẹ chăm sóc rốn và vệ sinh cho bé đúng cách.</div><div class="pc-pkgs"><div class="pc-pkg">Tắm bé sơ sinh: từ 200.000đ/buổi</div><div class="pc-pkg">Gói chăm sóc 30 ngày đầu: từ 5.000.000đ</div><div class="pc-pkg">Hướng dẫn mẹ tự chăm sóc bé: 1 buổi 300K</div></div><button class="btn-partner">Đặt lịch tại nhà →</button></div>
+        </div>
+        <div class="partner-card">
+          <div class="pc-head"><div class="pc-ico" style="background:var(--amber-l)">📸</div><div><div class="pc-name">Chụp Ảnh Sơ Sinh Nghệ Thuật</div><div class="pc-cat">Kỷ niệm · Studio & Tại nhà</div></div></div>
+          <div class="pc-body"><span class="pc-tag sp">Dịch vụ</span><div class="pc-desc">Chụp ảnh newborn chuyên nghiệp — lưu lại khoảnh khắc đầu đời của bé. Studio hoặc tại nhà, trang phục và props đầy đủ.</div><div class="pc-pkgs"><div class="pc-pkg">Gói Studio cơ bản: từ 1.500.000đ (20 ảnh)</div><div class="pc-pkg">Gói tại nhà: từ 2.200.000đ (30 ảnh)</div><div class="pc-pkg">Bé 0–28 ngày tuổi: thời điểm vàng chụp ảnh</div></div><button class="btn-partner">Xem portfolio & Đặt lịch →</button></div>
+        </div>
+        <div class="partner-card">
+          <div class="pc-head"><div class="pc-ico" style="background:var(--green-l)">🍱</div><div><div class="pc-name">Dịch vụ Nấu Cơm Cữ Sau Sinh</div><div class="pc-cat">Dinh dưỡng · Giao tận nhà</div></div></div>
+          <div class="pc-body"><span class="pc-tag sp">Dịch vụ</span><div class="pc-desc">Suất ăn dưỡng sinh theo thể trạng mẹ — nguyên liệu sạch, nấu đúng kiêng cữ, giao tận nhà. Giúp mẹ phục hồi và tiết sữa tốt.</div><div class="pc-pkgs"><div class="pc-pkg">Gói 30 ngày (3 bữa/ngày): từ 4.500.000đ</div><div class="pc-pkg">Gói 10 ngày (2 bữa/ngày): từ 1.800.000đ</div><div class="pc-pkg">Thực đơn tùy theo thể trạng mẹ</div></div><button class="btn-partner">Đặt suất ăn cữ →</button></div>
+        </div>
+        <div class="partner-card">
+          <div class="pc-head"><div class="pc-ico" style="background:var(--purple-l)">🎓</div><div><div class="pc-name">Lớp Học Tiền Sản & Làm Mẹ</div><div class="pc-cat">Đào tạo · Online & Offline</div></div></div>
+          <div class="pc-body"><span class="pc-tag sp">Dịch vụ</span><div class="pc-desc">Khóa học tiền sản, nuôi con bằng sữa mẹ, ăn dặm và phát triển bé. Giảng viên là BS Nhi và chuyên gia dinh dưỡng uy tín.</div><div class="pc-pkgs"><div class="pc-pkg">Khóa Tiền sản (8 buổi): từ 800.000đ</div><div class="pc-pkg">Khóa Nuôi con bằng sữa mẹ: từ 500.000đ</div><div class="pc-pkg">Khóa Ăn dặm BLW (6 buổi): từ 600.000đ</div></div><button class="btn-partner">Xem lịch học →</button></div>
+        </div>
+        <div class="partner-card">
+          <div class="pc-head"><div class="pc-ico" style="background:var(--teal-l)">🏠</div><div><div class="pc-name">Thuê Điều Dưỡng Tháng Sau Sinh</div><div class="pc-cat">Chăm sóc toàn thời gian · Tại nhà</div></div></div>
+          <div class="pc-body"><span class="pc-tag sp">Dịch vụ</span><div class="pc-desc">Điều dưỡng sơ sinh ở lại nhà hoặc làm việc giờ hành chính — chăm sóc bé, hỗ trợ mẹ ở cữ, hướng dẫn kỹ năng làm mẹ.</div><div class="pc-pkgs"><div class="pc-pkg">Điều dưỡng ban ngày (8h): từ 350.000đ/ngày</div><div class="pc-pkg">Điều dưỡng 24/7 (ở lại nhà): từ 600.000đ/ngày</div><div class="pc-pkg">Gói tháng (30 ngày): giảm 20%</div></div><button class="btn-partner">Tìm điều dưỡng phù hợp →</button></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="admin-overlay" id="admin-overlay">
+  <div class="login-box">
+    <button class="lb-close" onclick="document.getElementById('admin-overlay').classList.remove('on')">✕</button>
+    <div class="lb-logo">Sữa<em>Embe</em></div>
+    <div class="lb-sub">Đăng nhập hệ thống</div>
+    <div class="lb-roles">
+      <button class="lb-role on" onclick="setRole('admin',this)">⚙ Admin</button>
+      <button class="lb-role" onclick="setRole('user',this)">👩 Mẹ bỉm</button>
+    </div>
+    <div class="lbf"><label>Email</label><input type="email" id="lb-email" placeholder="admin@suaembe.com"/></div>
+    <div class="lbf"><label>Mật khẩu</label><input type="password" id="lb-pw" placeholder="••••••••"/></div>
+    <button class="lb-btn" onclick="doLogin()">Đăng nhập →</button>
+    <div style="font-size:11.5px;color:var(--muted);text-align:center;margin-top:10px">Demo: admin@demo.vn / 123456</div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-panel page" id="admin-panel">
+  <div class="admin-topbar">
+    <div class="atb-brand">Sữa<em>Embe</em> — Quản trị</div>
+    <div class="atb-right">
+      <span style="font-size:12px;color:rgba(255,255,255,.45)" id="atb-name">Admin</span>
+      <span class="atb-role" id="atb-role">Admin</span>
+      <button class="atb-logout" onclick="doLogout()">Đăng xuất</button>
+    </div>
+  </div>
+  <div class="admin-layout">
+    <div class="admin-sb">
+      <span class="sb-lbl">Tổng quan</span>
+      <button class="sb-item on" onclick="adSec('dashboard',this)"><span class="sb-ico">📊</span>Dashboard</button>
+      <span class="sb-lbl">Nội dung</span>
+      <button class="sb-item" onclick="adSec('san-pham',this)"><span class="sb-ico">🥛</span>Sản phẩm sữa</button>
+      <button class="sb-item" onclick="adSec('listings',this)"><span class="sb-ico">♻️</span>Tin chợ C2C</button>
+      <button class="sb-item" onclick="adSec('bai-viet',this)"><span class="sb-ico">📝</span>Bài viết / Blog</button>
+      <span class="sb-lbl">Người dùng</span>
+      <button class="sb-item" onclick="adSec('users',this)"><span class="sb-ico">👩</span>Mẹ bỉm</button>
+      <button class="sb-item" onclick="adSec('bs-nhi',this)"><span class="sb-ico">👨‍⚕️</span>BS Nhi</button>
+      <span class="sb-lbl">Kinh doanh</span>
+      <button class="sb-item" onclick="adSec('orders',this)"><span class="sb-ico">💳</span>Đơn hàng</button>
+      <button class="sb-item" onclick="adSec('doi-tac-admin',this)"><span class="sb-ico">🤝</span>Đối tác</button>
+      <button class="sb-item" onclick="adSec('settings',this)"><span class="sb-ico">⚙️</span>Cài đặt</button>
+    </div>
+    <div class="admin-main">
+      <div class="admin-sec on" id="sec-dashboard">
+        <div class="sec-title">📊 Dashboard</div>
+        <div class="stat-grid4">
+          <div class="astat"><div class="astat-n">50.241</div><div class="astat-l">Mẹ bỉm đăng ký</div><div class="astat-d">+312 tuần này</div></div>
+          <div class="astat"><div class="astat-n">2.847</div><div class="astat-l">Tin chợ C2C</div><div class="astat-d">+48 hôm nay</div></div>
+          <div class="astat"><div class="astat-n">12.430</div><div class="astat-l">Review sản phẩm</div><div class="astat-d">+124 tuần này</div></div>
+          <div class="astat"><div class="astat-n">45</div><div class="astat-l">BS Nhi hoạt động</div><div class="astat-d">Online ngay</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px">⏳ Cần xử lý</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="padding:9px 12px;background:var(--pink-l);border:1px solid var(--pink-b);border-radius:7px;font-size:12.5px;display:flex;justify-content:space-between"><span>Tin C2C chờ duyệt</span><strong style="color:var(--pink)">14</strong></div>
+              <div style="padding:9px 12px;background:var(--pink-l);border:1px solid var(--pink-b);border-radius:7px;font-size:12.5px;display:flex;justify-content:space-between"><span>BS Nhi chờ xác minh</span><strong style="color:var(--pink)">3</strong></div>
+              <div style="padding:9px 12px;background:rgba(22,163,74,.06);border:1px solid rgba(22,163,74,.2);border-radius:7px;font-size:12.5px;display:flex;justify-content:space-between"><span>Giao dịch escrow thành công</span><strong style="color:var(--green)">28</strong></div>
+            </div>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px">⚡ Truy cập nhanh</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <button onclick="adSec('listings',document.querySelector('.sb-item:nth-child(6)'))" style="text-align:left;background:var(--pink-l);border:1px solid var(--pink-b);color:var(--pink);padding:9px 12px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)">♻️ Duyệt tin chợ C2C (14 chờ)</button>
+              <button onclick="adSec('bai-viet',null)" style="text-align:left;background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:9px 12px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)">📝 Viết bài mới</button>
+              <button onclick="adSec('doi-tac-admin',null)" style="text-align:left;background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:9px 12px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)">🤝 Quản lý đối tác</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-sec" id="sec-listings">
+        <div class="sec-toolbar"><div class="sec-title">♻️ Tin Chợ C2C</div><div style="display:flex;gap:8px"><input class="mini-search" placeholder="Tìm tin đăng..."/><button class="new-btn">+ Thêm tin</button></div></div>
+        <table class="admin-tbl">
+          <thead><tr><th>Sản phẩm</th><th>Người bán</th><th>Danh mục</th><th>Giá</th><th>Escrow</th><th>Trạng thái</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><strong>Aptamil 2 · 800g · 85%</strong><div style="font-size:11px;color:var(--muted)">HCM · 2h trước</div></td><td>Mẹ Linh ⭐</td><td>Sữa dư</td><td style="font-weight:700;color:var(--pink);font-family:monospace">420K</td><td><span class="badge-ok">Bật</span></td><td><span class="badge-pend">Chờ duyệt</span></td><td style="display:flex;gap:3px"><button class="ta-btn ta-ok">✓ Duyệt</button><button class="ta-btn ta-del">Từ chối</button></td></tr>
+            <tr><td><strong>Xe đẩy Joie Chrome DLX</strong><div style="font-size:11px;color:var(--muted)">ĐN · 5h trước</div></td><td>Mẹ Mai ⭐</td><td>Xe đẩy</td><td style="font-weight:700;color:var(--pink);font-family:monospace">3.2M</td><td><span class="badge-ok">Bật</span></td><td><span class="badge-pend">Chờ duyệt</span></td><td style="display:flex;gap:3px"><button class="ta-btn ta-ok">✓ Duyệt</button><button class="ta-btn ta-del">Từ chối</button></td></tr>
+            <tr><td><strong>Set quần áo bé gái 3-6T</strong><div style="font-size:11px;color:var(--muted)">HN · 1 ngày trước</div></td><td>Mẹ Hoa ⭐</td><td>Quần áo</td><td style="font-weight:700;color:var(--pink);font-family:monospace">280K</td><td><span class="badge-ok">Bật</span></td><td><span class="badge-ok">Đã duyệt</span></td><td style="display:flex;gap:3px"><button class="ta-btn ta-edit">Sửa</button><button class="ta-btn ta-del">Ẩn</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="admin-sec" id="sec-san-pham"><div class="sec-title">🥛 Sản phẩm sữa</div><div style="margin-top:12px;color:var(--muted)">Quản lý 200+ loại sữa, review và so sánh — đang phát triển.</div></div>
+      <div class="admin-sec" id="sec-bai-viet"><div class="sec-title">📝 Bài viết / Blog</div><div style="margin-top:12px;color:var(--muted)">Quản lý bài viết nhật ký mẹ và nội dung chuyên gia.</div></div>
+      <div class="admin-sec" id="sec-users"><div class="sec-title">👩 Mẹ bỉm</div><div style="margin-top:12px;color:var(--muted)">Danh sách 50.241 mẹ bỉm đăng ký.</div></div>
+      <div class="admin-sec" id="sec-bs-nhi"><div class="sec-title">👨‍⚕️ BS Nhi</div><div style="margin-top:12px;color:var(--muted)">Quản lý và xác minh bác sĩ.</div></div>
+      <div class="admin-sec" id="sec-orders"><div class="sec-title">💳 Đơn hàng & Escrow</div><div style="margin-top:12px;color:var(--muted)">Quản lý giao dịch và thanh toán escrow.</div></div>
+      <div class="admin-sec" id="sec-doi-tac-admin"><div class="sec-title">🤝 Đối tác</div><div style="margin-top:12px;color:var(--muted)">Quản lý bệnh viện, bảo hiểm và đối tác.</div></div>
+      <div class="admin-sec" id="sec-settings"><div class="sec-title">⚙️ Cài đặt</div><div style="margin-top:12px;color:var(--muted)">Cài đặt hệ thống SữaEmbe.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div>
+        <div class="ft-brand">Sữa<em>Embe</em></div>
+        <div class="ft-about">Hệ sinh thái Mẹ & Bé Việt Nam — So sánh sữa, Chợ C2C, Hỏi BS Nhi và đối tác đồng hành từ mang thai đến nuôi con. Thành viên VEA Group.</div>
+      </div>
+      <div class="ft-col"><h4>Tính năng</h4><a onclick="go('cong-cu',null)">AI Gợi ý sữa</a><a onclick="go('cho',null)">Chợ Mẹ Bỉm</a><a onclick="go('bachoa',null)">Bách Hóa Mẹ & Bé</a><a onclick="go('bs-nhi',null)">Hỏi BS Nhi</a><a onclick="go('tintuc',null)">Nhật ký Bé</a></div>
+      <div class="ft-col"><h4>Danh mục sữa</h4><a>Sữa 0–6 tháng</a><a>Sữa 6–12 tháng</a><a>Sữa 1–3 tuổi</a><a>Sữa bầu</a><a>Sữa đặc trị</a></div>
+      <div class="ft-col"><h4>Đối tác</h4><a onclick="go('doi-tac',null)">Bệnh viện phụ sản</a><a onclick="go('doi-tac',null)">Bảo hiểm sinh con</a><a onclick="go('doi-tac',null)">Hành trang mẹ bỉm</a><a>DanhBaBacSi.com.vn</a></div>
+      <div class="ft-col"><h4>Hỗ trợ</h4><a>Hướng dẫn sử dụng</a><a>Chính sách Escrow</a><a>Liên hệ hỗ trợ</a><a>Bảo mật dữ liệu</a></div>
+    </div>
+    <div class="ft-bottom"><span>© 2026 SuaEmbe.com · Thành viên VEA Group · 🇻🇳</span><span>Bảo mật · Điều khoản · Cookie · Sitemap</span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast">✅ <span id="toast-msg">Thành công!</span></div>
+
+<script>
+// ── DATA ──
+const LISTINGS=[
+  {id:1,name:"Aptamil Pronutra 2 · 800g · Còn 85%",cat:"sua",ico:"🥛",loc:"HCM",time:"2h trước",price:"420.000đ",orig:"680.000đ",seller:"Mẹ Linh ⭐ Verified",esc:true},
+  {id:2,name:"Nan Optipro 3 · 900g · Mới 100%",cat:"sua",ico:"🥛",loc:"Hà Nội",time:"5h trước",price:"380.000đ",orig:"520.000đ",seller:"Mẹ Hoa ⭐ Verified",esc:true},
+  {id:3,name:"Set quần áo bé gái 3–6 tháng (8 bộ)",cat:"quan-ao",ico:"👕",loc:"Đà Nẵng",time:"Hôm qua",price:"280.000đ",orig:"480.000đ",seller:"Mẹ Lan ⭐ Verified",esc:true},
+  {id:4,name:"Xe đẩy Joie Chrome DLX · Còn 90%",cat:"xe-day",ico:"🛒",loc:"HCM",time:"Hôm qua",price:"3.200.000đ",orig:"5.500.000đ",seller:"Mẹ Mai ⭐ Verified",esc:true},
+  {id:5,name:"Bộ đồ chơi xếp hình Lego Duplo",cat:"do-choi",ico:"🧸",loc:"Hà Nội",time:"2 ngày trước",price:"350.000đ",orig:"620.000đ",seller:"Mẹ Thu ⭐ Verified",esc:false},
+  {id:6,name:"Friso Gold 2 · 400g · Còn 90%",cat:"sua",ico:"🥛",loc:"HCM",time:"Hôm qua",price:"195.000đ",orig:"310.000đ",seller:"Mẹ Ngọc ⭐ Verified",esc:true},
+  {id:7,name:"Địu em bé Ergobaby Adapt · Còn 95%",cat:"xe-day",ico:"🎒",loc:"Bình Dương",time:"3 ngày trước",price:"1.100.000đ",orig:"2.200.000đ",seller:"Mẹ Hương ⭐ Verified",esc:true},
+  {id:8,name:"Bộ đồ ăn dặm Avent 6 món · Mới 100%",cat:"do-dung",ico:"🍽",loc:"Hà Nội",time:"1 ngày trước",price:"220.000đ",orig:"380.000đ",seller:"Mẹ Liên ⭐ Verified",esc:false},
+];
+
+const SHOP_ITEMS=[
+  {id:1,name:"Sữa bột Aptamil Pronutra Advance 2",cat:"sua",ico:"🥛",price:"640.000đ",orig:"680.000đ",badge:"sale",badgeLabel:"Giảm 6%",rating:"⭐ 4.9 (284)"},
+  {id:2,name:"Tã dán Pampers Premium S · 84 miếng",cat:"bim",ico:"👶",price:"185.000đ",orig:"210.000đ",badge:"sale",badgeLabel:"Giảm 12%",rating:"⭐ 4.8 (512)"},
+  {id:3,name:"Bộ đồ ăn dặm Chicco 6 món",cat:"an-dam",ico:"🍽",price:"320.000đ",orig:"",badge:"new",badgeLabel:"Mới về",rating:"⭐ 4.7 (89)"},
+  {id:4,name:"Kem dưỡng ẩm Cetaphil Baby 400g",cat:"my-pham",ico:"🧴",price:"285.000đ",orig:"",badge:"",badgeLabel:"",rating:"⭐ 4.9 (341)"},
+  {id:5,name:"Đồ chơi xúc xắc Fisher-Price 3 món",cat:"do-choi",ico:"🧸",price:"195.000đ",orig:"240.000đ",badge:"sale",badgeLabel:"Giảm 19%",rating:"⭐ 4.8 (178)"},
+  {id:6,name:"Sữa bầu Blackmores Pregnancy Gold",cat:"sua",ico:"🤰",price:"420.000đ",orig:"",badge:"new",badgeLabel:"Mới về",rating:"⭐ 4.9 (203)"},
+  {id:7,name:"Bỉm quần Huggies Platinum L · 44 miếng",cat:"bim",ico:"👶",price:"215.000đ",orig:"245.000đ",badge:"sale",badgeLabel:"Giảm 12%",rating:"⭐ 4.7 (423)"},
+  {id:8,name:"Nước rửa bình Pigeon 700ml",cat:"an-dam",ico:"🍼",price:"95.000đ",orig:"",badge:"",badgeLabel:"",rating:"⭐ 4.8 (634)"},
+];
+
+const PARTNERS_ALL = [
+  {name:"BV Từ Dũ TP.HCM",cat:"benh-vien",ico:"🏥",bg:"rgba(13,148,136,.1)",tag:"bv",tagLabel:"Bệnh viện",desc:"Bệnh viện Sản Nhi hàng đầu miền Nam. Dịch vụ sinh thường, sinh mổ, TTTON và chăm sóc sơ sinh chuyên sâu.",pkgs:["Gói sinh thường từ 8 triệu","Gói sinh mổ từ 15 triệu","Khám thai định kỳ trọn gói"]},
+  {name:"BV Nhi Đồng 1",cat:"benh-vien",ico:"🏥",bg:"rgba(232,84,122,.1)",tag:"bv",tagLabel:"Bệnh viện",desc:"Bệnh viện Nhi khoa hàng đầu Việt Nam. Khám tổng quát, tiêm chủng, dinh dưỡng và điều trị bệnh nhi.",pkgs:["Khám tổng quát cho bé","Gói tiêm chủng trọn gói","Tư vấn dinh dưỡng 0–3 tuổi"]},
+  {name:"BV Hùng Vương",cat:"benh-vien",ico:"🏥",bg:"rgba(13,148,136,.1)",tag:"bv",tagLabel:"Bệnh viện",desc:"BV Hùng Vương — chuyên về sản khoa TP.HCM. Dịch vụ sinh tự nhiên, sinh mổ, TTTON và chăm sóc sau sinh.",pkgs:["Gói sinh thường từ 6 triệu","Gói sinh mổ từ 12 triệu","Khám thai kỹ thuật cao"]},
+  {name:"Prudential VN",cat:"bao-hiem",ico:"🛡",bg:"rgba(124,58,237,.1)",tag:"bh",tagLabel:"Bảo hiểm",desc:"Bảo hiểm nhân thọ và bảo hiểm thai sản. Gói PRU-Cuộc Sống Tươi Sáng bảo vệ mẹ và bé từ khi mang thai.",pkgs:["BH thai sản từ 500K/tháng","BH tai nạn bé từ 150K/năm","Tích lũy giáo dục cho con"]},
+  {name:"FWD Bảo hiểm",cat:"bao-hiem",ico:"🛡",bg:"rgba(13,148,136,.1)",tag:"bh",tagLabel:"Bảo hiểm",desc:"FWD Chăm Sóc Sức Khỏe Thai Sản — bảo vệ toàn diện từ mang thai đến sau sinh. Không cần khám sức khỏe.",pkgs:["BH thai sản online từ 99K","BH ung thư cho mẹ từ 99K/năm","Chi trả viện phí sinh con"]},
+  {name:"BS. Nguyễn Thị Thanh",cat:"tu-van-bs",ico:"👩‍⚕️",bg:"rgba(13,148,136,.1)",tag:"bv",tagLabel:"BS Nhi",desc:"15 năm kinh nghiệm · BV Nhi Đồng 1. Chuyên gia dinh dưỡng trẻ dưới 3 tuổi, tư vấn lựa chọn sữa phù hợp.",pkgs:["Tư vấn chọn sữa phù hợp bé","Tư vấn bé biếng ăn / táo bón","Tư vấn phát triển 0–3 tuổi"]},
+  {name:"BS. Trần Văn Hùng",cat:"tu-van-bs",ico:"👨‍⚕️",bg:"rgba(232,84,122,.1)",tag:"bv",tagLabel:"BS Nhi",desc:"12 năm kinh nghiệm · BV Nhi TW Hà Nội. Chuyên gia táo bón, biếng ăn và rối loạn tiêu hoá ở trẻ nhỏ.",pkgs:["Tư vấn tiêu hoá trẻ em","Xử lý táo bón / biếng ăn","Dinh dưỡng trẻ từ 0–5 tuổi"]},
+  {name:"Mamago — Hành trang mẹ bỉm",cat:"trang-thiet-bi",ico:"🛒",bg:"rgba(217,119,6,.1)",tag:"tb",tagLabel:"Trang thiết bị",desc:"Chuyên đồ dùng hành trang mẹ bỉm: túi đi sinh, đồ dùng cho bé sơ sinh, thiết bị y tế tại nhà.",pkgs:["Túi đi sinh trọn gói từ 800K","Máy hút sữa điện đôi từ 2.5M","Gối chống trào ngược cho bé"]},
+  {name:"Vua Nệm — Không gian bé",cat:"trang-thiet-bi",ico:"🛏",bg:"rgba(232,84,122,.1)",tag:"tb",tagLabel:"Nội thất bé",desc:"Giường cũi, nệm chống thấm, gối bảo vệ đầu — không gian an toàn và thoải mái cho bé từ ngày đầu về nhà.",pkgs:["Giường cũi cao cấp từ 3.5M","Nệm chống thấm cho bé","Gối định hình đầu tròn"]},
+];
+const PARTNERS = PARTNERS_ALL;
+
+// ── NAVIGATION ──
+function go(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nl').forEach(b => b.classList.remove('on'));
+  document.getElementById('admin-panel').classList.remove('on');
+  const pg = document.getElementById('pg-' + id);
+  if (pg) pg.classList.add('on');
+  if (el && el.classList.contains('nl')) el.classList.add('on');
+  window.scrollTo(0, 0);
+}
+
+// ── TABS (Công cụ) ──
+function switchCC(id) {
+  ['ai-sua','du-sinh','cam-nang'].forEach(i => {
+    document.getElementById('tc-'+i)?.classList.remove('active');
+    document.getElementById('ts-'+i)?.classList.remove('on');
+  });
+  document.getElementById('tc-'+id)?.classList.add('active');
+  document.getElementById('ts-'+id)?.classList.add('on');
+}
+
+// ── AI SỮA ──
+function runAI() {
+  document.getElementById('ai-result').classList.add('on');
+  document.getElementById('ai-result').scrollIntoView({behavior:'smooth'});
+}
+
+// ── TÍNH DỰ SINH ──
+function calcDueDate() {
+  const lmp = new Date(document.getElementById('lmp-date').value || '2026-01-15');
+  const due = new Date(lmp.getTime() + 280*24*60*60*1000);
+  const now = new Date();
+  const weeksPreg = Math.floor((now-lmp)/(7*24*60*60*1000));
+  const daysLeft = Math.max(0, Math.floor((due-now)/(24*60*60*1000)));
+  document.getElementById('res-date').textContent = due.toLocaleDateString('vi-VN');
+  document.getElementById('res-week').textContent = weeksPreg + ' tuần';
+  document.getElementById('res-days').textContent = daysLeft + ' ngày';
+}
+
+// ── CHỢ ──
+function renderListings(filter) {
+  const g = document.getElementById('listing-grid');
+  if (!g) return;
+  const items = filter && filter !== 'all' ? LISTINGS.filter(l => l.cat === filter) : LISTINGS;
+  g.innerHTML = items.map(l => `<div class="listing-card">
+    <div class="lc-thumb">
+      <span style="font-size:44px">${l.ico}</span>
+      <span class="lc-cat">${l.cat==='sua'?'Sữa dư':l.cat==='quan-ao'?'Quần áo':l.cat==='xe-day'?'Xe đẩy':l.cat==='do-choi'?'Đồ chơi':'Đồ dùng'}</span>
+      ${l.esc?'<span class="lc-esc">🛡 Escrow</span>':''}
+    </div>
+    <div class="lc-body">
+      <div class="lc-name">${l.name}</div>
+      <div class="lc-meta">📍 ${l.loc} · ${l.time}</div>
+      <div><span class="lc-price">${l.price}</span>${l.orig?`<span class="lc-orig">${l.orig}</span>`:''}</div>
+      <div class="lc-seller">✓ ${l.seller}</div>
+    </div>
+  </div>`).join('');
+}
+
+function filterChop(cat, el) {
+  document.querySelectorAll('.cf-pill').forEach(p => p.classList.remove('on'));
+  if (el) el.classList.add('on');
+  renderListings(cat);
+}
+
+// renderShop removed - Bách hóa now uses initBachoa/selectBHCat
+
+// ── ĐỐI TÁC ──
+function renderPartners(filter) {
+  const g = document.getElementById('partner-grid');
+  if (!g) return;
+  const items = filter && filter !== 'all' ? PARTNERS_ALL.filter(p => p.cat === filter) : PARTNERS_ALL;
+  // Show/hide special sections
+  const bsSection = document.getElementById('sec-tv-bs');
+  const dvSection = document.getElementById('sec-dich-vu');
+  if (bsSection) bsSection.style.display = filter === 'tu-van-bs' ? 'block' : 'none';
+  if (dvSection) dvSection.style.display = filter === 'dich-vu' ? 'block' : 'none';
+  g.innerHTML = items.map(p => `<div class="partner-card">
+    <div class="pc-head">
+      <div class="pc-ico" style="background:${p.bg}">${p.ico}</div>
+      <div><div class="pc-name">${p.name}</div><div class="pc-cat">${p.cat==='benh-vien'?'Bệnh viện':p.cat==='bao-hiem'?'Bảo hiểm':p.cat==='trang-thiet-bi'?'Trang thiết bị':'Dịch vụ'}</div></div>
+    </div>
+    <div class="pc-body">
+      <span class="pc-tag ${p.tag}">${p.tagLabel}</span>
+      <div class="pc-desc">${p.desc}</div>
+      <div class="pc-pkgs">${p.pkgs.map(k=>`<div class="pc-pkg">${k}</div>`).join('')}</div>
+      <button class="btn-partner">Xem chi tiết & Liên hệ →</button>
+    </div>
+  </div>`).join('');
+}
+
+function switchDT(cat) {
+  ['all','benh-vien','bao-hiem','tu-van-bs','trang-thiet-bi','dich-vu'].forEach(id => {
+    const b = document.getElementById('tb-dt-' + id.replace('benh-vien','bv').replace('bao-hiem','bh').replace('tu-van-bs','bs').replace('trang-thiet-bi','ttb').replace('dich-vu','dv'));
+    if (b) b.classList.remove('on');
+  });
+  const activeId = 'tb-dt-' + cat.replace('benh-vien','bv').replace('bao-hiem','bh').replace('tu-van-bs','bs').replace('trang-thiet-bi','ttb').replace('dich-vu','dv').replace('all','all');
+  const activeBtn = document.getElementById(activeId);
+  if (activeBtn) activeBtn.classList.add('on');
+  renderPartners(cat === 'all' ? null : cat);
+}
+function filterPartner(cat, el) {
+  document.querySelectorAll('.partner-tabs .cf-pill').forEach(p => p.classList.remove('on'));
+  if (el) el.classList.add('on');
+  renderPartners(cat);
+}
+
+// ── TAG OPTS ──
+document.querySelectorAll('.tag-opt').forEach(t => t.addEventListener('click', function(){this.classList.toggle('on');}));
+
+// ── ADMIN ──
+let currentRole = 'admin';
+function openLogin() { document.getElementById('admin-overlay').classList.add('on'); }
+function setRole(r, el) {
+  currentRole = r;
+  document.querySelectorAll('.lb-role').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+}
+function doLogin() {
+  const em = document.getElementById('lb-email').value.trim();
+  const pw = document.getElementById('lb-pw').value.trim();
+  if ((em === 'admin@demo.vn' || em === '') && (pw === '123456' || pw === '')) {
+    document.getElementById('admin-overlay').classList.remove('on');
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+    document.getElementById('admin-panel').classList.add('on');
+    document.getElementById('atb-name').textContent = 'Nguyễn Châu Phong';
+    document.getElementById('atb-role').textContent = currentRole === 'admin' ? 'Admin' : 'Mẹ bỉm';
+    adSec('dashboard', document.querySelector('.sb-item'));
+    window.scrollTo(0, 0);
+  } else { alert('Demo: admin@demo.vn / 123456'); }
+}
+function doLogout() {
+  document.getElementById('admin-panel').classList.remove('on');
+  go('home', document.querySelector('.nl'));
+}
+function adSec(id, el) {
+  document.querySelectorAll('.admin-sec').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('on'));
+  const s = document.getElementById('sec-' + id);
+  if (s) s.classList.add('on');
+  if (el) el.classList.add('on');
+  window.scrollTo(0, 0);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), 3000);
+}
+
+// ── TIN TỨC TABS ──
+function switchTT(id) {
+  ['news','nhatky','meo'].forEach(i => {
+    const b = document.getElementById('tb-tt-' + i);
+    const s = document.getElementById('ts-tt-' + i);
+    if (b) b.classList.remove('on');
+    if (s) s.classList.remove('on');
+  });
+  const b = document.getElementById('tb-tt-' + id);
+  const s = document.getElementById('ts-tt-' + id);
+  if (b) b.classList.add('on');
+  if (s) s.classList.add('on');
+}
+
+
+// ══ BÁCH HÓA DATA ══
+const BH_CATS = [
+  {id:'me-bau', label:'Mẹ bầu & Sau sinh', ico:'🤰', subs:[
+    {title:'Sữa cho mẹ bầu', items:['Sữa bầu Morinaga','Sữa bầu Matilia','Sữa bầu Enfamama','Sữa bầu IQ Mom','Sữa bầu Hipp','Sữa bầu Friso Mum']},
+    {title:'Máy hút sữa', items:['Máy hút sữa Spectra','Máy hút sữa Medela','Máy hút sữa Mamago','Máy hút sữa Pigeon','Máy hút điện đôi','Máy hút tay']},
+    {title:'Vitamin cho mẹ bầu & sau sinh', items:[]},
+    {title:'Quần áo mẹ bầu & sau sinh', items:[]},
+    {title:'Túi trữ sữa & Phụ kiện', items:[]},
+    {title:'Áo ngực cho con bú', items:[]},
+    {title:'Gel và Gen nịt bụng', items:[]},
+    {title:'Mỹ phẩm & Kem chống rạn da', items:[]},
+    {title:'Lợi sữa & Thảo dược', items:[]},
+  ], brands:['Morinaga','Medela','Spectra','Hipp','Friso Mum','Bbraun']},
+  {id:'sua-be', label:'Sữa cho bé', ico:'🥛', subs:[
+    {title:'Sữa bột 0–6 tháng (Số 1)', items:['Aptamil Pronutra 1','Nan Optipro 1','Friso Gold 1','Abbott Similac 1','Enfamil A+ 1','HiPP Organic 1','Vinamilk Optimum Gold 1','Meiji Hohoemi']},
+    {title:'Sữa bột 6–12 tháng (Số 2)', items:['Aptamil Pronutra 2','Nan Optipro 2 HM-O','Friso Gold 2','Abbott Similac 2','Enfamil A+ 2','HiPP Organic 2']},
+    {title:'Sữa bột 1–3 tuổi (Số 3)', items:['Aptamil Pronutra 3','Nan Optipro 3','Friso Gold 3','Grow Plus+','Vinamilk Grow']},
+    {title:'Sữa bột 3–6 tuổi (Số 4)', items:['Aptamil 4','Nan 4','Friso 4','Grow Gold']},
+    {title:'Sữa đặc trị', items:['Sữa non tăng đề kháng','Sữa chống táo bón','Sữa chống nôn trớ','Sữa cho bé sinh non','Sữa ít lactose']},
+    {title:'Sữa nước (RTD)', items:['Sữa pha sẵn Meiji','Sữa pha sẵn Friso','Sữa pha sẵn Aptamil']},
+  ], brands:['Aptamil','Nan','Friso','Abbott','Enfamil','HiPP','Vinamilk','Meiji','Wakodo','Morinaga']},
+  {id:'an-dam', label:'Bé ăn dặm', ico:'🍽', subs:[
+    {title:'Cháo & Bột ăn dặm', items:['Bột gạo ăn dặm Ridielac','Cháo Bellamy\'s Organic','Bột ngũ cốc HiPP','Cháo dinh dưỡng Gerber','Bột yến mạch Quaker Baby']},
+    {title:'Bánh ăn dặm', items:['Bánh gạo Glico','Bánh tan Hipp','Bánh quy sữa Farley\'s','Bánh bông lan Mamamy']},
+    {title:'Trái cây nghiền & Nước ép', items:['Trái cây nghiền Bellamy\'s','Nước ép Friso','Sinh tố rau củ HiPP']},
+    {title:'Dụng cụ ăn dặm', items:['Bộ bát thìa Avent','Ghế ăn dặm Stokke','Khay ăn dặm','Yếm bib silicon','Máy xay đồ ăn dặm']},
+  ], brands:['HiPP','Bellamy\'s','Ridielac','Gerber','Glico','Pigeon']},
+  {id:'bim-ta', label:'Bỉm tã & Vệ sinh', ico:'👶', subs:[
+    {title:'Tã dán sơ sinh', items:['Pampers Swaddlers NB','Huggies Platinum Newborn','Bobby Newborn','Bobby Extra Soft NB']},
+    {title:'Tã dán cỡ S/M/L/XL', items:['Pampers Premium S/M/L','Huggies Platinum S/M/L','Merries S/M/L','MamyPoko S/M/L','Bobby S/M/L']},
+    {title:'Tã quần S/M/L/XL/XXL', items:['Pampers Premium Pants','Huggies Dryfit Pants','Merries Pants','Bobby Pants']},
+    {title:'Khăn ướt', items:['Pampers Sensitive Wipes','Pigeon Wipes','Mamipoko Wipes','Huggies Wipes']},
+    {title:'Nước rửa bình & tiệt trùng', items:['Nước rửa bình Pigeon','Nước rửa bình Mamamy','Máy tiệt trùng sấy khô','Túi tiệt trùng lò vi sóng']},
+  ], brands:['Pampers','Huggies','Merries','MamyPoko','Bobby','Pigeon']},
+  {id:'binh-sua', label:'Bình sữa & Phụ kiện', ico:'🍼', subs:[
+    {title:'Bình sữa', items:['Bình Pigeon SofTouch','Bình Philips Avent Natural','Bình Comotomo','Bình Dr.Brown\'s','Bình Tommee Tippee','Bình Mamajoo']},
+    {title:'Núm ti & Ty giả', items:['Núm ti Pigeon','Núm ti Philips Avent','Ty giả NUK','Ty giả Philips Avent']},
+    {title:'Máy hâm sữa', items:['Máy hâm Philips Avent','Máy hâm Spectra','Máy hâm Dr.Brown\'s']},
+    {title:'Phụ kiện khác', items:['Cọ rửa bình','Hộp bảo quản sữa','Túi ủ sữa giữ nhiệt']},
+  ], brands:['Pigeon','Philips Avent','Comotomo','Dr.Brown\'s','Tommee Tippee','NUK']},
+  {id:'do-so-sinh', label:'Đồ sơ sinh', ico:'🎁', subs:[
+    {title:'Set đồ sơ sinh', items:['Set 7 món sơ sinh','Set đón bé về nhà','Hộp quà tặng sơ sinh']},
+    {title:'Quần áo sơ sinh 0–3T', items:['Body suit','Bộ romper','Túi ngủ sơ sinh','Mũ sơ sinh','Bao tay chân']},
+    {title:'Chăn & Gối sơ sinh', items:['Gối chặn sơ sinh','Chăn wrapping','Khăn quấn muslin']},
+    {title:'Xe nôi & Ghế rung', items:['Xe nôi đẩy','Ghế rung tự động','Võng rung điện','Ghế bouncers']},
+  ], brands:['Combi','Graco','Fisher-Price','Joie','Chicco','Maclaren']},
+  {id:'thoi-trang', label:'Thời trang & Phụ kiện', ico:'👕', subs:[
+    {title:'Quần áo bé gái 0–1 tuổi', items:['Váy đầm bé gái','Bộ liền thân bé gái','Set đồ bé gái']},
+    {title:'Quần áo bé trai 0–1 tuổi', items:['Bộ body romper bé trai','Quần short bé trai','Set đồ bé trai']},
+    {title:'Quần áo 1–3 tuổi', items:['Váy bé gái 1–3 tuổi','Bộ thể thao bé trai','Đồ bộ pijama']},
+    {title:'Yếm bib & Phụ kiện', items:['Yếm bib silicon','Yếm vải','Mũ che nắng','Giày tập đi']},
+  ], brands:['Carter\'s','H&M Kids','Mothercare','Zara Kids','Chicco','Gymboree']},
+  {id:'vitamin', label:'Vitamin & Sức khoẻ', ico:'💊', subs:[
+    {title:'Vitamin D & Canxi', items:['Vitamin D3 Aquadetrim','Vitamin D3 Biocare','Canxi nano Ostelin','Canxi chew Caltrate']},
+    {title:'Omega-3 & DHA', items:['DHA Moller\'s','Omega-3 Nordic Naturals','DHA Blackmores','DHA Mamom']},
+    {title:'Probiotic cho bé', items:['Probiotic Enterogermina','Bioflor Baby','Lactobacillus Reuteri','Men vi sinh BioAmicus']},
+    {title:'Tăng cân & Chiều cao', items:['Bio Island Lysine','Pediasure','Grow Plus+','Viên ngậm kẽm']},
+  ], brands:['Blackmores','Nordic Naturals','Moller\'s','Enterogermina','Bio Island']},
+  {id:'do-dung', label:'Đồ dùng mẹ & bé', ico:'🛒', subs:[
+    {title:'Xe đẩy & Xe nôi', items:['Xe đẩy Joie Chrome','Xe đẩy Chicco Urban','Xe đẩy Aprica','Xe nôi Cam Cam','Xe đẩy gấp gọn']},
+    {title:'Địu em bé', items:['Địu Ergobaby 360','Địu Beco Gemini','Địu vải wrap Moby','Địu hip seat Lalabu']},
+    {title:'Ghế ô tô cho bé', items:['Ghế Joie i-Spin','Ghế Chicco Seat','Ghế Britax Römer','Ghế Recaro Easylife']},
+    {title:'Nôi & Cũi', items:['Nôi rung Graco','Cũi gỗ Combi','Cũi đa năng xếp gọn']},
+  ], brands:['Joie','Ergobaby','Chicco','Graco','Britax','Combi']},
+  {id:'giat-xa', label:'Giặt xả & Tắm gội', ico:'🧴', subs:[
+    {title:'Nước giặt đồ bé', items:['Nước giặt Dnee','Nước giặt Pigeon','Nước giặt Pur Baby','Nước giặt Uni Baby']},
+    {title:'Sữa tắm gội bé', items:['Sữa tắm Bübchen','Sữa tắm Johnson\'s Baby','Sữa tắm Cetaphil Baby','Sữa tắm Mustela']},
+    {title:'Kem dưỡng da bé', items:['Kem Sudocrem','Kem Cetaphil Baby','Kem Bübchen','Lotion Mustela']},
+    {title:'Dầu gội bé', items:['Dầu gội Bébé Cadum','Dầu gội Pigeon','Dầu gội Johnson\'s No Tears']},
+  ], brands:['Cetaphil','Mustela','Johnson\'s','Bübchen','Pigeon','Sudocrem']},
+  {id:'do-choi', label:'Đồ chơi & Học tập', ico:'🧸', subs:[
+    {title:'Đồ chơi 0–6 tháng', items:['Xúc xắc Fisher-Price','Đồ chơi treo cũi','Gương soi bé','Đồ chơi nước tắm']},
+    {title:'Đồ chơi 6–12 tháng', items:['Bóng mềm Oball','Đồ chơi gõ trống','Khối xếp hình mềm','Con rối tay']},
+    {title:'Đồ chơi 1–3 tuổi', items:['Lego Duplo','Bộ xe chạy Vtech','Đàn nhạc','Sách vải bé']},
+    {title:'Sách & Học liệu', items:['Sách board book','Flash card','Sách vải Kouassi','Bộ thẻ học thông minh']},
+  ], brands:['Fisher-Price','Lego','Vtech','Oball','Chicco','Mattel']},
+];
+
+const BH_BRANDS = {
+  'me-bau': ['Morinaga','Medela','Spectra','Hipp','Friso Mum','Bbraun','Mamago','Pigeon'],
+  'sua-be': ['Aptamil','Nan','Friso','Abbott','Enfamil','HiPP','Vinamilk','Meiji','Wakodo','Morinaga','Glico','Nutifood'],
+  'an-dam': ['HiPP','Bellamy\'s','Ridielac','Gerber','Glico','Pigeon','Nestle','Heinz'],
+  'bim-ta': ['Pampers','Huggies','Merries','MamyPoko','Bobby','Pigeon','Diana','Goo.N'],
+  'binh-sua': ['Pigeon','Philips Avent','Comotomo','Dr.Brown\'s','Tommee Tippee','NUK','Chicco','Mamajoo'],
+  'do-so-sinh': ['Combi','Graco','Fisher-Price','Joie','Chicco','Maclaren','Carter\'s','Mothercare'],
+  'thoi-trang': ['Carter\'s','H&M','Zara Kids','Chicco','Gymboree','Petit Bateau'],
+  'vitamin': ['Blackmores','Nordic Naturals','Moller\'s','Enterogermina','Bio Island','Ostelin'],
+  'do-dung': ['Joie','Ergobaby','Chicco','Graco','Britax','Combi','Maclaren','Uppababy'],
+  'giat-xa': ['Cetaphil','Mustela','Johnson\'s','Bübchen','Pigeon','Sudocrem','Dnee'],
+  'do-choi': ['Fisher-Price','Lego','Vtech','Oball','Chicco','Mattel','Lamaze','Skip Hop'],
+};
+
+const BH_SAMPLE_PRODUCTS = {
+  'sua-be': [
+    {brand:'Aptamil',name:'Pronutra Advance 2 (6–12T)',ico:'🥛',price:'640.000đ',orig:'680.000đ',badge:'sale',badgeColor:'#E8547A',rating:'4.9 (284)'},
+    {brand:'Nan Nestlé',name:'Optipro 2 HM-O (6–12T)',ico:'🥛',price:'590.000đ',orig:'',badge:'',badgeColor:'',rating:'4.8 (312)'},
+    {brand:'Friso Gold',name:'Friso Gold 2 (6–12T) 900g',ico:'🥛',price:'520.000đ',orig:'580.000đ',badge:'sale',badgeColor:'#E8547A',rating:'4.7 (198)'},
+    {brand:'HiPP Organic',name:'HiPP Combiotic 2 (6–12T)',ico:'🥛',price:'720.000đ',orig:'',badge:'new',badgeColor:'#0D9488',rating:'4.9 (87)'},
+    {brand:'Vinamilk',name:'Optimum Gold 2 · 900g',ico:'🥛',price:'285.000đ',orig:'310.000đ',badge:'sale',badgeColor:'#E8547A',rating:'4.7 (521)'},
+    {brand:'Abbott',name:'Similac IQ Plus 2 · 900g',ico:'🥛',price:'460.000đ',orig:'',badge:'',badgeColor:'',rating:'4.6 (143)'},
+    {brand:'Meiji',name:'Meiji Hohoemi Step 2',ico:'🥛',price:'380.000đ',orig:'420.000đ',badge:'sale',badgeColor:'#E8547A',rating:'4.8 (267)'},
+    {brand:'Morinaga',name:'Morinaga Chil-Mil 2',ico:'🥛',price:'350.000đ',orig:'',badge:'',badgeColor:'',rating:'4.7 (189)'},
+  ],
+  'me-bau': [
+    {brand:'Morinaga',name:'Sữa bầu Morinaga · 900g',ico:'🤰',price:'420.000đ',orig:'',badge:'',badgeColor:'',rating:'4.8 (312)'},
+    {brand:'Spectra',name:'Máy hút sữa điện đôi S1+',ico:'⚡',price:'6.800.000đ',orig:'7.500.000đ',badge:'sale',badgeColor:'#E8547A',rating:'4.9 (156)'},
+    {brand:'Medela',name:'Máy hút sữa Swing Flex',ico:'⚡',price:'3.200.000đ',orig:'',badge:'new',badgeColor:'#0D9488',rating:'4.8 (98)'},
+    {brand:'Hipp',name:'Sữa bầu HiPP Mama · 500g',ico:'🤰',price:'380.000đ',orig:'',badge:'',badgeColor:'',rating:'4.7 (201)'},
+    {brand:'Mamago',name:'Túi trữ sữa Mamago 100ml (50c)',ico:'🍼',price:'95.000đ',orig:'',badge:'',badgeColor:'',rating:'4.9 (445)'},
+    {brand:'Pigeon',name:'Bộ cọ rửa bình Pigeon 4 món',ico:'🍼',price:'180.000đ',orig:'220.000đ',badge:'sale',badgeColor:'#E8547A',rating:'4.8 (367)'},
+    {brand:'Mustela',name:'Kem chống rạn da Mustela 250ml',ico:'🧴',price:'620.000đ',orig:'',badge:'',badgeColor:'',rating:'4.9 (203)'},
+    {brand:'Blackmores',name:'Vitamin tổng hợp mẹ bầu 60 viên',ico:'💊',price:'380.000đ',orig:'420.000đ',badge:'sale',badgeColor:'#E8547A',rating:'4.8 (289)'},
+  ],
+  'bim-ta': [
+    {brand:'Pampers',name:'Tã dán Premium Care S · 84 miếng',ico:'👶',price:'185.000đ',orig:'210.000đ',badge:'sale',badgeColor:'#E8547A',rating:'4.8 (512)'},
+    {brand:'Huggies',name:'Tã quần Platinum L · 52 miếng',ico:'👶',price:'215.000đ',orig:'245.000đ',badge:'sale',badgeColor:'#E8547A',rating:'4.7 (423)'},
+    {brand:'Merries',name:'Tã dán Merries M · 64 miếng',ico:'👶',price:'195.000đ',orig:'',badge:'',badgeColor:'',rating:'4.9 (634)'},
+    {brand:'Bobby',name:'Bobby Extra Soft NB · 96 miếng',ico:'👶',price:'120.000đ',orig:'140.000đ',badge:'sale',badgeColor:'#E8547A',rating:'4.6 (287)'},
+    {brand:'Pigeon',name:'Khăn ướt Pigeon 100% cotton · 80 tờ',ico:'🧻',price:'55.000đ',orig:'',badge:'',badgeColor:'',rating:'4.9 (891)'},
+    {brand:'MamyPoko',name:'Tã quần MamyPoko XL · 48 miếng',ico:'👶',price:'175.000đ',orig:'',badge:'new',badgeColor:'#0D9488',rating:'4.7 (312)'},
+    {brand:'Pampers',name:'Nước rửa bình Pigeon 700ml',ico:'🍼',price:'95.000đ',orig:'',badge:'',badgeColor:'',rating:'4.8 (634)'},
+    {brand:'Huggies',name:'Khăn ướt Huggies Pure Water 64 tờ',ico:'🧻',price:'45.000đ',orig:'',badge:'',badgeColor:'',rating:'4.8 (467)'},
+  ],
+};
+
+// Default: show first category
+let currentCat = 'me-bau';
+let currentBrand = null;
+
+function initBachoa() {
+  var sb = document.getElementById('cat-sidebar');
+  if (!sb) return;
+  var html = '';
+  BH_CATS.forEach(function(cat) {
+    html += '<div class="cat-sb-item ' + (cat.id === currentCat ? 'on' : '') + '" onclick="selectBHCat(\'' + cat.id + '\')">' +
+      '<span class="cat-sb-ico">' + cat.ico + '</span>' +
+      '<span>' + cat.label + '</span></div>';
+  });
+  sb.innerHTML = html;
+  renderBHCat(currentCat);
+}
+
+function selectBHCat(id) {
+  currentCat = id;
+  currentBrand = null;
+  document.querySelectorAll('.cat-sb-item').forEach(function(el){ el.classList.remove('on'); });
+  var items = document.querySelectorAll('.cat-sb-item');
+  var catIndex = BH_CATS.findIndex(function(c){ return c.id === id; });
+  if (items[catIndex]) items[catIndex].classList.add('on');
+  renderBHCat(id);
+}
+
+function renderBHCat(id) {
+  const cat = BH_CATS.find(function(c){ return c.id === id; });
+  if (!cat) return;
+
+  // Render subcats - NO nested template literals, use string concat
+  var subsHtml = '';
+  cat.subs.forEach(function(sub) {
+    var itemsHtml = '';
+    sub.items.forEach(function(item) {
+      itemsHtml += '<div class="subcat-item" onclick="filterBHProducts(\'' + id + '\',\'' + item.replace(/'/g, "\\'") + '\')">' + item + '</div>';
+    });
+    subsHtml += '<div class="subcat-section"><div class="subcat-title">' + sub.title + '</div><div class="subcat-items">' + itemsHtml + '</div></div>';
+  });
+
+  document.getElementById('bh-subcats').innerHTML =
+    '<div style="font-size:13px;font-weight:700;color:var(--muted2);margin-bottom:14px;display:flex;align-items:center;gap:8px">' +
+    '<span style="font-size:18px">' + cat.ico + '</span>' +
+    '<span style="font-size:16px;font-weight:800;color:var(--navy)">' + cat.label + '</span></div>' +
+    '<div class="subcat-grid">' + subsHtml + '</div>';
+
+  // Render products
+  var prods = BH_SAMPLE_PRODUCTS[id] || BH_SAMPLE_PRODUCTS['sua-be'];
+  var prodsHtml = '';
+  prods.forEach(function(p) {
+    var badge = p.badge ? '<span class="bh-prod-badge" style="background:' + p.badgeColor + ';color:#fff">' + (p.badge === 'sale' ? 'Giảm giá' : 'Mới về') + '</span>' : '';
+    var orig = p.orig ? '<span class="bh-prod-orig">' + p.orig + '</span>' : '';
+    prodsHtml += '<div class="bh-prod">' +
+      '<div class="bh-prod-thumb"><span style="font-size:38px">' + p.ico + '</span>' + badge + '</div>' +
+      '<div class="bh-prod-body">' +
+      '<div class="bh-prod-brand">' + p.brand + '</div>' +
+      '<div class="bh-prod-name">' + p.name + '</div>' +
+      '<div><span class="bh-prod-price">' + p.price + '</span>' + orig + '</div>' +
+      '<div class="bh-prod-rating">⭐ ' + p.rating + '</div>' +
+      '</div></div>';
+  });
+  document.getElementById('bh-products').innerHTML =
+    '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">' +
+    '<span>Sản phẩm nổi bật — ' + cat.label + '</span>' +
+    '<span style="color:var(--muted2);font-weight:400">Hiển thị ' + prods.length + ' sản phẩm</span></div>' +
+    '<div class="bh-prod-grid">' + prodsHtml + '</div>';
+
+  // Render brands
+  var brands = BH_BRANDS[id] || [];
+  var brandsHtml = '';
+  brands.forEach(function(b) {
+    brandsHtml += '<div class="brand-logo" onclick="filterBHByBrand(\'' + b.replace(/'/g, "\\'") + '\')">' + b + '</div>';
+  });
+  var bp = document.getElementById('brand-panel');
+  if (bp) bp.innerHTML = brandsHtml;
+}
+
+function filterBHProducts(catId, subItem) {
+  showToast('Đang lọc: ' + subItem);
+}
+function filterBHByBrand(brand) {
+  document.querySelectorAll('.brand-logo').forEach(el => el.classList.remove('on'));
+  event.target.classList.add('on');
+  showToast('Nhãn hàng: ' + brand);
+}
+function filterShop(cat, el) {
+  const mapping = {
+    'all': 'me-bau', 'sua-bot': 'sua-be', 'sua-bau': 'me-bau',
+    'bim': 'bim-ta', 'an-dam': 'an-dam', 'my-pham': 'giat-xa',
+    'do-choi': 'do-choi', 'binh-sua': 'binh-sua',
+    'sua-bot-2': 'sua-be', 'sua-lon': 'sua-be', 'quan-ao-moi': 'thoi-trang',
+    'may-hut': 'me-bau', 'xe-day-moi': 'do-dung', 'giu-re': 'do-dung',
+  };
+  const catId = mapping[cat] || 'me-bau';
+  go('bachoa', null);
+  currentCat = catId;
+  setTimeout(() => { initBachoa(); selectBHCat(catId); }, 50);
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', () => {
+  renderListings('all');
+  initBachoa();
+  renderPartners('all');
+  calcDueDate();
+});
+window.addEventListener('scroll', () => {
+  document.querySelector('nav')?.classList.toggle('scrolled', window.scrollY > 30);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+
+> suaembe@0.1.0 dev
+> next dev --turbopack --port 3001
+
+   ▲ Next.js 15.5.23 (Turbopack)
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.32.1:3001
+   - Environments: .env
+
+ ✓ Starting...
+Creating turbopack project { dir: 'D:\\VEA_GROUP\\suaembe', testMode: true }
+ ✓ Compiled middleware in 326ms
+ ✓ Ready in 1855ms
+ ○ Compiling /api/product-categories ...
+ ✓ Compiled /api/product-categories in 1802ms
+ GET /api/product-categories 500 in 9979ms
+ GET /api/products?page_size=1 500 in 9984ms
+ GET /api/brands 500 in 10013ms
+ ○ Compiling / ...
+ ✓ Compiled / in 3.1s
+ GET / 200 in 3867ms
+ ✓ Compiled middleware in 15ms
+ ✓ Compiled middleware in 2ms
+ ✓ Compiled middleware in 2ms
+ ✓ Compiled middleware in 2ms
+ ✓ Compiled in 277ms
+ ✓ Compiled middleware in 79ms
+ ✓ Compiled middleware in 4ms
+ ✓ Compiled middleware in 4ms
+ ✓ Compiled middleware in 5ms
+ ✓ Compiled middleware in 2ms
+ ✓ Compiled middleware in 44ms
+ ✓ Compiled in 1ms
+ ✓ Compiled / in 99ms
+ GET / 200 in 576ms
+ ✓ Compiled in 93ms
+ ✓ Compiled in 219ms
+ ✓ Compiled in 90ms
+ ✓ Compiled in 106ms
+ ✓ Compiled / in 67ms
+ GET / 200 in 245ms
+ ✓ Compiled middleware in 5ms
+ GET / 200 in 190ms
+ GET / 200 in 113ms
+ GET / 200 in 123ms
+ ✓ Compiled middleware in 111ms
+ ✓ Compiled middleware in 8ms
+ ✓ Compiled middleware in 4ms
+ ✓ Compiled middleware in 4ms
+ ✓ Compiled middleware in 2ms
+ ✓ Compiled middleware in 1ms
