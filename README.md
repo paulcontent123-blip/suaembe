@@ -63,6 +63,9 @@ npm run build && npm run start
 | [`document/USECASE.md`](document/USECASE.md) | **TÀI LIỆU USECASE** cho logic nghiệp vụ — 30 use case, trạng thái triển khai, luồng chính, quy tắc, ma trận phân quyền, danh sách API. Đọc file này trước khi sửa bất kỳ tính năng nào. |
 | [`document/database.md`](document/database.md) | Schema đầy đủ: bảng, cột, RLS, các quyết định mô hình dữ liệu đã chốt với techlead. |
 | [`document/TESTCASE.md`](document/TESTCASE.md) | Test case theo từng UC + trạng thái đã test thật (qua HTTP, không mock) hay chưa. |
+| [`document/DEPLOY_suaembe.md`](document/DEPLOY_suaembe.md) | Hướng dẫn deploy lên VPS (VD Vietnix) — cài Node.js/PM2/Nginx/SSL, cron, env var. Đã viết lại đúng kiến trúc hiện tại (bản cũ mô tả sai, đã thay). |
+
+**Lưu ý:** `document/suaembe.html` chỉ là bản demo tĩnh dùng để tham khảo **giao diện/bố cục** khi xây màn hình mới — không phải nguồn dữ liệu hay logic nghiệp vụ chuẩn (nhiều chỗ dữ liệu trong đó là bịa/hardcode).
 
 
 ## Trạng thái hiện tại

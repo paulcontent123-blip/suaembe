@@ -1,162 +1,195 @@
-# SuaEmbe.com — Deploy & Handoff Guide
+# SuaEmbe.com — Hướng Dẫn Deploy Thật
 
-## File cần upload
-```
-suaembe_v2.html  →  public_html/index.html
-```
-Chỉ 1 file duy nhất. Frontend chạy hoàn toàn không cần backend.
+> File này trước đây mô tả kiến trúc cũ (1 file HTML tĩnh + backend Express riêng trên Railway/Fly.io) — **không còn đúng**. Ứng dụng thật là **Next.js 15 (App Router) + Supabase**, cần chạy Node.js server thật liên tục, không phải web tĩnh. Hướng dẫn dưới đây phản ánh đúng kiến trúc hiện tại.
+
+## Yêu cầu bắt buộc của server đích
+
+Ứng dụng có hàng chục API route động (`src/app/api/**`), trang SSR, và 1 cron job nội bộ (`/api/cron/dispatch-notifications`). Vì vậy server đích **bắt buộc phải là VPS** (có quyền SSH cài đặt Node.js) — **Shared Hosting/cPanel không chạy được**, vì loại hosting đó chỉ phục vụ file tĩnh/PHP, không chạy được tiến trình Node.js sống.
+
+Cấu hình tối thiểu khuyến nghị: **1-2GB RAM, 1 vCPU** cho traffic nhỏ-vừa giai đoạn đầu.
 
 ---
 
-## Deploy Frontend
+## Bước 1 — Cài đặt môi trường trên VPS
 
-### Vercel (khuyên dùng — nhanh nhất, free)
+SSH vào VPS, chạy lần lượt (giả định Ubuntu/Debian — đa số VPS Vietnix dùng hệ này):
+
 ```bash
-# Cách 1: Drag & drop
-1. Vào app.vercel.com
-2. Kéo file index.html vào ô deploy
-3. Custom domain: suaembe.com
-4. SSL tự động bật
+# Cập nhật hệ thống
+sudo apt update && sudo apt upgrade -y
 
-# Cách 2: CLI
-npm i -g vercel
-vercel deploy --prod index.html
+# Cài Node.js 20 LTS (khuyến nghị — ổn định cho production)
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Kiểm tra
+node --version   # nên ra v20.x
+npm --version
+
+# Cài Git
+sudo apt install -y git
+
+# Cài PM2 (giữ Next.js server chạy nền, tự khởi động lại khi crash/reboot)
+sudo npm install -g pm2
+
+# Cài Nginx (reverse proxy + SSL)
+sudo apt install -y nginx
+
+# Cài Certbot (SSL miễn phí Let's Encrypt)
+sudo apt install -y certbot python3-certbot-nginx
 ```
 
-### Shared Hosting (cPanel)
-```
-1. cPanel → File Manager → public_html/
-2. Upload suaembe_v2.html, rename → index.html
-3. Trỏ domain suaembe.com → public_html/
-4. cPanel → SSL/TLS → Let's Encrypt → bật HTTPS
+---
+
+## Bước 2 — Lấy code về VPS
+
+Repo đã có sẵn trên GitHub (`https://github.com/paulcontent123-blip/suaembe.git`):
+
+```bash
+cd /var/www
+sudo git clone https://github.com/paulcontent123-blip/suaembe.git
+sudo chown -R $USER:$USER suaembe
+cd suaembe
+npm install
 ```
 
-### VPS + Nginx
+---
+
+## Bước 3 — Tạo file `.env` thật trên server
+
+File `.env` **không nằm trong git** (bị `.gitignore` chặn theo đúng thiết kế bảo mật) — phải tự tạo mới trên VPS:
+
+```bash
+nano .env
+```
+
+Dán đầy đủ nội dung `.env` thật (lấy từ máy dev, hoặc từ nơi lưu trữ credential an toàn của team) — **nhớ đổi 2 giá trị sau cho khớp domain thật**, khác với bản local:
+
+```
+NEXT_PUBLIC_SITE_URL=https://suaembe.com
+```
+
+(và tương tự nếu có domain callback riêng cho VNPay/MoMo sau này). Lưu file (Ctrl+O, Enter, Ctrl+X trong `nano`).
+
+---
+
+## Bước 4 — Build và chạy bằng PM2
+
+```bash
+npm run build
+pm2 start npm --name "suaembe" -- start
+pm2 save
+pm2 startup   # chạy lệnh nó in ra để PM2 tự khởi động cùng VPS sau khi reboot
+```
+
+Kiểm tra đang chạy:
+
+```bash
+pm2 status
+pm2 logs suaembe   # xem log thời gian thực, Ctrl+C để thoát xem log (không dừng app)
+curl http://localhost:3000   # phải trả về HTML trang chủ
+```
+
+---
+
+## Bước 5 — Cấu hình Nginx reverse proxy + SSL
+
+Tạo file cấu hình:
+
+```bash
+sudo nano /etc/nginx/sites-available/suaembe
+```
+
+Nội dung:
+
 ```nginx
 server {
     listen 80;
     server_name suaembe.com www.suaembe.com;
-    root /var/www/suaembe;
-    index index.html;
-    location / { try_files $uri /index.html; }
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
 }
 ```
+
+Kích hoạt + bật SSL miễn phí:
+
 ```bash
-scp suaembe_v2.html user@server:/var/www/suaembe/index.html
-nginx -t && systemctl reload nginx
-certbot --nginx -d suaembe.com -d www.suaembe.com
+sudo ln -s /etc/nginx/sites-available/suaembe /etc/nginx/sites-enabled/
+sudo nginx -t   # kiểm tra cú pháp trước khi reload
+sudo systemctl reload nginx
+
+sudo certbot --nginx -d suaembe.com -d www.suaembe.com
+# Certbot tự sửa file Nginx để redirect HTTP -> HTTPS và tự gia hạn SSL định kỳ
 ```
 
 ---
 
-## Backend Stack (dev team tích hợp)
+## Bước 6 — Áp dụng migration database (chạy 1 lần, từ máy local hoặc VPS đều được)
 
-| Component | Stack | Ghi chú |
-|-----------|-------|---------|
-| Database | PostgreSQL / Supabase | Schema trong TechSpec §7 |
-| API | Node.js Express + TypeScript | REST + JWT |
-| AI Gợi ý sữa | Claude API (`claude-sonnet-4-6`) | Prompt phân tích dinh dưỡng |
-| File upload | Cloudinary (free 25GB) | Ảnh listing C2C, avatar BS |
-| Payment Escrow | VNPay + MoMo Business | 2% phí giao dịch |
-| Push notification | Firebase FCM | Nhắc lịch ăn, tư vấn BS |
-| Email | Resend.com | Đăng ký, xác nhận booking |
-| Search | Meilisearch | Tìm kiếm sản phẩm, listing |
-| Hosting backend | Railway / Fly.io | Free tier ổn, scale tốt |
+Không bắt buộc chạy trên VPS — migration chỉ cần chạy 1 lần nhắm thẳng vào Supabase project, không phụ thuộc server nào:
 
----
-
-## API Endpoints cần build
-
-### Auth
-```
-POST /api/auth/register     — Đăng ký (email + phone + password)
-POST /api/auth/login        — Đăng nhập → JWT
-POST /api/auth/logout       — Logout
-GET  /api/auth/me           — Profile hiện tại
-```
-
-### AI Gợi ý sữa
-```
-POST /api/ai/suggest-milk   — Input: {age, weight, condition, budget, priorities}
-                              Output: [{product, match_percent, reason}]
-```
-
-### Chợ C2C
-```
-GET  /api/listings          — Danh sách (filter: cat, province, price)
-POST /api/listings          — Đăng bán (auth required)
-GET  /api/listings/:id      — Chi tiết
-PUT  /api/listings/:id      — Sửa (seller only)
-DELETE /api/listings/:id    — Ẩn (seller/admin)
-POST /api/listings/:id/buy  — Mua → tạo Escrow transaction
-POST /api/escrow/:id/confirm — Xác nhận nhận hàng → release tiền
-```
-
-### Bác sĩ Nhi
-```
-GET  /api/bs-nhi            — Danh sách BS (filter: specialty)
-POST /api/consult           — Gửi câu hỏi (auth required)
-PUT  /api/consult/:id/answer — BS trả lời (bs_nhi role)
-```
-
-### Đối tác / Booking
-```
-GET  /api/partners          — Danh sách đối tác (filter: type)
-POST /api/bookings          — Đặt dịch vụ (auth required)
-GET  /api/bookings/me       — Lịch sử booking của user
-```
-
-### Admin
-```
-GET  /api/admin/listings/pending   — Tin C2C chờ duyệt
-PUT  /api/admin/listings/:id/approve
-GET  /api/admin/stats              — Dashboard stats
-GET  /api/admin/users
-PUT  /api/admin/bs-nhi/:id/verify  — Xác minh BS Nhi
+```bash
+cd src/supabase
+supabase link --project-ref <project-ref>
+supabase db push
 ```
 
 ---
 
-## Test Checklist sau deploy
+## Bước 7 — Cron job (ưu điểm của VPS: không giới hạn tần suất như Vercel Hobby)
 
-- [ ] Trang chủ load OK, marquee nhãn sữa + đối tác chạy 2 hàng
-- [ ] Click từng mục nav → chuyển trang đúng, không trắng trang
-- [ ] Bách Hóa: click sidebar danh mục → panel giữa + brands cập nhật
-- [ ] Chợ Mẹ & Bé: click "Đăng bán" → form mở đầy đủ fields
-- [ ] Filter tin chợ theo danh mục (Sữa dư, Quần áo, Xe đẩy...)
-- [ ] Công cụ Mẹ → AI gợi ý sữa → kết quả Top 3 hiện ra
-- [ ] Công cụ Mẹ → Tính ngày dự sinh → kết quả tính đúng
-- [ ] Đối tác → 5 tab hoạt động (Bệnh viện / Bảo hiểm / BS / TB / Dịch vụ)
-- [ ] Tin tức → 3 tab (Tin tức / Nhật ký bé / Học viện Làm Mẹ)
-- [ ] Login: `admin@demo.vn / 123456` → vào admin panel đúng
-- [ ] Admin: click sidebar items → switch section đúng
-- [ ] Đăng xuất → về trang chủ, admin panel ẩn hoàn toàn
-- [ ] Chrome DevTools Console → **ZERO JS errors**
-- [ ] Mobile responsive (Chrome DevTools → Toggle device toolbar)
-
----
-
-## Xóa trước khi Go Live
-```
-Demo credentials trong HTML:
-- admin@demo.vn / 123456  (dòng ~login modal)
-Thay bằng xác thực thật từ backend API.
+```bash
+crontab -e
 ```
 
----
+Thêm dòng (chạy mỗi 5 phút, gọi đúng route dispatch push notification):
 
-## Revenue Model
+```
+*/5 * * * * curl -s -X POST https://suaembe.com/api/cron/dispatch-notifications -H "Authorization: Bearer <CRON_SECRET_thật>" >> /var/log/suaembe-cron.log 2>&1
+```
 
-| Nguồn | Cơ chế | Đơn giá |
-|-------|--------|---------|
-| Escrow C2C | 2% phí giao dịch thành công | 2% GMV |
-| Affiliate Bách hóa | Hoa hồng từ nhãn hàng | 5–15% |
-| Quảng cáo nhãn sữa | Banner / Featured slot | 2–5M/tháng/nhãn |
-| Premium membership | Nhật ký nâng cao, ưu tiên BS | 99–199K/tháng |
-| Booking đối tác | 10% booking fee | 10% value |
-| Affiliate BV/BH | Lead fee | 200–500K/lead |
-
-**Dự kiến: 40–100 triệu VNĐ/tháng** (tháng 6 sau vận hành)
+Thay `<CRON_SECRET_thật>` bằng giá trị thật trong `.env`.
 
 ---
-SuaEmbe.com · VEA Group · 2026
+
+## Cập nhật code sau này (redeploy thủ công)
+
+```bash
+cd /var/www/suaembe
+git pull
+npm install
+npm run build
+pm2 restart suaembe
+```
+
+Muốn tự động hoá bước này khi có commit mới (CI/CD), có thể dựng thêm GitHub Actions gọi SSH deploy script — chưa cấu hình sẵn trong dự án, làm sau nếu cần.
+
+---
+
+## Danh sách biến môi trường cần có trong `.env` trên VPS
+
+Giống hệt danh sách đã dùng cho Vercel — xem `README.md` mục "Bắt đầu" để biết đầy đủ nhóm biến (Supabase, Cloudinary, Claude, Firebase, Redis, `CRON_SECRET`, `NEXT_PUBLIC_SITE_URL`).
+
+---
+
+## Bảo mật cơ bản nên làm thêm
+
+```bash
+# Chỉ mở port cần thiết
+sudo ufw allow OpenSSH
+sudo ufw allow 'Nginx Full'
+sudo ufw enable
+
+# Không để .env lộ ra ngoài qua Nginx (Next.js đã tự loại trừ, nhưng kiểm tra thêm)
+curl https://suaembe.com/.env   # phải trả 404, không phải nội dung file
+```
