@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
 
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "SuaEmbe",
   description: "He sinh thai Me va Be cua VEA Group",
+  // Xác minh quyền sở hữu site trên Google Search Console (thuộc tính dạng
+  // "Tiền tố URL" — dùng thẻ HTML thay vì bản ghi DNS, vì DNS thật của domain
+  // nằm ở Matbao chứ không phải Vietnix, không tiện chỉnh qua Zone Editor).
+  verification: {
+    google: "1Tibqz4E9mzwidlDLJaIguOa8am7yXOPN5JKWCeEx2E",
+  },
 };
 
 // Nạp font qua <link> runtime (giống document/suaembe.html) thay vì
@@ -27,7 +35,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        <GoogleAnalytics />
+        {children}
+      </body>
     </html>
   );
 }
