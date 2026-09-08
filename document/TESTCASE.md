@@ -406,6 +406,8 @@ API: `GET /api/article-categories`, `GET /api/articles`, `GET /api/articles/:slu
 | NEWS-13 | Mục lục tự động khi content có heading | Bài viết có `## Tiêu đề` / `### Tiêu đề con` trong `content`, mở `/tin-tuc/:slug` | Trang chuyển layout 2 cột; sidebar "Mục lục nội dung" liệt kê đúng heading, heading cấp 3 thụt lề dưới heading cấp 2 gần nhất |
 | NEWS-14 | Bấm mục lục nhảy đúng vị trí | Bấm 1 mục trong "Mục lục nội dung" | URL thêm `#id` tương ứng; heading đó cuộn lên đúng vị trí, không bị thanh nav che (nhờ `scroll-mt`) |
 | NEWS-15 | Bài không có heading vẫn hiển thị 1 cột | Bài `content` không có dòng `## `/`### ` nào | Không hiện sidebar mục lục, layout 1 cột như cũ — không phá bài viết cũ chưa dùng heading |
+| NEWS-16 | API trả bài viết liên quan | `GET /api/articles/:slug` với bài có quan hệ | Response có `related_articles` đúng thứ tự; chỉ gồm bài `published` có slug |
+| NEWS-17 | Hiển thị bài viết liên quan | Mở `/tin-tuc/:slug` của bài đã thiết lập quan hệ | Cuối bài có khu vực "Bài viết liên quan"; mỗi card dẫn đúng `/tin-tuc/{slug}`; bài draft/archived không hiển thị |
 
 ---
 
@@ -434,6 +436,12 @@ API: `GET/POST /api/admin/article-categories`, `PUT /api/admin/article-categorie
 | ARTICLE-ADMIN-17 | Upload nhiều ảnh inline | Trong form tạo/sửa bài, bấm "Ảnh", chọn nhiều JPEG/PNG/WEBP/GIF | Mỗi ảnh được upload; nội dung chèn nhiều block `![alt](secure_url)`; không ghi đè ảnh trước |
 | ARTICLE-ADMIN-18 | Hủy form dọn ảnh nháp | Upload ảnh bìa/inline rồi bấm "Hủy" | `DELETE /api/uploads {draft_token}` dọn ảnh nháp trên Cloudinary và các row `media_assets` tương ứng |
 | ARTICLE-ADMIN-19 | Gắn media sau khi lưu | Upload ảnh inline, lưu bài, kiểm tra DB | `owner_table = 'articles'`, `owner_id` là bài viết; ảnh vẫn hiển thị sau reload |
+| ARTICLE-ADMIN-20 | Chọn bài viết liên quan | Mở form sửa bài, chọn 2–6 bài `published`, bấm Lưu | `PUT /api/admin/articles/:id` thành công; `article_relations` lưu đúng ID và thứ tự chọn; response có `related_article_ids` |
+| ARTICLE-ADMIN-21 | Xóa toàn bộ bài liên quan | Mở bài đã có quan hệ, bỏ chọn toàn bộ, bấm Lưu | Các dòng `article_relations` của bài bị xóa; response trả `related_article_ids: []`; trang public không hiện khu vực liên quan |
+| ARTICLE-ADMIN-22 | Giới hạn số bài liên quan | Chọn bài thứ 7 hoặc gửi hơn 6 UUID qua API | Checkbox thứ 7 bị khóa hoặc API trả `400`; không lưu quá 6 quan hệ |
+| ARTICLE-ADMIN-23 | Không tự liên kết chính bài đang sửa | Trong payload gửi chính `article.id` | Hệ thống bỏ qua ID trùng bài nguồn; không tạo dòng tự tham chiếu |
+| ARTICLE-ADMIN-24 | Phân trang danh sách bài viết | `GET /api/admin/articles?page=2&page_size=8` | Response có tối đa 8 `items`, `pagination.page = 2`, `page_size = 8`, `total` và `has_more` đúng |
+| ARTICLE-ADMIN-25 | Lọc trạng thái trước khi phân trang | `GET /api/admin/articles?status=published&page=1&page_size=8` | Chỉ trả bài `published`; tổng số và `has_more` tính trên tập đã lọc |
 
 | ARTICLE-PUBLIC-05 | Bố cục bài viết | Mở bài đã xuất bản có `title`, `excerpt`, H2/H3 và bảng | Render đúng một H1, sapo, mục lục, H2/H3 và bảng |
 | ARTICLE-PUBLIC-06 | SEO meta description | Mở bài có `meta_description` | HTML metadata dùng `meta_description`; nếu null thì fallback về `excerpt` |

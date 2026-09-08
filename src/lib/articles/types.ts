@@ -24,4 +24,5 @@ export interface Article {
 
 export interface ArticleDetail extends Article {
   content: string | null;
+  related_articles: Article[];
 }

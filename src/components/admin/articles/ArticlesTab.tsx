@@ -4,12 +4,22 @@ import { useEffect, useRef, useState } from "react";
 
 import { ArticleImageUploader } from "@/components/admin/articles/ArticleImageUploader";
 import type { AdminArticle, AdminArticleCategory, ArticleStatus } from "@/lib/admin/types";
+import { MAX_RELATED_ARTICLES } from "@/lib/articles/related";
 
 const STATUS_LABEL: Record<ArticleStatus, string> = {
   draft: "Nháp",
   published: "Đã xuất bản",
   archived: "Đã ẩn",
 };
+
+const ARTICLE_PAGE_SIZE = 8;
+
+interface ArticlePagination {
+  page: number;
+  page_size: number;
+  total: number;
+  has_more: boolean;
+}
 
 interface ArticleForm {
   title: string;
@@ -20,6 +30,7 @@ interface ArticleForm {
   content: string;
   cover_url: string;
   status: ArticleStatus;
+  related_article_ids: string[];
 }
 
 const EMPTY_FORM: ArticleForm = {
@@ -31,6 +42,7 @@ const EMPTY_FORM: ArticleForm = {
   content: "",
   cover_url: "",
   status: "draft",
+  related_article_ids: [],
 };
 
 function newDraftToken(): string {
@@ -47,6 +59,7 @@ function toForm(a: AdminArticle): ArticleForm {
     content: a.content ?? "",
     cover_url: a.cover_url ?? "",
     status: a.status,
+    related_article_ids: a.related_article_ids ?? [],
   };
 }
 
@@ -60,6 +73,7 @@ function toPayload(form: ArticleForm, mediaDraftToken?: string | null) {
     content: form.content.trim() || null,
     cover_url: form.cover_url.trim() || null,
     status: form.status,
+    related_article_ids: form.related_article_ids,
     ...(mediaDraftToken ? { media_draft_token: mediaDraftToken } : {}),
   };
 }
@@ -69,16 +83,21 @@ function ArticleFields({
   onChange,
   categories,
   draftToken,
+  articles,
+  articleId,
 }: {
   form: ArticleForm;
   onChange: (f: ArticleForm) => void;
   categories: AdminArticleCategory[];
   draftToken: string;
+  articles: AdminArticle[];
+  articleId?: string | null;
 }) {
   const inputCls =
     "w-full rounded-lg border border-black/10 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8547A]";
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef(form);
+  const [relatedSearch, setRelatedSearch] = useState("");
   formRef.current = form;
 
   function insertContent(value: string) {
@@ -115,6 +134,31 @@ function ArticleFields({
     insertContent(
       "| Cột 1 | Cột 2 |\n| --- | --- |\n| Nội dung | Nội dung |",
     );
+  }
+
+  const relatedCandidates = articles.filter(
+    (article) =>
+      article.id !== articleId &&
+      (article.status === "published" || form.related_article_ids.includes(article.id)) &&
+      Boolean(article.slug),
+  );
+  const normalizedRelatedSearch = relatedSearch.trim().toLocaleLowerCase();
+  const visibleRelatedCandidates = relatedCandidates.filter(
+    (article) =>
+      !normalizedRelatedSearch ||
+      article.title.toLocaleLowerCase().includes(normalizedRelatedSearch) ||
+      form.related_article_ids.includes(article.id),
+  );
+
+  function toggleRelatedArticle(articleIdToToggle: string) {
+    const selected = form.related_article_ids;
+    const related_article_ids = selected.includes(articleIdToToggle)
+      ? selected.filter((id) => id !== articleIdToToggle)
+      : selected.length >= MAX_RELATED_ARTICLES
+        ? selected
+        : [...selected, articleIdToToggle];
+
+    onChange({ ...form, related_article_ids });
   }
 
   return (
@@ -163,6 +207,63 @@ function ArticleFields({
           className={inputCls}
         />
       </label>
+      <fieldset className="col-span-2 flex flex-col gap-1">
+        <legend className="flex items-center justify-between text-[10px] font-bold uppercase text-[#94A3B8]">
+          <span>Bài viết liên quan</span>
+          <span className="font-normal normal-case">
+            {form.related_article_ids.length}/{MAX_RELATED_ARTICLES}
+          </span>
+        </legend>
+        <input
+          value={relatedSearch}
+          onChange={(e) => setRelatedSearch(e.target.value)}
+          placeholder="Lọc theo tên bài viết..."
+          aria-label="Lọc bài viết liên quan theo tên"
+          className="w-full rounded-lg border border-black/10 bg-white px-3 py-2 text-xs outline-none focus:border-[#E8547A]"
+        />
+        <div className="grid max-h-48 grid-cols-1 gap-1.5 overflow-y-auto rounded-lg border border-black/10 bg-white p-2 sm:grid-cols-2">
+          {relatedCandidates.length === 0 ? (
+            <p className="col-span-full px-2 py-2 text-[11px] text-[#94A3B8]">
+              Chưa có bài viết đã xuất bản để liên kết.
+            </p>
+          ) : visibleRelatedCandidates.length === 0 ? (
+            <p className="col-span-full px-2 py-2 text-[11px] text-[#94A3B8]">
+              Không tìm thấy bài viết phù hợp.
+            </p>
+          ) : (
+            visibleRelatedCandidates.map((article) => {
+              const checked = form.related_article_ids.includes(article.id);
+              const disabled = !checked && form.related_article_ids.length >= MAX_RELATED_ARTICLES;
+
+              return (
+                <label
+                  key={article.id}
+                  className={`flex cursor-pointer items-start gap-2 rounded-md border px-2.5 py-2 text-xs ${
+                    checked ? "border-[#E8547A]/40 bg-[#FFF0F5]" : "border-black/5 bg-[#F8FAFC]"
+                  } ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    disabled={disabled}
+                    onChange={() => toggleRelatedArticle(article.id)}
+                    className="mt-0.5 accent-[#E8547A]"
+                  />
+                  <span className="min-w-0">
+                    <span className="block font-semibold leading-snug text-[#0F172A]">{article.title}</span>
+                    <span className="mt-0.5 block text-[10px] text-[#64748B]">
+                      {article.article_categories?.name ?? "Chưa gán chuyên mục"}
+                    </span>
+                  </span>
+                </label>
+              );
+            })
+          )}
+        </div>
+        <span className="text-[11px] text-[#94A3B8]">
+          Chỉ hiển thị bài đã xuất bản trên trang chi tiết. Thứ tự hiển thị theo thứ tự chọn.
+        </span>
+      </fieldset>
       <label className="col-span-2 flex flex-col gap-1">
         <span className="flex items-center justify-between text-[10px] font-bold uppercase text-[#94A3B8]">
           <span>Meta description (SEO)</span>
@@ -214,14 +315,14 @@ function ArticleFields({
         </div>
         <textarea
           ref={contentRef}
-          rows={8}
+          rows={18}
           placeholder={
             "Mỗi đoạn cách nhau 1 dòng trống. Dùng **chữ đậm** để in đậm.\n" +
             "Dùng H2/H3 trên thanh công cụ để tạo mục lục. Bảng được lưu theo định dạng Markdown."
           }
           value={form.content}
           onChange={(e) => onChange({ ...form, content: e.target.value })}
-          className={inputCls}
+          className={`${inputCls} min-h-[420px] resize-y leading-relaxed`}
         />
       </label>
       <label className="flex flex-col gap-1">
@@ -246,6 +347,13 @@ export function ArticlesTab() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<ArticleStatus | "all">("all");
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState<ArticlePagination>({
+    page: 1,
+    page_size: ARTICLE_PAGE_SIZE,
+    total: 0,
+    has_more: false,
+  });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<ArticleForm>(EMPTY_FORM);
   const [editDraftToken, setEditDraftToken] = useState<string | null>(null);
@@ -254,12 +362,19 @@ export function ArticlesTab() {
   const [createDraftToken, setCreateDraftToken] = useState(() => newDraftToken());
   const [saving, setSaving] = useState(false);
 
-  async function loadAll() {
+  async function loadAll(targetPage = page, targetStatus = statusFilter) {
     setLoading(true);
 
     try {
+      const params = new URLSearchParams({
+        page: String(targetPage),
+        page_size: String(ARTICLE_PAGE_SIZE),
+      });
+
+      if (targetStatus !== "all") params.set("status", targetStatus);
+
       const [aRes, cRes] = await Promise.all([
-        fetch("/api/admin/articles"),
+        fetch(`/api/admin/articles?${params.toString()}`),
         fetch("/api/admin/article-categories"),
       ]);
       const [aData, cData] = await Promise.all([aRes.json(), cRes.json()]);
@@ -270,7 +385,15 @@ export function ArticlesTab() {
         return;
       }
 
-      setArticles(aData.articles ?? []);
+      setArticles(aData.items ?? aData.articles ?? []);
+      setPagination(
+        aData.pagination ?? {
+          page: targetPage,
+          page_size: ARTICLE_PAGE_SIZE,
+          total: aData.items?.length ?? aData.articles?.length ?? 0,
+          has_more: false,
+        },
+      );
       setCategories(cData.categories ?? []);
     } catch {
       setError("Có lỗi xảy ra, vui lòng thử lại.");
@@ -280,8 +403,11 @@ export function ArticlesTab() {
   }
 
   useEffect(() => {
-    loadAll();
-  }, []);
+    loadAll(page, statusFilter);
+    // loadAll chỉ là helper dùng chung cho các thao tác lưu; page/status là
+    // hai dependency thực sự quyết định dữ liệu cần tải.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, statusFilter]);
 
   async function cleanupDraftAssets(draftToken: string | null) {
     if (!draftToken) return;
@@ -328,10 +454,10 @@ export function ArticlesTab() {
         return;
       }
 
-      setArticles((prev) => [data.article, ...prev]);
       setCreateForm(EMPTY_FORM);
       setCreateDraftToken(newDraftToken());
       setCreating(false);
+      setPage(1);
     } catch {
       setError("Có lỗi xảy ra, vui lòng thử lại.");
     } finally {
@@ -360,6 +486,7 @@ export function ArticlesTab() {
       setArticles((prev) => prev.map((a) => (a.id === id ? data.article : a)));
       setEditingId(null);
       setEditDraftToken(null);
+      await loadAll(page, statusFilter);
     } catch {
       setError("Có lỗi xảy ra, vui lòng thử lại.");
     } finally {
@@ -367,7 +494,7 @@ export function ArticlesTab() {
     }
   }
 
-  const filtered = statusFilter === "all" ? articles : articles.filter((a) => a.status === statusFilter);
+  const filtered = articles;
 
   return (
     <div>
@@ -377,7 +504,10 @@ export function ArticlesTab() {
             <button
               key={s}
               type="button"
-              onClick={() => setStatusFilter(s)}
+              onClick={() => {
+                setStatusFilter(s);
+                setPage(1);
+              }}
               className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
                 statusFilter === s ? "bg-[#E8547A] text-white" : "bg-black/5 text-[#64748B] hover:bg-black/10"
               }`}
@@ -412,6 +542,8 @@ export function ArticlesTab() {
             onChange={setCreateForm}
             categories={categories}
             draftToken={createDraftToken}
+            articles={articles}
+            articleId={null}
           />
           <p className="mt-2 text-[11px] text-[#94A3B8]">Ảnh bìa và ảnh trong nội dung sẽ được upload ngay, sau đó gắn vào bài viết khi bấm Lưu.</p>
           <div className="mt-3 flex gap-2">
@@ -448,6 +580,8 @@ export function ArticlesTab() {
                   onChange={setEditForm}
                   categories={categories}
                   draftToken={editDraftToken ?? "00000000-0000-4000-8000-000000000000"}
+                  articles={articles}
+                  articleId={a.id}
                 />
                 <div className="mt-3 flex gap-2">
                   <button
@@ -514,6 +648,32 @@ export function ArticlesTab() {
               </div>
             ),
           )}
+        </div>
+      )}
+
+      {!loading && pagination.total > 0 && (
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-black/10 bg-white px-4 py-3">
+          <span className="text-xs text-[#64748B]">
+            Trang {pagination.page} · {pagination.total.toLocaleString("vi-VN")} bài viết
+          </span>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              disabled={pagination.page <= 1}
+              onClick={() => setPage((current) => Math.max(1, current - 1))}
+              className="rounded-lg border border-black/10 px-3 py-1.5 text-xs font-semibold text-[#64748B] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              ← Trước
+            </button>
+            <button
+              type="button"
+              disabled={!pagination.has_more}
+              onClick={() => setPage((current) => current + 1)}
+              className="rounded-lg border border-[#E8547A]/30 bg-[#FFF0F5] px-3 py-1.5 text-xs font-semibold text-[#E8547A] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Sau →
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/home/SiteFooter";
 import { SiteNav } from "@/components/home/SiteNav";
 import { ArticleViewPing } from "@/components/tin-tuc/ArticleViewPing";
 import { parseArticleContent } from "@/lib/articles/content";
+import { getRelatedArticles } from "@/lib/articles/related";
 import { isAcademyCategorySlug } from "@/lib/articles/style";
 import type { ArticleDetail } from "@/lib/articles/types";
 import { getUserProfile } from "@/lib/auth/profile";
@@ -66,13 +67,19 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
   const profile = user ? await getUserProfile(supabase, user.id) : null;
 
-  const { data: article } = await supabase
+  const { data: articleData } = await supabase
     .from("articles")
     .select(ARTICLE_DETAIL_COLUMNS)
     .eq("slug", slug)
     .maybeSingle<ArticleDetail>();
 
-  if (!article) notFound();
+  if (!articleData) notFound();
+
+  const { articles: relatedArticles, error: relatedError } = await getRelatedArticles(supabase, articleData.id);
+
+  if (relatedError) console.error("[article-detail] Khong the tai bai viet lien quan:", relatedError);
+
+  const article: ArticleDetail = { ...articleData, related_articles: relatedArticles };
 
   const isNews = !isAcademyCategorySlug(article.article_categories?.slug);
   const { blocks, toc } = parseArticleContent(article.content ?? "");
@@ -181,6 +188,50 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
         ⚠️ Bài viết mang tính tham khảo, không thay thế chỉ định của bác sĩ chuyên khoa. Vui lòng tham khảo ý kiến
         bác sĩ trước khi áp dụng cho trường hợp cụ thể của bé.
       </div>
+
+      {article.related_articles.length > 0 && (
+        <section className="mt-10 border-t border-black/10 pt-7" aria-labelledby="related-articles-title">
+          <h2 id="related-articles-title" className="mb-4 font-serif text-xl font-black text-[#0F172A]">
+            Bài viết liên quan
+          </h2>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {article.related_articles.map((relatedArticle) => (
+              <Link
+                key={relatedArticle.id}
+                href={`/tin-tuc/${relatedArticle.slug}`}
+                className="group overflow-hidden rounded-xl border border-black/10 bg-white transition hover:-translate-y-0.5 hover:border-[#E8547A] hover:shadow-md"
+              >
+                <div className="flex h-28 items-center justify-center bg-[#FFF0F5]">
+                  {relatedArticle.cover_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={relatedArticle.cover_url}
+                      alt={relatedArticle.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-3xl">📰</span>
+                  )}
+                </div>
+                <div className="p-3.5">
+                  <div className="mb-1 text-[10px] font-bold uppercase tracking-wide text-[#E8547A]">
+                    {relatedArticle.article_categories?.name ?? "Tin tức"}
+                  </div>
+                  <div className="line-clamp-2 text-sm font-bold leading-snug text-[#0F172A] group-hover:text-[#E8547A]">
+                    {relatedArticle.title}
+                  </div>
+                  {relatedArticle.excerpt && (
+                    <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-[#64748B]">
+                      {relatedArticle.excerpt}
+                    </p>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <Link
         href="/tin-tuc"

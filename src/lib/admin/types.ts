@@ -170,6 +170,7 @@ export interface AdminArticle {
   view_count: number;
   published_at: string | null;
   created_at: string;
+  related_article_ids: string[];
   article_categories: { id: string; name: string; slug: string } | null;
 }
 

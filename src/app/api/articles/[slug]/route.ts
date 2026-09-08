@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { getRelatedArticles } from "@/lib/articles/related";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
@@ -27,5 +28,9 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
     return NextResponse.json({ error: "Không tìm thấy bài viết." }, { status: 404 });
   }
 
-  return NextResponse.json({ article: data });
+  const { articles: relatedArticles, error: relatedError } = await getRelatedArticles(supabase, data.id);
+
+  if (relatedError) return NextResponse.json({ error: relatedError }, { status: 500 });
+
+  return NextResponse.json({ article: { ...data, related_articles: relatedArticles } });
 }

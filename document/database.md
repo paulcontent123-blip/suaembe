@@ -36,6 +36,7 @@ Tài liệu này liệt kê các bảng dữ liệu chính của dự án SuaEmb
 | `partner_bookings` | Lưu lead liên hệ và lịch đặt dịch vụ trung gian. | **Đã dùng MVP:** guest booking/lead, Admin CRUD và cập nhật trạng thái; xác nhận SMS/email hiện chỉ là stub timestamp. Lead bác sĩ dùng `bs_id` + `request_type = 'doctor_lead'`; booking/lead đối tác dùng `partner_id` và có thể gắn `partner_service_id`. |
 | `article_categories` | Lưu chuyên mục tin tức/học viện. | Quản lý danh mục cha/con cho 2 nhóm gốc "Tin tức & Cập nhật" và "Học viện Làm Mẹ" (UC-20/UC-21 đã triển khai). Không dùng cho "Nhật ký Dinh dưỡng Bé" — đó là UC-04 (`babies`/`baby_measurements`), không thuộc bảng này dù demo `suaembe.html` gộp chung 1 trang. |
 | `articles` | Lưu bài viết, tin tức và nội dung học viện. | Bao gồm tác giả, tiêu đề, slug, danh mục, tóm tắt, nội dung, ảnh bìa, trạng thái, lượt xem và ngày xuất bản. UC-20 (đọc, public) và UC-21 (Admin CRUD) đã triển khai. |
+| `article_relations` | Lưu danh sách bài viết liên quan do Admin thiết lập. | Bảng liên kết nhiều-nhiều tự tham chiếu `articles`; lưu thứ tự hiển thị. Public chỉ đọc quan hệ giữa các bài đang `published`. |
 | `media_assets` | Lưu metadata file/ảnh upload. | **Đã dùng một phần:** upload Cloudinary, lưu metadata và cleanup khi thay/gỡ ảnh; chưa có Admin Media Management độc lập. |
 
 ## 1.1. Mô hình đối tác
@@ -543,6 +544,19 @@ MVP mới bỏ escrow và chuyển sang đặt mua/thanh toán thường theo s�
 | `view_count` | `integer` | Lượt xem. Khách không UPDATE trực tiếp được (RLS `articles_update_admin` chỉ cho admin) — tăng qua function `increment_article_view(p_slug)` chạy `security definer`, phạm vi cố tình thu hẹp: chỉ +1 đúng 1 bài đang published theo slug. Gọi từ `POST /api/articles/:slug/view`, không dedupe theo phiên/trình duyệt. |
 | `published_at` | `timestamptz` | Ngày xuất bản. |
 | `created_at` | `timestamptz` | Ngày tạo. |
+
+### `article_relations` - Quan hệ bài viết liên quan
+
+Admin chọn tối đa 6 bài đã có slug trong form tạo/sửa bài. Quan hệ được lưu theo thứ tự chọn và chỉ các bài liên quan có `status = 'published'` mới hiển thị ở trang công khai.
+
+| Cột | Kiểu dữ liệu | Mô tả |
+|---|---|---|
+| `article_id` | `uuid` | Bài viết nguồn, khóa ngoại `articles(id)` với `on delete cascade`. |
+| `related_article_id` | `uuid` | Bài viết được liên kết, khóa ngoại `articles(id)` với `on delete cascade`. Không được trùng `article_id`. |
+| `sort_order` | `integer` | Thứ tự hiển thị, bắt đầu từ 0 theo thứ tự Admin chọn. |
+| `created_at` | `timestamptz` | Thời điểm tạo quan hệ. |
+
+Khóa chính là cặp (`article_id`, `related_article_id`), tránh tạo cùng một liên kết nhiều lần. RLS cho phép khách đọc quan hệ khi cả bài nguồn và bài liên quan đều đã xuất bản; chỉ Admin được thêm, sửa hoặc xóa.
 
 ### `article_categories` - Chuyên mục tin tức/học viện
 

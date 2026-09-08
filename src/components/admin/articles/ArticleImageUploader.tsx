@@ -33,6 +33,7 @@ export function ArticleImageUploader({
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const inputId = `article-image-${assetType}-${draftToken}`;
 
   async function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.target.files ?? []);
@@ -100,18 +101,25 @@ export function ArticleImageUploader({
         // eslint-disable-next-line @next/next/no-img-element
         <img src={previewUrl} alt="" className="h-28 w-full rounded-lg border border-black/10 object-cover" />
       )}
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/jpeg,image/png,image/webp,image/gif"
-        onChange={handleChange}
-        disabled={uploading}
-        className="text-xs text-[#64748B]"
-      />
+      <label
+        htmlFor={inputId}
+        className={`inline-flex w-fit cursor-pointer items-center rounded-lg bg-gradient-to-r from-[#E8547A] to-[#C43A62] px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-within:ring-2 focus-within:ring-[#E8547A]/30 ${
+          uploading ? "pointer-events-none opacity-60" : ""
+        }`}
+      >
+        {uploading ? "Đang upload..." : previewUrl ? "Đổi ảnh bìa" : "Chọn ảnh bìa"}
+        <input
+          id={inputId}
+          ref={inputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          onChange={handleChange}
+          disabled={uploading}
+          className="sr-only"
+        />
+      </label>
       <span className="text-[11px] text-[#94A3B8]">JPEG, PNG, WEBP hoặc GIF; tối đa 5MB.</span>
-      {uploading && <span className="text-[11px] text-[#94A3B8]">Đang upload...</span>}
       {error && <span className="text-[11px] text-red-600">{error}</span>}
     </div>
   );
 }
-

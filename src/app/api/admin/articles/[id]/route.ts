@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 
 import { parseArticleFields } from "@/lib/admin/article-validation";
 import { requireAdminProfile } from "@/lib/auth/require-admin";
+import {
+  getArticleRelationIds,
+  parseRelatedArticleIds,
+  replaceArticleRelations,
+} from "@/lib/articles/related";
 import { claimArticleDraftMedia, cleanupArticleMedia, isArticleDraftToken } from "@/lib/media/article";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -26,8 +31,11 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   }
 
   const { fields, errors } = parseArticleFields(body);
+  const relatedResult = parseRelatedArticleIds(body.related_article_ids);
   const mediaDraftTokenValue = body.media_draft_token;
   const mediaDraftToken = typeof mediaDraftTokenValue === "string" ? mediaDraftTokenValue : null;
+
+  if (relatedResult.error) errors.push(relatedResult.error);
 
   if (mediaDraftTokenValue !== undefined && mediaDraftTokenValue !== null && !isArticleDraftToken(mediaDraftTokenValue)) {
     errors.push("media_draft_token khong hop le.");
@@ -68,7 +76,15 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     if (claimError) console.error("[articles] Khong the gan media nhap vao bai viet:", claimError);
   }
 
+  if (relatedResult.ids !== undefined) {
+    const relationError = await replaceArticleRelations(supabase, data.id, relatedResult.ids);
+
+    if (relationError) return NextResponse.json({ error: relationError }, { status: 500 });
+  }
+
   await cleanupArticleMedia(data.id, data.content, data.cover_url);
 
-  return NextResponse.json({ article: data });
+  return NextResponse.json({
+    article: { ...data, related_article_ids: await getArticleRelationIds(supabase, data.id) },
+  });
 }

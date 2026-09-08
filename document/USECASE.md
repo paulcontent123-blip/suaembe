@@ -648,7 +648,7 @@ POST /api/ai/suggest-milk
 
 **Trạng thái:** Đã triển khai — trang public `/tin-tuc` (2 tab: "Tin tức & Cập nhật", "Học viện Làm Mẹ") và trang đọc bài `/tin-tuc/:slug`.
 
-**Bảng:** `article_categories`, `articles`, `media_assets`
+**Bảng:** `article_categories`, `articles`, `article_relations`, `media_assets`
 
 **Luồng chính:**
 
@@ -686,6 +686,8 @@ POST /api/ai/suggest-milk
 5. Ảnh được lưu tạm ở Cloudinary/`media_assets` theo `draft_token`; khi admin bấm Lưu, backend gắn tất cả ảnh của phiên vào `articles` và cập nhật `cover_url`/`content`.
 6. Admin lưu nháp với `status = 'draft'`.
 7. Admin xuất bản bằng `status = 'published'` hoặc ẩn bằng `status = 'archived'`.
+8. Khi sửa bài, Admin chọn tối đa 6 bài viết đã xuất bản trong mục "Bài viết liên quan"; hệ thống lưu thứ tự lựa chọn vào `article_relations`.
+9. Trang chi tiết `/tin-tuc/:slug` hiển thị các bài liên quan ở cuối nội dung; bài draft/archived bị bỏ qua ở phía public.
 
 **Ghi chú triển khai:**
 
@@ -695,6 +697,9 @@ POST /api/ai/suggest-milk
 - Thanh công cụ **Ảnh** cho phép upload nhiều file trong lúc soạn; mỗi ảnh được chèn thành một block `![alt](secure_url)` và trang public render an toàn thành `<img>`.
 - Ảnh nháp bị hủy khi admin đóng form sẽ được dọn khỏi Cloudinary và `media_assets`; ảnh đã lưu nhưng bị gỡ khỏi nội dung sẽ được cleanup khi bài được lưu lại.
 - `meta_description` dài tối đa 160 ký tự và được dùng làm metadata SEO ở trang `/tin-tuc/:slug`; nếu bỏ trống, trang dùng `excerpt` làm fallback.
+- `GET /api/admin/articles` trả thêm `related_article_ids`; `POST/PUT /api/admin/articles` nhận danh sách `related_article_ids` và thay thế toàn bộ quan hệ của bài theo thứ tự gửi lên.
+- `GET /api/admin/articles?page=1&page_size=8&status=published` hỗ trợ phân trang danh sách Admin; response gồm `items`/`articles` và `pagination { page, page_size, total, has_more }`. Bộ lọc trạng thái được áp dụng trước khi tính tổng và chia trang.
+- `GET /api/articles/:slug` trả thêm `related_articles`, chỉ gồm các bài `published` có slug hợp lệ.
 - Chưa có API xoá bài viết/chuyên mục (`DELETE`) — chỉ tạo, sửa nội dung và đổi trạng thái draft/published/archived, giống cách UC-23 (Sản phẩm) cũng không có xoá.
 
 ### UC-22 - Quản Lý Bác Sĩ Nhi Đối Tác
