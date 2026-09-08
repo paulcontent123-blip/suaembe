@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 import { getUserProfile } from "@/lib/auth/profile";
 import { getCloudinary } from "@/lib/cloudinary";
+import { cleanupArticleDraftMedia, isArticleDraftToken } from "@/lib/media/article";
 import { destroyMediaAsset } from "@/lib/media/cleanup";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -68,11 +69,37 @@ export async function POST(request: Request) {
   const ownerId = formData.get("owner_id");
   const assetType = formData.get("asset_type");
   const altText = formData.get("alt_text");
+  const draftTokenValue = formData.get("draft_token");
 
   const resolvedOwnerTable = typeof ownerTable === "string" && ownerTable ? ownerTable : null;
   let resolvedOwnerId = typeof ownerId === "string" && ownerId ? ownerId : null;
+  const draftToken = draftTokenValue === null ? null : typeof draftTokenValue === "string" ? draftTokenValue : null;
 
-  if (resolvedOwnerTable) {
+  if (draftTokenValue !== null && !isArticleDraftToken(draftToken)) {
+    return NextResponse.json({ error: "draft_token khong hop le." }, { status: 400 });
+  }
+
+  const resolvedAssetType = typeof assetType === "string" && assetType ? assetType : "image";
+
+  if (draftToken) {
+    if (!user) {
+      return NextResponse.json({ error: "Can dang nhap de upload anh bai viet." }, { status: 401 });
+    }
+
+    const profile = await getUserProfile(supabase, user.id);
+
+    if (profile?.role !== "admin") {
+      return NextResponse.json({ error: "Chi Admin moi duoc upload anh bai viet." }, { status: 403 });
+    }
+
+    if (resolvedOwnerTable || resolvedOwnerId || !["cover", "article_inline"].includes(resolvedAssetType)) {
+      return NextResponse.json({ error: "Thong tin upload anh bai viet khong hop le." }, { status: 400 });
+    }
+  }
+
+  if (draftToken) {
+    resolvedOwnerId = null;
+  } else if (resolvedOwnerTable) {
     // Gắn media vào 1 dòng đã tồn tại (vd thêm ảnh cho sản phẩm/listing đã
     // tạo) luôn cần xác định được "ai đang làm việc này" để kiểm tra quyền sở
     // hữu — khách vãng lai (chưa đăng nhập) không đi qua nhánh này.
@@ -115,7 +142,7 @@ export async function POST(request: Request) {
     const cloudinary = getCloudinary();
 
     uploadResult = await cloudinary.uploader.upload(base64, {
-      folder: `suaembe/${resolvedOwnerTable ?? "misc"}`,
+      folder: `suaembe/${resolvedOwnerTable ?? (draftToken ? "articles" : "misc")}`,
       resource_type: "image",
     });
   } catch (error) {
@@ -130,7 +157,7 @@ export async function POST(request: Request) {
       uploader_id: user?.id ?? null,
       owner_table: resolvedOwnerTable,
       owner_id: resolvedOwnerId,
-      asset_type: typeof assetType === "string" && assetType ? assetType : "image",
+      asset_type: resolvedAssetType,
       provider: "cloudinary",
       public_id: uploadResult.public_id,
       url: uploadResult.url,
@@ -140,11 +167,18 @@ export async function POST(request: Request) {
       width: uploadResult.width ?? null,
       height: uploadResult.height ?? null,
       alt_text: typeof altText === "string" && altText ? altText : null,
+      metadata: draftToken ? { draft_token: draftToken } : {},
     })
     .select()
     .single();
 
   if (error) {
+    try {
+      await getCloudinary().uploader.destroy(uploadResult.public_id, { resource_type: "image" });
+    } catch (cleanupError) {
+      console.error("[uploads] Khong the don resource Cloudinary sau khi luu media that bai:", cleanupError);
+    }
+
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
@@ -165,12 +199,32 @@ export async function DELETE(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let body: { secure_url?: unknown };
+  let body: { secure_url?: unknown; draft_token?: unknown };
 
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "Body JSON không hợp lệ." }, { status: 400 });
+  }
+
+  if (body.draft_token !== undefined) {
+    if (!isArticleDraftToken(body.draft_token)) {
+      return NextResponse.json({ error: "draft_token khong hop le." }, { status: 400 });
+    }
+
+    if (!user) {
+      return NextResponse.json({ error: "Can dang nhap de xoa anh bai viet nhap." }, { status: 401 });
+    }
+
+    const profile = await getUserProfile(supabase, user.id);
+
+    if (profile?.role !== "admin") {
+      return NextResponse.json({ error: "Chi Admin moi duoc xoa anh bai viet nhap." }, { status: 403 });
+    }
+
+    await cleanupArticleDraftMedia(body.draft_token, user.id);
+
+    return NextResponse.json({ ok: true });
   }
 
   const secureUrl = typeof body.secure_url === "string" ? body.secure_url : null;

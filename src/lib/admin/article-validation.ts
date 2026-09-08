@@ -6,6 +6,7 @@ interface ArticleInput {
   title?: unknown;
   slug?: unknown;
   excerpt?: unknown;
+  meta_description?: unknown;
   content?: unknown;
   cover_url?: unknown;
   status?: unknown;
@@ -28,9 +29,13 @@ export function parseArticleFields(body: ArticleInput): {
   const title = str(body.title);
   if (title !== undefined) fields.title = title;
 
-  for (const key of ["category_id", "slug", "excerpt", "content", "cover_url"] as const) {
+  for (const key of ["category_id", "slug", "excerpt", "meta_description", "content", "cover_url"] as const) {
     const value = str(body[key]);
     if (value !== undefined) fields[key] = value;
+  }
+
+  if (typeof fields.meta_description === "string" && fields.meta_description.length > 160) {
+    errors.push("meta_description khong duoc vuot qua 160 ky tu.");
   }
 
   if (body.status !== undefined) {

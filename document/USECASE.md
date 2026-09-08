@@ -665,7 +665,9 @@ POST /api/ai/suggest-milk
 - Sidebar "Đọc nhiều nhất" lấy 4 bài `view_count` cao nhất trong toàn bộ bài `published` (không giới hạn theo tab/chuyên mục đang chọn).
 - Đọc bài (kể cả khách vãng lai) tăng `articles.view_count` qua `POST /api/articles/:slug/view`, gọi 1 lần khi trang chi tiết mount trong trình duyệt (không tính view khi chỉ SSR/bot fetch HTML thô). RLS "articles_update_admin" không cho khách UPDATE trực tiếp, nên route này gọi function Postgres `increment_article_view(p_slug)` chạy `security definer` — phạm vi cố tình thu hẹp: chỉ +1 `view_count` của đúng 1 bài đang `published` theo slug, không mở quyền ghi cột nào khác hay bài draft/archived. Không dedupe theo phiên/trình duyệt — số liệu mang tính tham khảo như phần lớn bộ đếm lượt xem đơn giản khác.
 - Tab "Nhật ký Dinh dưỡng Bé" trong `/tin-tuc` bản thân nó **không** thuộc UC-20 — đó là UC-04/05/06 (dùng `babies`/`baby_measurements`/`development_milestones`/`baby_feeding_schedule`), chỉ được đặt cùng trang cho khớp bố cục demo. Trang `/tin-tuc` (server component) fetch `babies` của user hiện tại (nếu đã đăng nhập) và truyền xuống cho tab này — không ảnh hưởng RLS/quyền riêng tư, `babies` vẫn lọc đúng `user_id = auth.uid()`.
+- **Bố cục bài viết:** `title` được render thành H1 duy nhất, `excerpt` là sapo hiển thị ngay dưới H1, sau đó là metadata/ảnh bìa và nội dung. `meta_description` là mô tả SEO riêng, không thay thế sapo.
 - **Mục lục nội dung (Table of Contents):** dòng nội dung bắt đầu bằng `## ` (heading cấp 2) hoặc `### ` (heading cấp 3) được `src/lib/articles/content.ts` (`parseArticleContent`) tách thành heading có `id` neo (slug tự sinh từ tiêu đề, bỏ dấu tiếng Việt). Nếu bài có ít nhất 1 heading, trang `/tin-tuc/:slug` tự chuyển sang layout 2 cột: nội dung + sidebar "Mục lục nội dung" sticky bên phải (ẩn trên mobile), mỗi mục trỏ neo `#id` tương ứng, heading cấp 3 thụt lề dưới heading cấp 2 gần nhất. Bài không có heading nào vẫn hiển thị 1 cột như trước — không phá layout dữ liệu cũ.
+- **Bảng:** nội dung có thể chứa block Markdown dạng `| Cột | Giá trị |`, dòng phân cách `| --- | --- |` và các dòng dữ liệu. Frontend parse an toàn thành bảng HTML, không cho phép HTML tùy ý trong nội dung.
 
 ### UC-21 - Quản Lý Chuyên Mục Và Bài Viết
 
@@ -679,15 +681,20 @@ POST /api/ai/suggest-milk
 
 1. Admin tạo/cập nhật chuyên mục tin tức/học viện trong `article_categories` (tên, slug, chuyên mục cha, mô tả, thứ tự hiển thị, ẩn/hiện).
 2. Admin tạo bài viết và chọn `category_id`.
-3. Admin nhập tiêu đề, slug, tóm tắt, nội dung và ảnh bìa.
-4. Nếu upload ảnh, hệ thống lưu metadata vào `media_assets`, đồng thời cập nhật `articles.cover_url`.
-5. Admin lưu nháp với `status = 'draft'`.
-6. Admin xuất bản bằng `status = 'published'` hoặc ẩn bằng `status = 'archived'`.
+3. Admin nhập tiêu đề (H1), slug, sapo/tóm tắt, meta description, nội dung H2/H3 và bảng nếu cần.
+4. Admin upload ảnh bìa hoặc chọn nhiều ảnh inline ngay trong form; frontend chèn ảnh inline theo cú pháp Markdown `![alt](secure_url)`.
+5. Ảnh được lưu tạm ở Cloudinary/`media_assets` theo `draft_token`; khi admin bấm Lưu, backend gắn tất cả ảnh của phiên vào `articles` và cập nhật `cover_url`/`content`.
+6. Admin lưu nháp với `status = 'draft'`.
+7. Admin xuất bản bằng `status = 'published'` hoặc ẩn bằng `status = 'archived'`.
 
 **Ghi chú triển khai:**
 
 - Lần đầu chuyển 1 bài sang `published`, backend tự gán `published_at = now()` nếu chưa có; các lần sửa/đổi trạng thái sau đó giữ nguyên mốc xuất bản gốc (không bị ghi đè mỗi lần lưu).
 - `author_id` gán tự động theo admin đang đăng nhập lúc tạo bài, không cho chọn tuỳ ý.
+- H1 lấy duy nhất từ trường `title`; thanh công cụ nội dung hỗ trợ chèn H2, H3 và bảng Markdown. H2/H3 được dùng để sinh mục lục tự động.
+- Thanh công cụ **Ảnh** cho phép upload nhiều file trong lúc soạn; mỗi ảnh được chèn thành một block `![alt](secure_url)` và trang public render an toàn thành `<img>`.
+- Ảnh nháp bị hủy khi admin đóng form sẽ được dọn khỏi Cloudinary và `media_assets`; ảnh đã lưu nhưng bị gỡ khỏi nội dung sẽ được cleanup khi bài được lưu lại.
+- `meta_description` dài tối đa 160 ký tự và được dùng làm metadata SEO ở trang `/tin-tuc/:slug`; nếu bỏ trống, trang dùng `excerpt` làm fallback.
 - Chưa có API xoá bài viết/chuyên mục (`DELETE`) — chỉ tạo, sửa nội dung và đổi trạng thái draft/published/archived, giống cách UC-23 (Sản phẩm) cũng không có xoá.
 
 ### UC-22 - Quản Lý Bác Sĩ Nhi Đối Tác

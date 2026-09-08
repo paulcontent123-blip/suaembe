@@ -536,7 +536,8 @@ MVP mới bỏ escrow và chuyển sang đặt mua/thanh toán thường theo s�
 | `title` | `text` | Tiêu đề. |
 | `slug` | `text` | Đường dẫn thân thiện SEO. |
 | `excerpt` | `text` | Tóm tắt. |
-| `content` | `text` | Nội dung bài viết (plain text, đoạn cách nhau bằng dòng trống, `**chữ**` để in đậm — frontend tự parse, không dùng thư viện markdown). |
+| `meta_description` | `text` | Mô tả SEO, tối đa 160 ký tự, dùng làm thẻ description của trang bài viết. |
+| `content` | `text` | Nội dung plain text: đoạn cách nhau bằng dòng trống, `##`/`###` cho H2/H3, `**chữ**` để in đậm và bảng Markdown đơn giản. |
 | `cover_url` | `text` | Ảnh bìa. |
 | `status` | `text` | Trạng thái: draft, published, archived. Lần đầu chuyển sang published, backend tự gán `published_at = now()` nếu chưa có; các lần sửa sau giữ nguyên mốc gốc. |
 | `view_count` | `integer` | Lượt xem. Khách không UPDATE trực tiếp được (RLS `articles_update_admin` chỉ cho admin) — tăng qua function `increment_article_view(p_slug)` chạy `security definer`, phạm vi cố tình thu hẹp: chỉ +1 đúng 1 bài đang published theo slug. Gọi từ `POST /api/articles/:slug/view`, không dedupe theo phiên/trình duyệt. |
@@ -559,7 +560,7 @@ MVP mới bỏ escrow và chuyển sang đặt mua/thanh toán thường theo s�
 
 ### `media_assets` - File/ảnh upload
 
-**Trạng thái hiện tại:** Đã dùng một phần. `POST /api/uploads` upload ảnh lên Cloudinary rồi lưu metadata; `DELETE /api/uploads` chỉ cho gỡ ảnh listing draft chưa gắn owner trong giới hạn an toàn. Khi avatar/cover/ảnh sản phẩm/listing bị thay hoặc gỡ, backend đã gọi cleanup Cloudinary và xóa row metadata tương ứng. Chưa có `GET/DELETE /api/admin/media-assets` hoặc màn hình Admin xem/tìm/xóa media tập trung. Logo/cover của `partners` hiện mới có cột schema, chưa có uploader riêng trong UI Admin.
+**Trạng thái hiện tại:** Đã dùng một phần. `POST /api/uploads` upload ảnh lên Cloudinary rồi lưu metadata; bài viết hỗ trợ ảnh bìa và nhiều ảnh inline qua phiên `draft_token`. `DELETE /api/uploads` dọn ảnh bài viết nháp hoặc ảnh listing draft chưa gắn owner trong giới hạn quyền tương ứng. Khi avatar/cover/ảnh inline/sản phẩm/listing bị thay hoặc gỡ, backend đã gọi cleanup Cloudinary và xóa row metadata tương ứng. Chưa có `GET/DELETE /api/admin/media-assets` hoặc màn hình Admin xem/tìm/xóa media tập trung. Logo/cover của `partners` hiện mới có cột schema, chưa có uploader riêng trong UI Admin.
 
 | Cột | Kiểu dữ liệu | Mô tả |
 |---|---|---|
@@ -567,7 +568,7 @@ MVP mới bỏ escrow và chuyển sang đặt mua/thanh toán thường theo s�
 | `uploader_id` | `uuid` | Người upload. |
 | `owner_table` | `text` | Bảng sở hữu file: users, products, c2c_listings, bs_nhi, articles...; `null` cho ảnh C2C upload trước khi tạo tin. |
 | `owner_id` | `uuid` | ID bản ghi sở hữu file. |
-| `asset_type` | `text` | Loại asset: image, avatar, logo, cover, document... |
+| `asset_type` | `text` | Loại asset: image, avatar, logo, cover, `article_inline`, document... |
 | `provider` | `text` | Nhà cung cấp lưu trữ: cloudinary, supabase_storage... |
 | `bucket` | `text` | Bucket nếu dùng Supabase Storage. |
 | `public_id` | `text` | Public ID/path của provider. |
@@ -578,7 +579,7 @@ MVP mới bỏ escrow và chuyển sang đặt mua/thanh toán thường theo s�
 | `width` | `integer` | Chiều rộng ảnh. |
 | `height` | `integer` | Chiều cao ảnh. |
 | `alt_text` | `text` | Mô tả ảnh. |
-| `metadata` | `jsonb` | Metadata bổ sung từ provider. |
+| `metadata` | `jsonb` | Metadata bổ sung; ảnh bài viết nháp lưu `draft_token` tại đây trước khi được gắn owner. |
 | `is_public` | `boolean` | File có public metadata hay không. |
 | `created_at` | `timestamptz` | Thời điểm tạo. |
 
@@ -586,10 +587,11 @@ MVP mới bỏ escrow và chuyển sang đặt mua/thanh toán thường theo s�
 
 1. Frontend gửi file đến `POST /api/uploads`.
 2. Backend kiểm tra MIME (`jpeg/png/webp/gif`) và giới hạn 5MB.
-3. Nếu có `owner_table`, user thường chỉ được gắn vào dữ liệu của chính mình; bảng admin-only chỉ Admin được gắn. Nếu không có `owner_table`, khách vãng lai được upload ảnh nháp cho form C2C.
-4. File được lưu tại Cloudinary; URL được trả về frontend và thường đồng thời được lưu vào `avatar_url`, `cover_url` hoặc `image_urls` của bảng nghiệp vụ.
-5. Khi URL bị thay/gỡ, helper cleanup tìm row theo `secure_url`, gọi Cloudinary `destroy(public_id)` rồi xóa row `media_assets`.
-6. Ảnh C2C nháp bị bỏ quên khi khách đóng form chưa có job định kỳ dọn tự động; đây là phần còn thiếu.
+3. Nếu có `owner_table`, user thường chỉ được gắn vào dữ liệu của chính mình; bảng admin-only chỉ Admin được gắn. Với bài viết mới, Admin upload qua `draft_token`, chưa gắn owner cho đến khi lưu bài.
+4. File được lưu tại Cloudinary; URL được chèn vào `content` theo Markdown `![alt](secure_url)` hoặc lưu vào `cover_url`.
+5. Khi lưu bài, backend claim các media cùng `draft_token` vào `owner_table = 'articles'`, `owner_id = articles.id`.
+6. Khi URL bị thay/gỡ, helper cleanup gọi Cloudinary `destroy(public_id)` rồi xóa row `media_assets`; khi hủy form bài viết, toàn bộ media nháp theo `draft_token` được dọn.
+7. Ảnh C2C nháp bị bỏ quên khi khách đóng form chưa có job định kỳ dọn tự động; đây là phần còn thiếu.
 
 ## 3. Bảng đề xuất mở rộng
 

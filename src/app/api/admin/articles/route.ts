@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 
 import { parseArticleFields } from "@/lib/admin/article-validation";
 import { requireAdminProfile } from "@/lib/auth/require-admin";
+import { claimArticleDraftMedia, cleanupArticleMedia, isArticleDraftToken } from "@/lib/media/article";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
 const ARTICLE_COLUMNS =
-  "id, author_id, category_id, title, slug, excerpt, content, cover_url, status, view_count, published_at, created_at, article_categories(id, name, slug)";
+  "id, author_id, category_id, title, slug, excerpt, meta_description, content, cover_url, status, view_count, published_at, created_at, article_categories(id, name, slug)";
 
 // UC-21 - Quản Lý Chuyên Mục Và Bài Viết. Admin xem toàn bộ bài viết (kể cả
 // draft/archived — RLS "articles_read_published_or_admin" chỉ ẩn với khách,
@@ -43,6 +44,12 @@ export async function POST(request: Request) {
   }
 
   const { fields, errors } = parseArticleFields(body);
+  const mediaDraftTokenValue = body.media_draft_token;
+  const mediaDraftToken = typeof mediaDraftTokenValue === "string" ? mediaDraftTokenValue : null;
+
+  if (mediaDraftTokenValue !== undefined && mediaDraftTokenValue !== null && !isArticleDraftToken(mediaDraftTokenValue)) {
+    errors.push("media_draft_token khong hop le.");
+  }
 
   if (!fields.title) errors.push("title là bắt buộc.");
 
@@ -63,6 +70,14 @@ export async function POST(request: Request) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  if (mediaDraftToken) {
+    const claimError = await claimArticleDraftMedia(mediaDraftToken, data.id, admin.id);
+
+    if (claimError) console.error("[articles] Khong the gan media nhap vao bai viet:", claimError);
+  }
+
+  await cleanupArticleMedia(data.id, data.content, data.cover_url);
 
   return NextResponse.json({ article: data }, { status: 201 });
 }

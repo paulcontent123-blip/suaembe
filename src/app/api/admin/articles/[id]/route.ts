@@ -2,13 +2,13 @@ import { NextResponse } from "next/server";
 
 import { parseArticleFields } from "@/lib/admin/article-validation";
 import { requireAdminProfile } from "@/lib/auth/require-admin";
-import { cleanupRemovedMediaUrls } from "@/lib/media/cleanup";
+import { claimArticleDraftMedia, cleanupArticleMedia, isArticleDraftToken } from "@/lib/media/article";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
 const ARTICLE_COLUMNS =
-  "id, author_id, category_id, title, slug, excerpt, content, cover_url, status, view_count, published_at, created_at, article_categories(id, name, slug)";
+  "id, author_id, category_id, title, slug, excerpt, meta_description, content, cover_url, status, view_count, published_at, created_at, article_categories(id, name, slug)";
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -26,12 +26,18 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   }
 
   const { fields, errors } = parseArticleFields(body);
+  const mediaDraftTokenValue = body.media_draft_token;
+  const mediaDraftToken = typeof mediaDraftTokenValue === "string" ? mediaDraftTokenValue : null;
+
+  if (mediaDraftTokenValue !== undefined && mediaDraftTokenValue !== null && !isArticleDraftToken(mediaDraftTokenValue)) {
+    errors.push("media_draft_token khong hop le.");
+  }
 
   if (errors.length > 0) {
     return NextResponse.json({ error: errors.join(" ") }, { status: 400 });
   }
 
-  if (Object.keys(fields).length === 0) {
+  if (Object.keys(fields).length === 0 && !mediaDraftToken) {
     return NextResponse.json({ error: "Không có thay đổi nào để lưu." }, { status: 400 });
   }
 
@@ -43,22 +49,12 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     if (!current?.published_at) fields.published_at = new Date().toISOString();
   }
 
-  // Ghi lại cover_url cũ trước khi update để dọn Cloudinary/media_assets nếu
-  // bị thay thế hoặc gỡ bỏ — tránh rò rỉ file khi đổi ảnh cover.
-  let previousCoverUrl: string | null = null;
-
-  if ("cover_url" in fields) {
-    const { data: before } = await supabase.from("articles").select("cover_url").eq("id", id).maybeSingle();
-
-    previousCoverUrl = before?.cover_url ?? null;
-  }
-
-  const { data, error } = await supabase
-    .from("articles")
-    .update(fields)
-    .eq("id", id)
-    .select(ARTICLE_COLUMNS)
-    .maybeSingle();
+  // Sau khi lưu, claim media nháp và dọn các ảnh bài viết không còn được tham chiếu.
+  const result =
+    Object.keys(fields).length > 0
+      ? await supabase.from("articles").update(fields).eq("id", id).select(ARTICLE_COLUMNS).maybeSingle()
+      : await supabase.from("articles").select(ARTICLE_COLUMNS).eq("id", id).maybeSingle();
+  const { data, error } = result;
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
@@ -66,9 +62,13 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: "Không tìm thấy bài viết." }, { status: 404 });
   }
 
-  if ("cover_url" in fields && previousCoverUrl) {
-    await cleanupRemovedMediaUrls([previousCoverUrl], [fields.cover_url as string | null]);
+  if (mediaDraftToken) {
+    const claimError = await claimArticleDraftMedia(mediaDraftToken, data.id, admin.id);
+
+    if (claimError) console.error("[articles] Khong the gan media nhap vao bai viet:", claimError);
   }
+
+  await cleanupArticleMedia(data.id, data.content, data.cover_url);
 
   return NextResponse.json({ article: data });
 }

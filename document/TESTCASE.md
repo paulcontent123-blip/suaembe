@@ -426,6 +426,18 @@ API: `GET/POST /api/admin/article-categories`, `PUT /api/admin/article-categorie
 | ARTICLE-ADMIN-09 | Ẩn bài | `PUT` `{ status: "archived" }` | `200`; bài biến mất khỏi `GET /api/articles` công khai |
 | ARTICLE-ADMIN-10 | Upload ảnh bìa | Upload ảnh cho bài đã tạo, `owner_table = articles` | `201` media; PUT lại `cover_url` vào bài viết |
 | ARTICLE-ADMIN-11 | UI tab Bài viết/Chuyên mục | Vào `/admin` -> "Bài viết / Blog" | 2 tab hoạt động, danh sách cập nhật không cần reload |
+| ARTICLE-ADMIN-12 | Lưu meta description | Tạo/sửa bài với `meta_description` <= 160 ký tự | `201/200`; giá trị lưu đúng vào `articles.meta_description` |
+| ARTICLE-ADMIN-13 | Chặn meta description quá dài | Gửi `meta_description` dài hơn 160 ký tự | `400`; không lưu bài |
+| ARTICLE-ADMIN-14 | Chèn H2/H3 từ thanh công cụ | Trong form bài viết, chọn vùng văn bản rồi bấm H2 hoặc H3 | Nội dung được chèn đúng cú pháp `##`/`###`; không tạo H1 trong thân bài |
+| ARTICLE-ADMIN-15 | Chèn bảng | Bấm "Bảng" trong trình soạn nội dung | Chèn đúng block bảng Markdown gồm header, dòng phân cách và dòng dữ liệu |
+| ARTICLE-ADMIN-16 | Upload ảnh bìa khi tạo bài mới | Bấm "Viết bài mới", chọn ảnh bìa trước khi bài có `id` | Upload thành công; ảnh xem trước xuất hiện; khi lưu bài, `cover_url` và `media_assets.owner_id` trỏ đúng bài |
+| ARTICLE-ADMIN-17 | Upload nhiều ảnh inline | Trong form tạo/sửa bài, bấm "Ảnh", chọn nhiều JPEG/PNG/WEBP/GIF | Mỗi ảnh được upload; nội dung chèn nhiều block `![alt](secure_url)`; không ghi đè ảnh trước |
+| ARTICLE-ADMIN-18 | Hủy form dọn ảnh nháp | Upload ảnh bìa/inline rồi bấm "Hủy" | `DELETE /api/uploads {draft_token}` dọn ảnh nháp trên Cloudinary và các row `media_assets` tương ứng |
+| ARTICLE-ADMIN-19 | Gắn media sau khi lưu | Upload ảnh inline, lưu bài, kiểm tra DB | `owner_table = 'articles'`, `owner_id` là bài viết; ảnh vẫn hiển thị sau reload |
+
+| ARTICLE-PUBLIC-05 | Bố cục bài viết | Mở bài đã xuất bản có `title`, `excerpt`, H2/H3 và bảng | Render đúng một H1, sapo, mục lục, H2/H3 và bảng |
+| ARTICLE-PUBLIC-06 | SEO meta description | Mở bài có `meta_description` | HTML metadata dùng `meta_description`; nếu null thì fallback về `excerpt` |
+| ARTICLE-PUBLIC-07 | Hiển thị ảnh inline Markdown | Bài published có một hoặc nhiều block `![alt](https://...)` | Ảnh hiển thị đúng thứ tự, có `alt`, không render HTML tùy ý |
 
 ---
 
@@ -561,6 +573,8 @@ API: `POST /api/uploads`, `DELETE /api/uploads`.
 | MEDIA-17 | PUT không đụng field ảnh thì không dọn gì | `PUT /api/admin/products/:id` chỉ đổi `name`, không gửi `image_urls` | Ảnh hiện có của sản phẩm không bị đụng tới |
 | MEDIA-18 | Gỡ ảnh khỏi tin C2C qua `PUT /api/listings/:id` | Tin có `images: [ảnh1, ảnh2]`, `PUT {images: [ảnh2]}` | Ảnh1 bị xoá khỏi Cloudinary + `media_assets`; ảnh2 còn nguyên |
 | MEDIA-19 | Xoá cả tin C2C dọn hết ảnh còn lại | `DELETE /api/listings/:id` cho tin còn `images: [ảnh2]` | Ảnh2 cũng bị xoá khỏi Cloudinary + `media_assets`, không còn sót ảnh mồ côi |
+| MEDIA-20 | Upload ảnh bài viết dạng nháp | Admin gửi `draft_token`, `asset_type = cover/article_inline` tới `POST /api/uploads` | `201`; row có `owner_table/owner_id = null`, `metadata.draft_token` đúng phiên, folder Cloudinary thuộc articles |
+| MEDIA-21 | Chặn user thường upload ảnh bài viết nháp | User thường gửi `draft_token` tới `POST /api/uploads` | `403`; không tạo file hoặc row media |
 
 Ghi chú: MEDIA-11 đến MEDIA-19 đã chạy thật (upload ảnh thật lên Cloudinary, không mock) trong phiên triển khai bước 1 "sửa rò rỉ xoá media" — 36/36 assertion pass. Cover bài viết (`cover_url`) và avatar bác sĩ (`bs_nhi.avatar_url`) dùng chung code path với MEDIA-14 (field ảnh dạng string đơn) — đã chạy test thật riêng cho 2 field này (thêm 12/12 assertion pass): thay `cover_url`/`avatar_url` tự xoá đúng ảnh cũ trên cả Cloudinary lẫn `media_assets`, ảnh mới giữ nguyên. Toàn bộ dữ liệu test đã dọn sạch.
 

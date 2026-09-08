@@ -15,6 +15,7 @@ export interface Article {
   title: string;
   slug: string | null;
   excerpt: string | null;
+  meta_description: string | null;
   cover_url: string | null;
   view_count: number;
   published_at: string | null;

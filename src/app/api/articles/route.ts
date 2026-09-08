@@ -5,7 +5,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 export const runtime = "nodejs";
 
 const ARTICLE_COLUMNS =
-  "id, category_id, title, slug, excerpt, cover_url, view_count, published_at, article_categories(id, name, slug, parent_id)";
+  "id, category_id, title, slug, excerpt, meta_description, cover_url, view_count, published_at, article_categories(id, name, slug, parent_id)";
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 50;

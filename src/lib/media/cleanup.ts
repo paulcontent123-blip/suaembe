@@ -12,7 +12,7 @@ interface DestroyableAsset {
 // giờ khớp null = null nên không tự xoá được qua client thường. Không throw
 // khi Cloudinary lỗi — caller vẫn phải hoàn tất việc chính dù dọn rác thất
 // bại, chỉ log lại để theo dõi.
-async function destroyMediaAssets(assets: DestroyableAsset[]): Promise<void> {
+export async function destroyMediaAssets(assets: DestroyableAsset[]): Promise<void> {
   if (assets.length === 0) return;
 
   const cloudinary = getCloudinary();

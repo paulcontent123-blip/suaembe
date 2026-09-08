@@ -163,6 +163,7 @@ export interface AdminArticle {
   title: string;
   slug: string | null;
   excerpt: string | null;
+  meta_description: string | null;
   content: string | null;
   cover_url: string | null;
   status: ArticleStatus;

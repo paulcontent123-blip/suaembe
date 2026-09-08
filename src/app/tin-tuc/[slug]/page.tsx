@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Fragment } from "react";
@@ -12,7 +13,30 @@ import { getUserProfile } from "@/lib/auth/profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const ARTICLE_DETAIL_COLUMNS =
-  "id, category_id, title, slug, excerpt, content, cover_url, view_count, published_at, article_categories(id, name, slug, parent_id)";
+  "id, category_id, title, slug, excerpt, meta_description, content, cover_url, view_count, published_at, article_categories(id, name, slug, parent_id)";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createSupabaseServerClient();
+  const { data: article } = await supabase
+    .from("articles")
+    .select("title, excerpt, meta_description, cover_url")
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (!article) return {};
+
+  return {
+    title: article.title,
+    description: article.meta_description ?? article.excerpt ?? undefined,
+    openGraph: {
+      title: article.title,
+      description: article.meta_description ?? article.excerpt ?? undefined,
+      images: article.cover_url ? [article.cover_url] : undefined,
+      type: "article",
+    },
+  };
+}
 
 // `**chữ**` bên trong 1 đoạn/heading vẫn cần parse riêng để in đậm.
 function renderInline(text: string) {
@@ -66,6 +90,9 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
         </div>
       )}
       <h1 className="mb-3 font-serif text-[26px] font-black leading-tight text-[#0F172A]">{article.title}</h1>
+      {article.excerpt && (
+        <p className="mb-5 text-[15px] font-medium leading-relaxed text-[#475569]">{renderInline(article.excerpt)}</p>
+      )}
       <div className="mb-6 text-[12px] text-[#94A3B8]">
         📅 {article.published_at ? new Date(article.published_at).toLocaleDateString("vi-VN") : "—"} · ⏱{" "}
         {readingMinutes(article.content)} phút đọc · 👁 {article.view_count.toLocaleString("vi-VN")} lượt xem
@@ -78,9 +105,9 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
       {blocks.length > 0 ? (
         <div>
-          {blocks.map((block, i) =>
-            block.type === "heading" ? (
-              block.level === 2 ? (
+          {blocks.map((block, i) => {
+            if (block.type === "heading") {
+              return block.level === 2 ? (
                 <h2
                   key={i}
                   id={block.id}
@@ -92,13 +119,59 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                 <h3 key={i} id={block.id} className="mb-2 mt-5 scroll-mt-24 text-[15px] font-bold text-[#0F172A]">
                   {renderInline(block.text)}
                 </h3>
-              )
-            ) : (
+              );
+            }
+
+            if (block.type === "image") {
+              return (
+                <figure key={i} className="mb-6 mt-5">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={block.url}
+                    alt={block.alt || article.title}
+                    loading="lazy"
+                    className="w-full rounded-xl border border-black/5 object-cover"
+                  />
+                  {block.alt && <figcaption className="mt-2 text-center text-xs text-[#94A3B8]">{block.alt}</figcaption>}
+                </figure>
+              );
+            }
+
+            if (block.type === "table") {
+              return (
+                <div key={i} className="mb-6 mt-5 overflow-x-auto rounded-lg border border-black/10 bg-white">
+                  <table className="w-full min-w-[480px] border-collapse text-left text-[13px] text-[#334155]">
+                    <thead className="bg-[#FFF0F5] text-[#0F172A]">
+                      <tr>
+                        {block.headers.map((header, headerIndex) => (
+                          <th key={headerIndex} className="border-b border-black/10 px-3 py-2.5 font-bold">
+                            {renderInline(header)}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {block.rows.map((row, rowIndex) => (
+                        <tr key={rowIndex} className="border-b border-black/5 last:border-b-0">
+                          {row.map((cell, cellIndex) => (
+                            <td key={cellIndex} className="px-3 py-2.5 align-top leading-relaxed">
+                              {renderInline(cell)}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              );
+            }
+
+            return (
               <p key={i} className="mb-4 whitespace-pre-line text-[14.5px] leading-[1.85] text-[#334155]">
                 {renderInline(block.text)}
               </p>
-            ),
-          )}
+            );
+          })}
         </div>
       ) : (
         <p className="text-sm text-[#94A3B8]">Nội dung đang được cập nhật.</p>
