@@ -144,6 +144,35 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
               );
             }
 
+            if (block.type === "list") {
+              const items = block.items.map((item, itemIndex) => (
+                <li key={itemIndex} className="pl-1 leading-[1.85]">
+                  {renderInline(item)}
+                </li>
+              ));
+
+              return block.ordered ? (
+                <ol key={i} className="mb-5 mt-4 list-decimal space-y-1 pl-6 text-[14.5px] text-[#334155]">
+                  {items}
+                </ol>
+              ) : (
+                <ul key={i} className="mb-5 mt-4 list-disc space-y-1 pl-6 text-[14.5px] text-[#334155]">
+                  {items}
+                </ul>
+              );
+            }
+
+            if (block.type === "quote") {
+              return (
+                <blockquote
+                  key={i}
+                  className="mb-5 mt-4 border-l-4 border-[#E8547A] bg-[#FFF7FA] px-4 py-3 text-[14.5px] italic leading-[1.85] text-[#475569]"
+                >
+                  {renderInline(block.text)}
+                </blockquote>
+              );
+            }
+
             if (block.type === "table") {
               return (
                 <div key={i} className="mb-6 mt-5 overflow-x-auto rounded-lg border border-black/10 bg-white">
@@ -255,7 +284,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
               <div className="mb-2.5 text-[11px] font-bold uppercase tracking-wide text-[#94A3B8]">
                 Mục lục nội dung
               </div>
-              <ul className="flex flex-col gap-1.5">
+              <ul className="flex max-h-[calc(100vh-9rem)] flex-col gap-1.5 overflow-y-auto overscroll-contain pr-1">
                 {toc.map((item) => (
                   <li key={item.id} className={item.level === 3 ? "pl-3" : ""}>
                     <a

@@ -136,6 +136,36 @@ function ArticleFields({
     );
   }
 
+  function insertList() {
+    const textarea = contentRef.current;
+    const start = textarea?.selectionStart ?? form.content.length;
+    const end = textarea?.selectionEnd ?? form.content.length;
+    const selected = form.content.slice(start, end).trim();
+    const value = selected
+      ? selected
+          .split(/\r?\n/)
+          .map((line) => (line.trim() ? `- ${line.trim().replace(/^[-*+]\s+/, "")}` : line))
+          .join("\n")
+      : "- Mục thứ nhất\n- Mục thứ hai";
+
+    insertContent(`\n\n${value}\n\n`);
+  }
+
+  function insertQuote() {
+    const textarea = contentRef.current;
+    const start = textarea?.selectionStart ?? form.content.length;
+    const end = textarea?.selectionEnd ?? form.content.length;
+    const selected = form.content.slice(start, end).trim();
+    const value = selected
+      ? selected
+          .split(/\r?\n/)
+          .map((line) => (line.trim() ? `> ${line.trim().replace(/^>\s?/, "")}` : line))
+          .join("\n")
+      : "> Nội dung trích dẫn";
+
+    insertContent(`\n\n${value}\n\n`);
+  }
+
   const relatedCandidates = articles.filter(
     (article) =>
       article.id !== articleId &&
@@ -174,7 +204,10 @@ function ArticleFields({
           <p><strong>Tóm tắt:</strong> nêu lợi ích chính, ngắn gọn và khác với bài khác.</p>
           <p><strong>Meta:</strong> mô tả riêng, ưu tiên 120–160 ký tự và đặt từ khóa sớm.</p>
           <p><strong>Nội dung:</strong> dùng H2/H3 theo đúng thứ tự; mỗi đoạn cách nhau một dòng trống.</p>
-          <p><strong>Ảnh:</strong> chọn ảnh đúng chủ đề, đặt alt mô tả; kiểm tra bảng và liên kết trước khi xuất bản.</p>
+          <p><strong>Danh sách:</strong> dùng `-`/`*` cho bullet hoặc `1.` cho danh sách đánh số.</p>
+          <p><strong>Trích dẫn:</strong> bắt đầu dòng bằng `&gt;` để tạo quote.</p>
+          <p><strong>Ảnh:</strong> chọn ảnh đúng chủ đề, đặt alt mô tả; kiểm tra bảng và liên kết.</p>
+          <p><strong>Xóa ảnh:</strong> xóa dòng Markdown ảnh rồi bấm Lưu để dọn ảnh trên Cloudinary.</p>
         </div>
       </aside>
       <label className="col-span-2 flex flex-col gap-1">
@@ -319,6 +352,22 @@ function ArticleFields({
           >
             Bảng
           </button>
+          <button
+            type="button"
+            onClick={insertList}
+            className="rounded border border-black/10 bg-white px-2 py-1 text-xs font-bold text-[#0F172A] hover:border-[#E8547A]"
+            title="Chèn danh sách"
+          >
+            Danh sách
+          </button>
+          <button
+            type="button"
+            onClick={insertQuote}
+            className="rounded border border-black/10 bg-white px-2 py-1 text-xs font-bold text-[#0F172A] hover:border-[#E8547A]"
+            title="Chèn trích dẫn"
+          >
+            Trích dẫn
+          </button>
           <span className="ml-1 text-[11px] text-[#94A3B8]">H1 dùng tiêu đề bài viết; H2/H3 sẽ tự tạo mục lục.</span>
           <ArticleImageUploader
             draftToken={draftToken}
@@ -334,7 +383,7 @@ function ArticleFields({
           rows={18}
           placeholder={
             "Mỗi đoạn cách nhau 1 dòng trống. Dùng **chữ đậm** để in đậm.\n" +
-            "Dùng H2/H3 trên thanh công cụ để tạo mục lục. Bảng được lưu theo định dạng Markdown."
+            "Dùng H2/H3 để tạo mục lục; -/* cho danh sách; > cho trích dẫn; bảng dùng định dạng Markdown."
           }
           value={form.content}
           onChange={(e) => onChange({ ...form, content: e.target.value })}

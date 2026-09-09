@@ -14,7 +14,7 @@ export function extractArticleImageUrls(content: string | null | undefined): str
   if (!content) return [];
 
   const urls: string[] = [];
-  const imagePattern = /!\[[^\]]*\]\((https?:\/\/[^)\s]+)\)/g;
+  const imagePattern = /!\[[^\]]*\]\s*\(\s*(https?:\/\/[^)\s]+)\s*\)/g;
   let match: RegExpExecArray | null;
 
   while ((match = imagePattern.exec(content)) !== null) {

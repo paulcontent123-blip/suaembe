@@ -1,14 +1,14 @@
-// UC-20/UC-21 - Nội dung bài viết lưu plain text, đoạn cách nhau bằng dòng
-// trống, `**chữ**` để in đậm, và dòng bắt đầu bằng `## `/`### ` để tạo tiêu
-// đề phụ (heading) — tự parse thủ công thay vì thêm thư viện markdown vì
-// chỉ cần đúng các định dạng này. Heading dùng chung để: (1) render `<h2>`/
-// `<h3>` có `id` neo, (2) tự sinh mục lục (TOC) ở trang đọc bài — 1 nguồn
+// UC-20/UC-21 - Nội dung bài viết lưu plain text, hỗ trợ Markdown giới hạn cho
+// bold, heading, table, image, list và quote. Heading dùng chung để: (1) render
+// `<h2>`/`<h3>` có `id` neo, (2) tự sinh mục lục (TOC) ở trang đọc bài — 1 nguồn
 // dữ liệu duy nhất nên id giữa nội dung và mục lục luôn khớp nhau.
 
 export type ContentBlock =
   | { type: "heading"; level: 2 | 3; id: string; text: string }
   | { type: "table"; headers: string[]; rows: string[][] }
   | { type: "image"; url: string; alt: string }
+  | { type: "list"; ordered: boolean; items: string[] }
+  | { type: "quote"; text: string }
   | { type: "paragraph"; text: string };
 
 export interface TocItem {
@@ -75,6 +75,19 @@ function parseImage(block: string): { url: string; alt: string } | null {
   return match ? { alt: match[1].trim(), url: match[2] } : null;
 }
 
+function parseListItem(line: string): { ordered: boolean; text: string } | null {
+  const unordered = line.match(/^[-*+]\s+(.+)$/);
+  if (unordered) return { ordered: false, text: unordered[1].trim() };
+
+  const ordered = line.match(/^\d+[.)]\s+(.+)$/);
+  return ordered ? { ordered: true, text: ordered[1].trim() } : null;
+}
+
+function parseQuoteLine(line: string): string | null {
+  const match = line.match(/^>\s?(.*)$/);
+  return match ? match[1].trim() : null;
+}
+
 export function parseArticleContent(content: string): { blocks: ContentBlock[]; toc: TocItem[] } {
   const blocks: ContentBlock[] = [];
   const toc: TocItem[] = [];
@@ -124,6 +137,38 @@ export function parseArticleContent(content: string): { blocks: ContentBlock[]; 
       const level: 2 | 3 = h3Match ? 3 : 2;
       flushPending();
       pushHeading(level, (h3Match ?? h2Match)![1]);
+      continue;
+    }
+
+    const listItem = parseListItem(line);
+    if (listItem) {
+      flushPending();
+      const items = [listItem.text];
+
+      while (index + 1 < lines.length) {
+        const nextItem = parseListItem(lines[index + 1].trim());
+        if (!nextItem || nextItem.ordered !== listItem.ordered) break;
+        items.push(nextItem.text);
+        index += 1;
+      }
+
+      blocks.push({ type: "list", ordered: listItem.ordered, items });
+      continue;
+    }
+
+    const quoteText = parseQuoteLine(line);
+    if (quoteText !== null) {
+      flushPending();
+      const quoteLines = [quoteText];
+
+      while (index + 1 < lines.length) {
+        const nextQuote = parseQuoteLine(lines[index + 1].trim());
+        if (nextQuote === null) break;
+        quoteLines.push(nextQuote);
+        index += 1;
+      }
+
+      blocks.push({ type: "quote", text: quoteLines.join("\n") });
       continue;
     }
 
