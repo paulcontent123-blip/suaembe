@@ -79,35 +79,94 @@ export function parseArticleContent(content: string): { blocks: ContentBlock[]; 
   const blocks: ContentBlock[] = [];
   const toc: TocItem[] = [];
   const usedIds = new Map<string, number>();
+  const lines = content.replace(/\r\n?/g, "\n").split("\n");
+  let pendingLines: string[] = [];
 
-  for (const raw of content.split("\n\n")) {
-    const block = raw.trim();
-    if (!block) continue;
+  const flushPending = () => {
+    const block = pendingLines.join("\n").trim();
+    pendingLines = [];
 
-    const h3Match = block.match(/^###\s+(.+)$/);
-    const h2Match = !h3Match ? block.match(/^##\s+(.+)$/) : null;
-    const table = !h2Match && !h3Match ? parseTable(block) : null;
-    const image = !h2Match && !h3Match && !table ? parseImage(block) : null;
+    if (!block) return;
 
-    if (h2Match || h3Match) {
-      const level: 2 | 3 = h3Match ? 3 : 2;
-      const text = (h3Match ?? h2Match)![1].trim();
-      let id = slugify(text) || "muc";
-      const seen = usedIds.get(id) ?? 0;
-
-      usedIds.set(id, seen + 1);
-      if (seen > 0) id = `${id}-${seen + 1}`;
-
-      blocks.push({ type: "heading", level, id, text });
-      toc.push({ level, id, text });
-    } else if (table) {
+    const table = parseTable(block);
+    if (table) {
       blocks.push({ type: "table", ...table });
-    } else if (image) {
-      blocks.push({ type: "image", ...image });
     } else {
       blocks.push({ type: "paragraph", text: block });
     }
+  };
+
+  const pushHeading = (level: 2 | 3, rawText: string) => {
+    const text = rawText.trim();
+    let id = slugify(text) || "muc";
+    const seen = usedIds.get(id) ?? 0;
+
+    usedIds.set(id, seen + 1);
+    if (seen > 0) id = `${id}-${seen + 1}`;
+
+    blocks.push({ type: "heading", level, id, text });
+    toc.push({ level, id, text });
+  };
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const rawLine = lines[index];
+    const line = rawLine.trim();
+
+    if (!line) {
+      flushPending();
+      continue;
+    }
+
+    const h3Match = line.match(/^###\s+(.+)$/);
+    const h2Match = !h3Match ? line.match(/^##\s+(.+)$/) : null;
+
+    if (h2Match || h3Match) {
+      const level: 2 | 3 = h3Match ? 3 : 2;
+      flushPending();
+      pushHeading(level, (h3Match ?? h2Match)![1]);
+      continue;
+    }
+
+    let image = parseImage(line);
+
+    // Accept content copied with the alt text and URL split across two lines.
+    if (!image && /^!\[[^\]]*\]\s*$/.test(line)) {
+      const nextLine = lines[index + 1]?.trim();
+      if (nextLine && /^\(https?:\/\/[^)\s]+\)$/.test(nextLine)) {
+        image = parseImage(`${line}${nextLine}`);
+        index += 1;
+      }
+    }
+
+    if (image) {
+      flushPending();
+      blocks.push({ type: "image", ...image });
+      continue;
+    }
+
+    // Parse a table even when the author did not add a blank line before it.
+    const nextLine = lines[index + 1]?.trim();
+    if (nextLine && parseTable(`${line}\n${nextLine}`)) {
+      flushPending();
+      const tableLines = [line, nextLine];
+      index += 1;
+
+      while (index + 1 < lines.length) {
+        const row = lines[index + 1].trim();
+        if (!row || !parseTableRow(row)) break;
+        tableLines.push(row);
+        index += 1;
+      }
+
+      const table = parseTable(tableLines.join("\n"));
+      if (table) blocks.push({ type: "table", ...table });
+      continue;
+    }
+
+    pendingLines.push(rawLine);
   }
+
+  flushPending();
 
   return { blocks, toc };
 }

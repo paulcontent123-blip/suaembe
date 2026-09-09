@@ -163,6 +163,20 @@ function ArticleFields({
 
   return (
     <div className="grid grid-cols-2 gap-2.5">
+      <aside className="col-span-2 rounded-lg border border-[#E8547A]/20 bg-[#FFF7FA] px-3 py-2.5 text-[11px] text-[#475569]">
+        <div className="mb-1.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5">
+          <span className="font-bold uppercase text-[#C43A62]">Hướng dẫn SEO nhanh</span>
+          <span className="text-[#94A3B8]">Áp dụng cho cả Thêm và Sửa</span>
+        </div>
+        <div className="grid gap-x-5 gap-y-1 sm:grid-cols-2">
+          <p><strong>H1:</strong> một tiêu đề duy nhất, nêu rõ chủ đề và từ khóa chính.</p>
+          <p><strong>Slug:</strong> viết thường, không dấu, ngăn cách bằng dấu gạch ngang.</p>
+          <p><strong>Tóm tắt:</strong> nêu lợi ích chính, ngắn gọn và khác với bài khác.</p>
+          <p><strong>Meta:</strong> mô tả riêng, ưu tiên 120–160 ký tự và đặt từ khóa sớm.</p>
+          <p><strong>Nội dung:</strong> dùng H2/H3 theo đúng thứ tự; mỗi đoạn cách nhau một dòng trống.</p>
+          <p><strong>Ảnh:</strong> chọn ảnh đúng chủ đề, đặt alt mô tả; kiểm tra bảng và liên kết trước khi xuất bản.</p>
+        </div>
+      </aside>
       <label className="col-span-2 flex flex-col gap-1">
         <span className="text-[10px] font-bold uppercase text-[#94A3B8]">Tiêu đề (H1) *</span>
         <input value={form.title} onChange={(e) => onChange({ ...form, title: e.target.value })} className={inputCls} />
@@ -310,7 +324,9 @@ function ArticleFields({
             draftToken={draftToken}
             assetType="article_inline"
             multiple
-            onUploaded={({ url, alt }) => insertContent(`\n\n![${alt}](${url})\n\n`)}
+            onUploadedBatch={(images) =>
+              insertContent(`\n\n${images.map(({ url, alt }) => `![${alt}](${url})`).join("\n\n")}\n\n`)
+            }
           />
         </div>
         <textarea

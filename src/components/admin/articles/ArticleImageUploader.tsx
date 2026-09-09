@@ -10,7 +10,8 @@ interface UploadedArticleImage {
 interface ArticleImageUploaderProps {
   draftToken: string;
   assetType: "cover" | "article_inline";
-  onUploaded: (image: UploadedArticleImage) => void;
+  onUploaded?: (image: UploadedArticleImage) => void;
+  onUploadedBatch?: (images: UploadedArticleImage[]) => void;
   multiple?: boolean;
   previewUrl?: string;
 }
@@ -27,6 +28,7 @@ export function ArticleImageUploader({
   draftToken,
   assetType,
   onUploaded,
+  onUploadedBatch,
   multiple = false,
   previewUrl,
 }: ArticleImageUploaderProps) {
@@ -41,6 +43,7 @@ export function ArticleImageUploader({
 
     setUploading(true);
     setError(null);
+    const uploadedImages: UploadedArticleImage[] = [];
 
     try {
       for (const file of files) {
@@ -64,11 +67,15 @@ export function ArticleImageUploader({
           throw new Error("Upload ảnh không trả về URL hợp lệ.");
         }
 
-        onUploaded({ url, alt });
+        const uploadedImage = { url, alt };
+        uploadedImages.push(uploadedImage);
+
+        if (!onUploadedBatch) onUploaded?.(uploadedImage);
       }
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : "Upload ảnh thất bại.");
     } finally {
+      if (onUploadedBatch && uploadedImages.length > 0) onUploadedBatch(uploadedImages);
       setUploading(false);
       if (inputRef.current) inputRef.current.value = "";
     }
