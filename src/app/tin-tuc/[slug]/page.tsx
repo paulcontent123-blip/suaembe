@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Fragment } from "react";
 
+import { ArticleInline } from "@/components/articles/ArticleInline";
 import { SiteFooter } from "@/components/home/SiteFooter";
 import { SiteNav } from "@/components/home/SiteNav";
 import { ArticleViewPing } from "@/components/tin-tuc/ArticleViewPing";
@@ -37,19 +37,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: "article",
     },
   };
-}
-
-// `**chữ**` bên trong 1 đoạn/heading vẫn cần parse riêng để in đậm.
-function renderInline(text: string) {
-  return text.split(/(\*\*[^*]+\*\*)/g).map((part, j) =>
-    part.startsWith("**") && part.endsWith("**") ? (
-      <strong key={j} className="font-bold text-[#0F172A]">
-        {part.slice(2, -2)}
-      </strong>
-    ) : (
-      <Fragment key={j}>{part}</Fragment>
-    ),
-  );
 }
 
 function readingMinutes(content: string | null): number {
@@ -98,7 +85,9 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
       )}
       <h1 className="mb-3 font-serif text-[26px] font-black leading-tight text-[#0F172A]">{article.title}</h1>
       {article.excerpt && (
-        <p className="mb-5 text-[15px] font-medium leading-relaxed text-[#475569]">{renderInline(article.excerpt)}</p>
+        <p className="mb-5 text-[15px] font-medium leading-relaxed text-[#475569]">
+          <ArticleInline text={article.excerpt} />
+        </p>
       )}
       <div className="mb-6 text-[12px] text-[#94A3B8]">
         📅 {article.published_at ? new Date(article.published_at).toLocaleDateString("vi-VN") : "—"} · ⏱{" "}
@@ -120,11 +109,11 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                   id={block.id}
                   className="mb-3 mt-7 scroll-mt-24 font-serif text-lg font-black text-[#0F172A] first:mt-0"
                 >
-                  {renderInline(block.text)}
+                  <ArticleInline text={block.text} />
                 </h2>
               ) : (
                 <h3 key={i} id={block.id} className="mb-2 mt-5 scroll-mt-24 text-[15px] font-bold text-[#0F172A]">
-                  {renderInline(block.text)}
+                  <ArticleInline text={block.text} />
                 </h3>
               );
             }
@@ -147,7 +136,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
             if (block.type === "list") {
               const items = block.items.map((item, itemIndex) => (
                 <li key={itemIndex} className="pl-1 leading-[1.85]">
-                  {renderInline(item)}
+                  <ArticleInline text={item} />
                 </li>
               ));
 
@@ -168,7 +157,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                   key={i}
                   className="mb-5 mt-4 border-l-4 border-[#E8547A] bg-[#FFF7FA] px-4 py-3 text-[14.5px] italic leading-[1.85] text-[#475569]"
                 >
-                  {renderInline(block.text)}
+                  <ArticleInline text={block.text} />
                 </blockquote>
               );
             }
@@ -181,7 +170,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                       <tr>
                         {block.headers.map((header, headerIndex) => (
                           <th key={headerIndex} className="border-b border-black/10 px-3 py-2.5 font-bold">
-                            {renderInline(header)}
+                            <ArticleInline text={header} />
                           </th>
                         ))}
                       </tr>
@@ -191,7 +180,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                         <tr key={rowIndex} className="border-b border-black/5 last:border-b-0">
                           {row.map((cell, cellIndex) => (
                             <td key={cellIndex} className="px-3 py-2.5 align-top leading-relaxed">
-                              {renderInline(cell)}
+                              <ArticleInline text={cell} />
                             </td>
                           ))}
                         </tr>
@@ -204,7 +193,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
             return (
               <p key={i} className="mb-4 whitespace-pre-line text-[14.5px] leading-[1.85] text-[#334155]">
-                {renderInline(block.text)}
+                <ArticleInline text={block.text} />
               </p>
             );
           })}

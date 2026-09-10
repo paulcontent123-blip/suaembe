@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 
-interface UploadedArticleImage {
+export interface UploadedArticleImage {
   url: string;
   alt: string;
 }
@@ -12,8 +12,13 @@ interface ArticleImageUploaderProps {
   assetType: "cover" | "article_inline";
   onUploaded?: (image: UploadedArticleImage) => void;
   onUploadedBatch?: (images: UploadedArticleImage[]) => void;
+  onBeforeSelect?: () => void;
+  onRemove?: () => void;
+  onUploadingChange?: (uploading: boolean) => void;
   multiple?: boolean;
   previewUrl?: string;
+  previewAlt?: string;
+  buttonLabel?: string;
 }
 
 function altFromFile(file: File): string {
@@ -29,8 +34,13 @@ export function ArticleImageUploader({
   assetType,
   onUploaded,
   onUploadedBatch,
+  onBeforeSelect,
+  onRemove,
+  onUploadingChange,
   multiple = false,
   previewUrl,
+  previewAlt = "",
+  buttonLabel = "Ảnh",
 }: ArticleImageUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -42,6 +52,7 @@ export function ArticleImageUploader({
     if (files.length === 0) return;
 
     setUploading(true);
+    onUploadingChange?.(true);
     setError(null);
     const uploadedImages: UploadedArticleImage[] = [];
 
@@ -77,6 +88,7 @@ export function ArticleImageUploader({
     } finally {
       if (onUploadedBatch && uploadedImages.length > 0) onUploadedBatch(uploadedImages);
       setUploading(false);
+      onUploadingChange?.(false);
       if (inputRef.current) inputRef.current.value = "";
     }
   }
@@ -85,13 +97,14 @@ export function ArticleImageUploader({
     return (
       <div className="inline-flex flex-col items-start gap-1">
         <label className="cursor-pointer rounded border border-black/10 bg-white px-2 py-1 text-xs font-bold text-[#0F172A] hover:border-[#E8547A]">
-          {uploading ? "Đang upload..." : "Ảnh"}
+          {uploading ? "Đang tải ảnh..." : buttonLabel}
           <input
             ref={inputRef}
             type="file"
             accept="image/jpeg,image/png,image/webp,image/gif"
             multiple={multiple}
             onChange={handleChange}
+            onClick={onBeforeSelect}
             disabled={uploading}
             className="hidden"
           />
@@ -105,8 +118,25 @@ export function ArticleImageUploader({
     <div className="col-span-2 flex flex-col gap-1">
       <span className="text-[10px] font-bold uppercase text-[#94A3B8]">Ảnh bìa</span>
       {previewUrl && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={previewUrl} alt="" className="h-28 w-full rounded-lg border border-black/10 object-cover" />
+        <div className="relative">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={previewUrl}
+            alt={previewAlt}
+            className="h-36 w-full rounded-lg border border-black/10 object-cover"
+          />
+          {onRemove && (
+            <button
+              type="button"
+              onClick={onRemove}
+              className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#0F172A]/80 text-base font-bold text-white hover:bg-[#DC2626]"
+              title="Gỡ ảnh bìa"
+              aria-label="Gỡ ảnh bìa"
+            >
+              ×
+            </button>
+          )}
+        </div>
       )}
       <label
         htmlFor={inputId}
@@ -121,6 +151,7 @@ export function ArticleImageUploader({
           type="file"
           accept="image/jpeg,image/png,image/webp,image/gif"
           onChange={handleChange}
+          onClick={onBeforeSelect}
           disabled={uploading}
           className="sr-only"
         />
