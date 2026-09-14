@@ -153,12 +153,12 @@ function PartnerCard({ partner, onOpen }: { partner: PublicPartner; onOpen: () =
           <ServicePreview services={partner.services} />
         </div>
 
-        <div className="mt-auto flex items-center justify-between gap-2 border-t border-[#EEF1F5] pt-3">
+        <div className="mt-auto flex flex-col items-stretch gap-2 border-t border-[#EEF1F5] pt-3 sm:flex-row sm:items-center sm:justify-between">
           <span className="truncate text-[11px] text-[#94A3B8]">{partner.province ? `📍 ${partner.province}` : "Tư vấn qua SữaEmbe"}</span>
           <button
             type="button"
             onClick={onOpen}
-            className="shrink-0 rounded-lg border border-[#F6B9CB] bg-[#FFF5F8] px-3 py-2 text-[12px] font-extrabold text-[#E8547A] transition hover:bg-[#E8547A] hover:text-white"
+            className="w-full shrink-0 rounded-lg border border-[#F6B9CB] bg-[#FFF5F8] px-3 py-2 text-[12px] font-extrabold text-[#E8547A] transition hover:bg-[#E8547A] hover:text-white sm:w-auto"
           >
             {isService ? "Xem chi tiết & Đặt lịch" : "Xem chi tiết & Liên hệ"} →
           </button>
@@ -308,7 +308,7 @@ function PartnerDetailModal({ partner, onClose, onSuccess }: { partner: PublicPa
   }
 
   return (
-    <div className="fixed inset-0 z-[400] flex items-center justify-center bg-[#0F172A]/55 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-[400] flex items-center justify-center bg-[#0F172A]/55 p-2 sm:p-4" onClick={onClose}>
       <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-2xl" onClick={(event) => event.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="partner-detail-title">
         <div className="relative h-28 overflow-hidden bg-gradient-to-r from-[#FFF0F5] via-[#FDF8FA] to-[#E8F7F5]">
           {partner.cover_url && (
@@ -511,19 +511,19 @@ function DoctorConsultModal({
   }
 
   return (
-    <div className="fixed inset-0 z-[400] flex items-center justify-center bg-[#0F172A]/55 p-4" onClick={onClose}>
-      <div className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl" onClick={(event) => event.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="doctor-detail-title">
+    <div className="fixed inset-0 z-[400] flex items-center justify-center bg-[#0F172A]/55 p-2 sm:p-4" onClick={onClose}>
+      <div className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white p-4 shadow-2xl sm:rounded-2xl sm:p-6" onClick={(event) => event.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="doctor-detail-title">
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3">
+          <div className="min-w-0 flex items-center gap-3">
             <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-[#E8F7F5] text-sm font-extrabold text-[#0D9488]">
               {doctor.avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={doctor.avatar_url} alt={doctor.full_name} className="h-full w-full object-cover" />
               ) : initials(doctor.full_name)}
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="mb-1 flex flex-wrap gap-1.5"><span className="rounded bg-[#E8F7F5] px-2 py-1 text-[10.5px] font-bold text-[#0D9488]">BS Nhi</span>{doctor.verified && <span className="rounded bg-[#ECFDF3] px-2 py-1 text-[10.5px] font-bold text-[#16A34A]">✓ Đã xác minh</span>}</div>
-              <h2 id="doctor-detail-title" className="text-lg font-extrabold text-[#0F172A]">{doctor.full_name}</h2>
+              <h2 id="doctor-detail-title" className="break-words text-lg font-extrabold text-[#0F172A]">{doctor.full_name}</h2>
             </div>
           </div>
           <button type="button" onClick={onClose} aria-label="Đóng" className="text-2xl leading-none text-[#94A3B8] hover:text-[#0F172A]">×</button>
@@ -679,17 +679,17 @@ export function PartnerBrowser({
 
   return (
     <div className="flex-1">
-      <section className="border-b border-[#F3DCE4] bg-gradient-to-b from-[#FFF8FA] to-[#FDF8FA] px-6 pb-7 pt-10 sm:pt-14">
+      <section className="border-b border-[#F3DCE4] bg-gradient-to-b from-[#FFF8FA] to-[#FDF8FA] px-4 pb-7 pt-8 sm:px-6 sm:pt-14">
         <div className="mx-auto max-w-[1120px]">
           <div className="mb-3 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#E8547A]"><span className="h-px w-6 bg-[#E8547A]" /> Đối tác đồng hành trong hành trình mẹ bỉm</div>
           <div className="max-w-3xl">
-            <h1 className="font-serif text-4xl font-black leading-tight text-[#0F172A] sm:text-5xl">Đối tác <em className="not-italic text-[#E8547A]">tin cậy</em> từ A đến Z</h1>
-            <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-[#64748B]">Từ lúc mang thai đến khi nuôi con lớn, SữaEmbe kết nối mẹ với các đối tác được xác minh và đồng hành tư vấn theo từng nhu cầu.</p>
+            <h1 className="font-serif text-3xl font-black leading-tight text-[#0F172A] sm:text-5xl">Đối tác <em className="not-italic text-[#E8547A]">tin cậy</em> từ A đến Z</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#64748B] sm:text-[15px]">Từ lúc mang thai đến khi nuôi con lớn, SữaEmbe kết nối mẹ với các đối tác được xác minh và đồng hành tư vấn theo từng nhu cầu.</p>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1120px] px-6 pb-12 pt-5">
+      <section className="mx-auto max-w-[1120px] px-4 pb-12 pt-5 sm:px-6">
         <div className="overflow-x-auto border-b border-[#DCE3EC]">
           <div className="flex min-w-max gap-1">
             {TABS.map((tab) => (
@@ -714,7 +714,7 @@ export function PartnerBrowser({
 
         {showDoctorSection && (
           <div className="mt-10">
-            <div className="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-[#B7E4DF] bg-gradient-to-br from-[#F2FCFB] to-[#F8FFFE] px-5 py-4"><div><div className="text-sm font-extrabold text-[#0D9488]">👨‍⚕️ 45+ Bác sĩ Nhi khoa xác minh</div><p className="mt-1 max-w-2xl text-xs leading-relaxed text-[#64748B]">Liên kết từ hệ thống danh bạ bác sĩ uy tín. Xem chi tiết, liên hệ qua SữaEmbe hoặc gửi câu hỏi để Admin chuyển tiếp cho bác sĩ.</p></div><button type="button" disabled={visibleDoctors.length === 0} onClick={() => visibleDoctors[0] && openDoctor(visibleDoctors[0], "consult")} className="shrink-0 rounded-lg bg-[#0D9488] px-4 py-2.5 text-xs font-extrabold text-white transition hover:bg-[#08786E] disabled:cursor-not-allowed disabled:opacity-50">Hỏi BS Nhi ngay →</button></div>
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-[#B7E4DF] bg-gradient-to-br from-[#F2FCFB] to-[#F8FFFE] px-4 py-4 sm:px-5"><div><div className="text-sm font-extrabold text-[#0D9488]">👨‍⚕️ 45+ Bác sĩ Nhi khoa xác minh</div><p className="mt-1 max-w-2xl text-xs leading-relaxed text-[#64748B]">Liên kết từ hệ thống danh bạ bác sĩ uy tín. Xem chi tiết, liên hệ qua SữaEmbe hoặc gửi câu hỏi để Admin chuyển tiếp cho bác sĩ.</p></div><button type="button" disabled={visibleDoctors.length === 0} onClick={() => visibleDoctors[0] && openDoctor(visibleDoctors[0], "consult")} className="w-full shrink-0 rounded-lg bg-[#0D9488] px-4 py-2.5 text-xs font-extrabold text-white transition hover:bg-[#08786E] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto">Hỏi BS Nhi ngay →</button></div>
             {visibleDoctors.length > 0 ? <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{visibleDoctors.map((doctor) => <DoctorCard key={doctor.id} doctor={doctor} onOpen={() => openDoctor(doctor, "contact")} onConsult={() => openDoctor(doctor, "consult")} />)}</div> : <EmptyState text="Chưa có hồ sơ bác sĩ phù hợp." />}
           </div>
         )}
@@ -722,7 +722,7 @@ export function PartnerBrowser({
 
       {selectedPartner && <PartnerDetailModal key={selectedPartner.id} partner={selectedPartner} onClose={() => setSelectedPartner(null)} onSuccess={showToast} />}
       {selectedDoctor && <DoctorConsultModal key={`${selectedDoctor.id}-${doctorModalMode}`} doctor={selectedDoctor} isAuthenticated={isAuthenticated} initialMode={doctorModalMode} onClose={() => setSelectedDoctor(null)} onSuccess={showToast} />}
-      {toast && <div className="fixed bottom-7 right-7 z-[500] max-w-sm rounded-lg bg-[#0F172A] px-5 py-3 text-sm font-semibold text-white shadow-2xl">{toast}</div>}
+      {toast && <div className="fixed inset-x-4 bottom-4 z-[500] rounded-lg bg-[#0F172A] px-4 py-3 text-sm font-semibold text-white shadow-2xl sm:left-auto sm:right-7 sm:max-w-sm sm:px-5">{toast}</div>}
     </div>
   );
 }

@@ -67,7 +67,7 @@ export function NotificationSettings() {
   }
 
   return (
-    <div className="rounded-2xl border border-black/10 bg-white p-8 shadow-sm">
+    <div className="rounded-2xl border border-black/10 bg-white p-4 shadow-sm sm:p-8">
       <h2 className="text-lg font-bold text-[#0F172A]">🔔 Thông báo</h2>
       <p className="mt-1 text-xs text-[#94A3B8]">
         Bật thông báo đẩy để nhận nhắc lịch ăn/sữa của bé và khi bác sĩ trả lời câu hỏi tư vấn.
@@ -98,7 +98,7 @@ export function NotificationSettings() {
       {error && <p className="mt-3 text-[12.5px] font-semibold text-red-600">{error}</p>}
 
       {toast && (
-        <div className="fixed bottom-7 right-7 z-[300] max-w-xs rounded-lg bg-[#0F172A] px-5 py-3 text-white shadow-2xl">
+        <div className="fixed inset-x-4 bottom-4 z-[300] rounded-lg bg-[#0F172A] px-4 py-3 text-white shadow-2xl sm:left-auto sm:right-7 sm:max-w-xs sm:px-5">
           <div className="text-sm font-bold">{toast.title}</div>
           {toast.body && <div className="mt-0.5 text-[12.5px] text-white/80">{toast.body}</div>}
         </div>

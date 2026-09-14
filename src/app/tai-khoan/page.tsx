@@ -65,14 +65,14 @@ export default async function TaiKhoanPage() {
     <main className="min-h-screen bg-[#FDF8FA]">
       <SiteNav profile={profile} />
 
-      <div className="mx-auto max-w-[1120px] px-7 py-10">
+      <div className="mx-auto max-w-[1120px] px-4 py-7 sm:px-7 sm:py-10">
         <div className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide text-[#E8547A]">
           <span className="h-px w-5 bg-[#E8547A]" /> Tài khoản của bạn
         </div>
 
         <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="mb-2 font-serif text-3xl font-black text-[#0F172A]">
+            <h1 className="mb-2 break-words font-serif text-2xl font-black text-[#0F172A] sm:text-3xl">
               Chào mừng, <em className="not-italic text-[#E8547A]">{profile.full_name || profile.email}</em>
             </h1>
             <p className="text-sm text-[#64748B]">
@@ -83,12 +83,12 @@ export default async function TaiKhoanPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-black/10 bg-white p-8 shadow-sm">
+          <div className="rounded-2xl border border-black/10 bg-white p-4 shadow-sm sm:p-8">
             <h2 className="text-lg font-bold text-[#0F172A]">Thông tin tài khoản</h2>
             <ProfileForm profile={profile} />
           </div>
 
-          <div className="rounded-2xl border border-black/10 bg-white p-8 shadow-sm">
+          <div className="rounded-2xl border border-black/10 bg-white p-4 shadow-sm sm:p-8">
             <h2 className="text-lg font-bold text-[#0F172A]">Hồ sơ bé</h2>
             <p className="mt-1 text-xs text-[#94A3B8]">
               Quản lý hồ sơ bé để dùng cho theo dõi tăng trưởng, mốc phát triển và AI gợi ý sữa.

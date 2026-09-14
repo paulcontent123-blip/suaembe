@@ -25,7 +25,7 @@ const PARTNERS: { label: string; cls: string }[] = [
 export function PartnerMarquee() {
   return (
     <div className="border-b border-black/10 bg-white py-7">
-      <div className="mx-auto max-w-[1120px] px-7">
+      <div className="mx-auto max-w-[1120px] px-4 sm:px-7">
         <div className="mb-4 text-center text-[11px] font-bold uppercase tracking-[1.5px] text-[#94A3B8]">
           Nhãn sữa &amp; Đối tác tin cậy
         </div>

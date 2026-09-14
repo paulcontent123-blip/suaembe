@@ -83,7 +83,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
           {article.article_categories.name}
         </div>
       )}
-      <h1 className="mb-3 font-serif text-[26px] font-black leading-tight text-[#0F172A]">{article.title}</h1>
+      <h1 className="mb-3 break-words font-serif text-2xl font-black leading-tight text-[#0F172A] sm:text-[26px]">{article.title}</h1>
       {article.excerpt && (
         <p className="mb-5 text-[15px] font-medium leading-relaxed text-[#475569]">
           <ArticleInline text={article.excerpt} />
@@ -266,7 +266,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
       <SiteNav profile={profile} />
 
       {hasToc ? (
-        <div className="mx-auto grid max-w-[980px] grid-cols-1 gap-8 px-6 py-10 lg:grid-cols-[1fr_240px]">
+        <div className="mx-auto grid max-w-[980px] grid-cols-1 gap-8 px-4 py-7 sm:px-6 sm:py-10 lg:grid-cols-[1fr_240px]">
           <div className="max-w-[760px]">{articleBody}</div>
           <aside className="hidden lg:block">
             <nav className="sticky top-24 rounded-xl border border-black/10 bg-white p-4">
@@ -289,7 +289,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
           </aside>
         </div>
       ) : (
-        <div className="mx-auto max-w-[760px] px-6 py-10">{articleBody}</div>
+        <div className="mx-auto max-w-[760px] px-4 py-7 sm:px-6 sm:py-10">{articleBody}</div>
       )}
 
       <SiteFooter />

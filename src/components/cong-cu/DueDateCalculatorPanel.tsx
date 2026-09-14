@@ -91,7 +91,7 @@ export function DueDateCalculatorPanel() {
           <div className="mb-3.5 text-[11px] font-bold uppercase tracking-wide text-[#E8547A]/70">
             Kết quả tính toán
           </div>
-          <div className="mb-3.5 grid grid-cols-3 gap-3">
+          <div className="mb-3.5 grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="text-center">
               <div className="font-mono text-lg font-black text-[#F9A8BE]">
                 {result.dueDate.toLocaleDateString("vi-VN")}

@@ -48,7 +48,7 @@ export function GrowthDiaryBrowser({
 
   if (babies.length === 0) {
     return (
-      <div className={embedded ? "py-10 text-center" : "mx-auto max-w-[600px] px-6 py-16 text-center"}>
+      <div className={embedded ? "px-2 py-10 text-center" : "mx-auto max-w-[600px] px-4 py-12 text-center sm:px-6 sm:py-16"}>
         <div className="mb-3 text-5xl">👶</div>
         {!embedded && <h1 className="mb-2 font-serif text-2xl font-black text-[#0F172A]">Nhật ký Dinh dưỡng Bé</h1>}
         <p className="mb-6 text-sm text-[#64748B]">
@@ -65,13 +65,13 @@ export function GrowthDiaryBrowser({
   }
 
   return (
-    <div className={embedded ? "" : "mx-auto max-w-[1120px] px-6 py-10"}>
+    <div className={embedded ? "" : "mx-auto max-w-[1120px] px-4 py-7 sm:px-6 sm:py-10"}>
       {!embedded && (
         <>
           <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-[#E8547A]">
             Theo dõi tăng trưởng · Mốc phát triển · Lịch ăn
           </div>
-          <h1 className="mb-6 font-serif text-3xl font-black text-[#0F172A]">
+          <h1 className="mb-6 font-serif text-2xl font-black text-[#0F172A] sm:text-3xl">
             Nhật ký <em className="not-italic text-[#E8547A]">Dinh dưỡng Bé</em>
           </h1>
         </>
@@ -143,7 +143,7 @@ export function GrowthDiaryBrowser({
       </div>
 
       {toast && (
-        <div className="fixed bottom-7 right-7 z-[300] flex items-center gap-2 rounded-lg bg-[#16A34A] px-5 py-3 text-sm font-bold text-white shadow-2xl">
+        <div className="fixed inset-x-4 bottom-4 z-[300] flex items-center gap-2 rounded-lg bg-[#16A34A] px-4 py-3 text-sm font-bold text-white shadow-2xl sm:left-auto sm:right-7 sm:px-5">
           ✅ {toast}
         </div>
       )}

@@ -63,8 +63,8 @@ function BabyFields({
   onChange: (next: FormState) => void;
 }) {
   return (
-    <div className="grid grid-cols-2 gap-3">
-      <label className="col-span-2 flex flex-col gap-1">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <label className="col-span-1 flex flex-col gap-1 sm:col-span-2">
         <span className="text-[10px] font-bold uppercase tracking-wide text-[#64748B]">
           Tên bé
         </span>

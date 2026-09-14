@@ -99,7 +99,7 @@ export function ProfileForm({ profile }: { profile: UserProfile }) {
 
   return (
     <div className="mt-6 rounded-xl bg-[#FFF0F5] p-4">
-      <div className="flex items-center gap-4">
+      <div className="flex min-w-0 items-center gap-4">
         <div className="h-16 w-16 shrink-0 overflow-hidden rounded-full bg-[#E8547A] text-white flex items-center justify-center text-lg font-bold">
           {avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -108,14 +108,14 @@ export function ProfileForm({ profile }: { profile: UserProfile }) {
             (profile.full_name ?? profile.email).charAt(0).toUpperCase()
           )}
         </div>
-        <div>
+        <div className="min-w-0 flex-1">
           <input
             ref={fileInputRef}
             type="file"
             accept="image/jpeg,image/png,image/webp,image/gif"
             onChange={handleAvatarChange}
             disabled={uploading}
-            className="text-xs text-[#64748B]"
+            className="max-w-full text-xs text-[#64748B]"
           />
           <p className="mt-1 text-[11px] text-[#94A3B8]">
             {uploading ? "Đang upload..." : "JPEG/PNG/WEBP/GIF, tối đa 5MB"}

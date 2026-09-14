@@ -33,11 +33,11 @@ export function ProductDetailModal({ product, onClose }: { product: Product; onC
 
   return (
     <div
-      className="fixed inset-0 z-[400] flex items-center justify-center bg-black/50 p-4"
+      className="fixed inset-0 z-[400] flex items-center justify-center bg-black/50 p-2 sm:p-4"
       onClick={onClose}
     >
       <div
-        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-2xl"
+        className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b border-black/10 px-5 py-3.5">
@@ -52,8 +52,8 @@ export function ProductDetailModal({ product, onClose }: { product: Product; onC
           </button>
         </div>
 
-        <div className="p-5">
-          <div className="mb-4 flex h-64 items-center justify-center overflow-hidden rounded-xl bg-[#FFF0F5] text-6xl">
+        <div className="p-4 sm:p-5">
+          <div className="mb-4 flex h-48 items-center justify-center overflow-hidden rounded-xl bg-[#FFF0F5] text-6xl sm:h-64">
             {images.length > 0 ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={images[activeImage]} alt={product.name} className="h-full w-full object-cover" />
@@ -85,9 +85,9 @@ export function ProductDetailModal({ product, onClose }: { product: Product; onC
               {product.brands.name}
             </div>
           )}
-          <h2 className="mb-2 text-xl font-extrabold text-[#0F172A]">{product.name}</h2>
+          <h2 className="mb-2 break-words text-lg font-extrabold text-[#0F172A] sm:text-xl">{product.name}</h2>
 
-          <div className="mb-3 flex items-baseline gap-2">
+          <div className="mb-3 flex flex-wrap items-baseline gap-x-2 gap-y-1">
             <span className="font-mono text-2xl font-extrabold text-[#E8547A]">
               {formatVnd(product.price_vnd)}
             </span>
@@ -106,7 +106,7 @@ export function ProductDetailModal({ product, onClose }: { product: Product; onC
               href={product.outbound_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mb-4 flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-[#E8547A] to-[#C43A62] px-4 py-3 text-sm font-bold text-white"
+              className="mb-4 flex flex-wrap items-center justify-center gap-1.5 break-all rounded-xl bg-gradient-to-r from-[#E8547A] to-[#C43A62] px-4 py-3 text-center text-sm font-bold text-white"
             >
               Mua ngay{outboundHost ? ` trên ${outboundHost}` : ""} ↗
             </a>

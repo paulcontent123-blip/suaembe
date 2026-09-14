@@ -228,7 +228,7 @@ function BuyForm({
   return (
     <form onSubmit={handleSubmit} className="mt-4 rounded-xl border border-[#E8547A]/25 bg-[#FFF0F5] p-4">
       <div className="mb-3 text-[13px] font-bold text-[#0F172A]">Thông tin đặt mua</div>
-      <div className="grid grid-cols-2 gap-2.5">
+       <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
         <label className="flex flex-col gap-1">
           <span className="text-[10px] font-bold uppercase text-[#94A3B8]">Tên người nhận *</span>
           <input
@@ -248,7 +248,7 @@ function BuyForm({
             className={inputCls}
           />
         </label>
-        <label className="col-span-2 flex flex-col gap-1">
+       <label className="col-span-1 flex flex-col gap-1 sm:col-span-2">
           <span className="text-[10px] font-bold uppercase text-[#94A3B8]">Địa chỉ nhận hàng</span>
           <input
             value={form.shipping_address}
@@ -419,8 +419,8 @@ function EditListingForm({
   return (
     <form onSubmit={handleSubmit} className="mt-4 rounded-xl border border-[#E8547A]/25 bg-[#FFF0F5] p-4">
       <div className="mb-3 text-[13px] font-bold text-[#0F172A]">Sửa tin đăng</div>
-      <div className="grid grid-cols-2 gap-2.5">
-        <label className="col-span-2 flex flex-col gap-1">
+       <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+         <label className="col-span-1 flex flex-col gap-1 sm:col-span-2">
           <span className="text-[10px] font-bold uppercase text-[#94A3B8]">Tiêu đề</span>
           <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className={inputCls} />
         </label>
@@ -517,7 +517,7 @@ function EditListingForm({
           <span className="text-[10px] font-bold uppercase text-[#94A3B8]">Zalo liên hệ</span>
           <input value={form.zalo} onChange={(e) => setForm({ ...form, zalo: e.target.value })} className={inputCls} />
         </label>
-        <label className="col-span-2 flex flex-col gap-1">
+         <label className="col-span-1 flex flex-col gap-1 sm:col-span-2">
           <span className="text-[10px] font-bold uppercase text-[#94A3B8]">Mô tả</span>
           <textarea
             rows={3}
@@ -696,9 +696,9 @@ export function ListingDetailModal({
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-[400] flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-[400] flex items-center justify-center bg-black/50 p-2 sm:p-4" onClick={onClose}>
       <div
-        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-2xl"
+        className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b border-black/10 px-5 py-3.5">
@@ -713,8 +713,8 @@ export function ListingDetailModal({
           </button>
         </div>
 
-        <div className="p-5">
-          <div className="mb-4 flex h-64 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-[#FFF0F5] to-[#F1F5F9] text-6xl">
+        <div className="p-4 sm:p-5">
+          <div className="mb-4 flex h-48 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-[#FFF0F5] to-[#F1F5F9] text-6xl sm:h-64">
             {images.length > 0 ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={images[activeImage]} alt={listing.title} className="h-full w-full object-cover" />
@@ -764,7 +764,7 @@ export function ListingDetailModal({
           </div>
 
           <div className="mb-2 flex items-start justify-between gap-2">
-            <h2 className="text-xl font-extrabold text-[#0F172A]">{listing.title}</h2>
+            <h2 className="break-words text-lg font-extrabold text-[#0F172A] sm:text-xl">{listing.title}</h2>
             {canEdit && !editing && (
               <button
                 type="button"
@@ -776,7 +776,7 @@ export function ListingDetailModal({
             )}
           </div>
 
-          <div className="mb-3 flex items-baseline gap-2">
+          <div className="mb-3 flex flex-wrap items-baseline gap-x-2 gap-y-1">
             <span className="font-mono text-2xl font-extrabold text-[#E8547A]">{formatVnd(listing.price)}</span>
             {listing.original_price != null && listing.original_price > listing.price && (
               <span className="font-mono text-sm text-[#94A3B8] line-through">

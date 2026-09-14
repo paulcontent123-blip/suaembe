@@ -22,10 +22,10 @@ function ArticleListItem({ article }: { article: Article }) {
   return (
     <Link
       href={`/tin-tuc/${article.slug}`}
-      className="flex overflow-hidden rounded-xl border border-black/10 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-[#E8547A] hover:shadow-md"
+      className="flex flex-col overflow-hidden rounded-xl border border-black/10 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-[#E8547A] hover:shadow-md sm:flex-row"
     >
       <div
-        className="flex w-[180px] shrink-0 items-center justify-center text-4xl"
+        className="flex h-36 w-full shrink-0 items-center justify-center text-4xl sm:h-auto sm:w-[180px]"
         style={{ background: `linear-gradient(135deg, ${style.color}22, #F8FAFC)` }}
       >
         {article.cover_url ? (
@@ -35,15 +35,15 @@ function ArticleListItem({ article }: { article: Article }) {
           style.emoji
         )}
       </div>
-      <div className="p-4">
+      <div className="min-w-0 p-3 sm:p-4">
         <div className="mb-1.5 text-[10px] font-bold uppercase tracking-wide" style={{ color: style.color }}>
           {article.article_categories?.name ?? "Tin tức"}
         </div>
-        <div className="mb-1.5 text-[15px] font-bold leading-snug text-[#0F172A]">{article.title}</div>
+        <div className="mb-1.5 line-clamp-2 break-words text-[15px] font-bold leading-snug text-[#0F172A]">{article.title}</div>
         {article.excerpt && (
           <div className="mb-2 line-clamp-2 text-[12.5px] leading-relaxed text-[#64748B]">{article.excerpt}</div>
         )}
-        <div className="text-[11px] text-[#94A3B8]">
+        <div className="break-words text-[11px] text-[#94A3B8]">
           📅 {article.published_at ? new Date(article.published_at).toLocaleDateString("vi-VN") : "—"} · ⏱{" "}
           {readingMinutes(article.excerpt)} phút đọc · 👁 {article.view_count.toLocaleString("vi-VN")} lượt xem
         </div>
@@ -159,15 +159,16 @@ export function TinTucBrowser({
   }, [academyArticles]);
 
   return (
-    <div className="mx-auto max-w-[1120px] px-6 py-10">
+    <div className="mx-auto max-w-[1120px] px-4 py-7 sm:px-6 sm:py-10">
       <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-[#E8547A]">
         Kiến thức · Nhật ký · Mẹo hay
       </div>
-      <h1 className="mb-6 font-serif text-3xl font-black text-[#0F172A]">
+      <h1 className="mb-6 font-serif text-2xl font-black text-[#0F172A] sm:text-3xl">
         Tin tức <em className="not-italic text-[#E8547A]">Mẹ &amp; Bé</em>
       </h1>
 
-      <div className="mb-6 flex gap-1.5 border-b border-black/10">
+      <div className="mb-6 overflow-x-auto border-b border-black/10">
+        <div className="flex min-w-max gap-1.5">
         <button
           type="button"
           onClick={() => setTab("news")}
@@ -195,6 +196,7 @@ export function TinTucBrowser({
         >
           💡 Học viện Làm Mẹ
         </button>
+        </div>
       </div>
 
       {tab === "nhatky" ? (

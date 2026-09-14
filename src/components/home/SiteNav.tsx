@@ -56,6 +56,7 @@ export function SiteNav({
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<"login" | "register">("login");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   function openAuth(tab: "login" | "register") {
     setAuthTab(tab);
@@ -73,6 +74,10 @@ export function SiteNav({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
   async function handleLogout() {
     setUserMenuOpen(false);
     await fetch("/api/auth/logout", { method: "POST" });
@@ -82,12 +87,12 @@ export function SiteNav({
 
   return (
     <>
-      <nav className="sticky top-0 z-[100] flex h-16 items-center gap-2 border-b border-black/10 bg-white/95 px-6 backdrop-blur-md">
-        <Link href="/" className="mr-4 flex shrink-0 items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-gradient-to-br from-[#E8547A] to-[#C43A62] text-lg">
+      <nav className="sticky top-0 z-[100] flex min-h-16 flex-wrap items-center gap-2 border-b border-black/10 bg-white/95 px-4 backdrop-blur-md sm:px-6">
+        <Link href="/" className="mr-0 flex min-w-0 shrink items-center gap-2 sm:mr-4">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-gradient-to-br from-[#E8547A] to-[#C43A62] text-lg">
             🍼
           </div>
-          <div className="font-serif text-lg font-black text-[#0F172A]">
+          <div className="truncate font-serif text-base font-black text-[#0F172A] sm:text-lg">
             Sữa<em className="not-italic text-[#E8547A]">Embe</em>
           </div>
         </Link>
@@ -112,7 +117,17 @@ export function SiteNav({
           </Link>
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-2">
+        <button
+          type="button"
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-site-menu"
+          onClick={() => setMobileMenuOpen((value) => !value)}
+          className="ml-auto flex shrink-0 items-center rounded-lg border border-[#CBD5E1] px-3 py-2 text-[12px] font-semibold text-[#475569] hover:border-[#E8547A] hover:text-[#E8547A] lg:hidden"
+        >
+          {mobileMenuOpen ? "Đóng" : "Menu"}
+        </button>
+
+        <div className="ml-auto hidden shrink-0 items-center gap-2 sm:flex">
           {profile ? (
             <div className="relative">
               <button
@@ -123,7 +138,7 @@ export function SiteNav({
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#E8547A] text-[11px] font-bold text-white">
                   {(profile.full_name ?? profile.email).charAt(0).toUpperCase()}
                 </span>
-                {profile.full_name || profile.email}
+                <span className="max-w-[9rem] truncate sm:max-w-[14rem]">{profile.full_name || profile.email}</span>
               </button>
 
               {userMenuOpen && (
@@ -182,6 +197,97 @@ export function SiteNav({
             </>
           )}
         </div>
+
+        {mobileMenuOpen && (
+          <div id="mobile-site-menu" className="basis-full border-t border-black/10 py-3 lg:hidden">
+            <div className="grid gap-1">
+              <Link
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className={navLinkClass(isActiveHref(pathname, "/"))}
+              >
+                Trang chủ
+              </Link>
+              {NAV_GROUPS.map((group) => (
+                <Link
+                  key={group.label}
+                  href={group.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={navLinkClass(isActiveHref(pathname, group.href))}
+                >
+                  {group.label}
+                </Link>
+              ))}
+              <Link
+                href="/tin-tuc"
+                onClick={() => setMobileMenuOpen(false)}
+                className={navLinkClass(isActiveHref(pathname, "/tin-tuc"))}
+              >
+                📰 Tin tức Mẹ & Bé
+              </Link>
+              <Link
+                href="/doi-tac"
+                onClick={() => setMobileMenuOpen(false)}
+                className={navLinkClass(isActiveHref(pathname, "/doi-tac"))}
+              >
+                🤝 Đối tác
+              </Link>
+            </div>
+
+            <div className="mt-2 border-t border-black/10 pt-2">
+              {profile ? (
+                <div className="grid gap-1">
+                  <Link
+                    href="/tai-khoan"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-lg px-3 py-2 text-[12.5px] font-semibold text-[#64748B] hover:bg-[#E8547A]/10 hover:text-[#E8547A]"
+                  >
+                    Tài khoản
+                  </Link>
+                  {profile.role === "admin" && (
+                    <Link
+                      href="/admin"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="rounded-lg px-3 py-2 text-[12.5px] font-semibold text-[#64748B] hover:bg-[#E8547A]/10 hover:text-[#E8547A]"
+                    >
+                      Quản trị
+                    </Link>
+                  )}
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="rounded-lg px-3 py-2 text-left text-[12.5px] font-semibold text-red-600 hover:bg-red-50"
+                  >
+                    Đăng xuất
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-2 px-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      openAuth("login");
+                    }}
+                    className="rounded-lg border border-[#CBD5E1] px-3.5 py-2 text-[12.5px] font-semibold text-[#64748B] hover:border-[#E8547A] hover:text-[#E8547A]"
+                  >
+                    Đăng nhập
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      openAuth("register");
+                    }}
+                    className="rounded-lg bg-gradient-to-r from-[#E8547A] to-[#C43A62] px-4 py-2 text-[12.5px] font-bold text-white"
+                  >
+                    Đăng ký
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </nav>
 
       <AuthModal

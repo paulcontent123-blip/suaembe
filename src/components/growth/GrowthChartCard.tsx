@@ -108,7 +108,7 @@ export function GrowthChartCard({ baby, onSaved }: { baby: Baby; onSaved: () => 
 
   return (
     <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-[15px] font-bold text-[#0F172A]">📈 Biểu đồ phát triển (so chuẩn WHO)</h2>
         <button
           type="button"
@@ -121,7 +121,7 @@ export function GrowthChartCard({ baby, onSaved }: { baby: Baby; onSaved: () => 
 
       {adding && (
         <form onSubmit={handleSubmit} className="mb-4 rounded-xl border border-[#E8547A]/25 bg-[#FFF0F5] p-3.5">
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
             <label className="flex flex-col gap-1">
               <span className="text-[10px] font-bold uppercase text-[#94A3B8]">Cân nặng (kg)</span>
               <input

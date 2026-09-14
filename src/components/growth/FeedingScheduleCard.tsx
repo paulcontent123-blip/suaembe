@@ -149,7 +149,7 @@ export function FeedingScheduleCard({ babyId, onSaved }: { babyId: string; onSav
 
   return (
     <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-[15px] font-bold text-[#0F172A]">🍽 Lịch ăn dặm hôm nay</h2>
         {items.length > 0 && (
           <button
@@ -172,8 +172,8 @@ export function FeedingScheduleCard({ babyId, onSaved }: { babyId: string; onSav
 
       {adding && (
         <form onSubmit={handleAdd} className="mb-4 rounded-xl border border-[#E8547A]/25 bg-[#FFF0F5] p-3.5">
-          <div className="grid grid-cols-2 gap-2">
-            <label className="col-span-2 flex flex-col gap-1">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <label className="col-span-1 flex flex-col gap-1 sm:col-span-2">
               <span className="text-[10px] font-bold uppercase text-[#94A3B8]">Tên bữa *</span>
               <input
                 placeholder="VD: Sữa công thức, Cháo rau củ..."
@@ -226,8 +226,8 @@ export function FeedingScheduleCard({ babyId, onSaved }: { babyId: string; onSav
               key={item.id}
               className="flex items-center justify-between gap-2 rounded-lg bg-[#F8FAFC] px-3 py-2.5"
             >
-              <div>
-                <span className="text-[13px] font-semibold text-[#0F172A]">
+              <div className="min-w-0">
+                <span className="break-words text-[13px] font-semibold text-[#0F172A]">
                   {item.scheduled_time ? item.scheduled_time.slice(0, 5) : "--:--"} — {item.title}
                 </span>
                 {item.amount_ml && <span className="ml-1 text-[11.5px] text-[#64748B]">({item.amount_ml}ml)</span>}

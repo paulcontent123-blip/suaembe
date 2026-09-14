@@ -186,7 +186,7 @@ export function AuthModal({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-white p-8 shadow-2xl"
+        className="relative max-h-[calc(100vh-2rem)] w-full max-w-sm overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl sm:p-8"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#E8547A] to-[#0D9488]" />

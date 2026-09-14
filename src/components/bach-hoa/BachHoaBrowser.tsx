@@ -40,7 +40,7 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
       }}
       className="cursor-pointer overflow-hidden rounded-xl border border-black/10 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-[#E8547A] hover:shadow-lg"
     >
-      <div className="relative flex h-28 items-center justify-center bg-[#FFF0F5] text-4xl">
+      <div className="relative flex h-24 items-center justify-center bg-[#FFF0F5] text-4xl sm:h-28">
         {thumb ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={thumb} alt={product.name} className="h-full w-full object-cover" />
@@ -62,7 +62,7 @@ function ProductCard({ product, onClick }: { product: Product; onClick: () => vo
         <div className="mb-1.5 line-clamp-2 text-xs font-semibold leading-snug text-[#0F172A]">
           {product.name}
         </div>
-        <div className="flex items-baseline gap-1">
+        <div className="flex flex-wrap items-baseline gap-x-1 gap-y-0.5">
           <span className="font-mono text-sm font-extrabold text-[#E8547A]">
             {formatVnd(product.price_vnd)}
           </span>
@@ -309,11 +309,11 @@ export function BachHoaBrowser({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <div className="flex items-center justify-between gap-3 bg-gradient-to-r from-[#E8547A] to-[#C43A62] px-7 py-3.5">
-        <div className="font-serif text-lg font-black text-white">
+      <div className="flex flex-col items-stretch gap-3 bg-gradient-to-r from-[#E8547A] to-[#C43A62] px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+        <div className="truncate font-serif text-lg font-black text-white">
           🛍 Bách Hóa <em className="not-italic">Mẹ &amp; Bé</em>
         </div>
-        <div className="flex gap-2">
+        <div className="flex min-w-0 gap-2">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -321,7 +321,7 @@ export function BachHoaBrowser({
               if (e.key === "Enter") handleSearch();
             }}
             placeholder="🔍 Tìm sản phẩm, nhãn hàng..."
-            className="w-72 rounded-lg border-none bg-white px-4 py-2 text-sm text-[#0F172A] outline-none placeholder:text-[#94A3B8]"
+            className="min-w-0 flex-1 rounded-lg border-none bg-white px-3 py-2 text-sm text-[#0F172A] outline-none placeholder:text-[#94A3B8] sm:w-72 sm:flex-none sm:px-4"
           />
           <button
             type="button"
@@ -341,28 +341,30 @@ export function BachHoaBrowser({
         // flex (thay vì grid không có chiều cao) để 3 cột luôn cao bằng
         // nhau và lấp hết phần còn lại của trang, tránh khoảng trắng/xám
         // lệch nhau khi danh sách sản phẩm ngắn hơn viewport.
-        <div className="flex flex-1">
-          <div className="w-[220px] shrink-0 border-r border-black/10 bg-white py-3">
+        <div className="flex flex-1 flex-col lg:flex-row">
+          <div className="w-full shrink-0 border-b border-black/10 bg-white py-3 lg:w-[220px] lg:border-b-0 lg:border-r">
             <div className="px-4 pb-1.5 text-[11px] font-bold uppercase tracking-wide text-[#94A3B8]">
               Danh mục sản phẩm
             </div>
-            {topCategories.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => selectTop(cat.id)}
-                className={`flex w-full items-center gap-2.5 border-l-2 px-4 py-2 text-left text-[13px] transition ${selectedTopId === cat.id
-                    ? "border-[#E8547A] bg-[#E8547A]/10 font-bold text-[#E8547A]"
-                    : "border-transparent text-[#64748B] hover:bg-[#E8547A]/5 hover:text-[#E8547A]"
-                  }`}
-              >
-                <span className="w-4 text-center">{categoryIcon(cat.name)}</span>
-                {cat.name}
-              </button>
-            ))}
+            <div className="flex gap-2 overflow-x-auto px-3 pb-1 lg:block lg:overflow-visible lg:px-0 lg:pb-0">
+              {topCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => selectTop(cat.id)}
+                  className={`flex shrink-0 items-center gap-2.5 rounded-lg border-l-2 px-3 py-2 text-left text-[13px] transition lg:w-full lg:rounded-none lg:px-4 ${selectedTopId === cat.id
+                      ? "border-[#E8547A] bg-[#E8547A]/10 font-bold text-[#E8547A]"
+                      : "border-transparent text-[#64748B] hover:bg-[#E8547A]/5 hover:text-[#E8547A]"
+                    }`}
+                >
+                  <span className="w-4 text-center">{categoryIcon(cat.name)}</span>
+                  {cat.name}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="min-w-0 flex-1 bg-[#F1F5F9] p-5">
+          <div className="min-w-0 flex-1 bg-[#F1F5F9] p-4 sm:p-5">
             {selectedTop && (
               <div className="mb-3.5 flex items-center gap-2">
                 <span className="text-lg">{categoryIcon(selectedTop.name)}</span>
@@ -397,7 +399,7 @@ export function BachHoaBrowser({
                     </button>
                   )}
                 </div>
-                <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
                   {childCategories.map((c) => {
                     const grandchildren = childrenOf(c.id);
                     const items = productsByChild.get(c.id) ?? [];
@@ -457,7 +459,7 @@ export function BachHoaBrowser({
               </div>
             )}
 
-            <div ref={productGridRef} className="mb-2.5 flex items-center justify-between text-xs font-bold text-[#64748B]">
+            <div ref={productGridRef} className="mb-2.5 flex flex-wrap items-center justify-between gap-1 text-xs font-bold text-[#64748B]">
               <span>Sản phẩm nổi bật{loading ? " — đang tải..." : ""}</span>
               <span className="font-normal text-[#94A3B8]">Hiển thị {products.length} sản phẩm</span>
             </div>
@@ -469,7 +471,7 @@ export function BachHoaBrowser({
                 Chưa có sản phẩm phù hợp trong danh mục này.
               </p>
             ) : (
-              <div className="grid grid-cols-4 gap-2.5">
+              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
                 {products.map((p) => (
                   <ProductCard key={p.id} product={p} onClick={() => setSelectedProduct(p)} />
                 ))}
@@ -477,18 +479,18 @@ export function BachHoaBrowser({
             )}
           </div>
 
-          <div className="w-[200px] shrink-0 border-l border-black/10 bg-white p-3.5">
+          <div className="w-full shrink-0 border-t border-black/10 bg-white p-3.5 lg:w-[200px] lg:border-l lg:border-t-0">
             <div className="mb-2.5 text-[10px] font-bold uppercase tracking-wide text-[#94A3B8]">
               Nhãn hàng
             </div>
             {brands.length === 0 ? (
               <p className="text-xs text-[#94A3B8]">Chưa có nhãn hàng.</p>
             ) : (
-              <div className="flex flex-col gap-1.5">
+              <div className="flex gap-1.5 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0">
                 <button
                   type="button"
                   onClick={() => selectBrand(null, "Tất cả")}
-                  className={`rounded-lg border px-2.5 py-2 text-center text-xs font-bold transition ${!selectedBrandId
+                  className={`shrink-0 rounded-lg border px-2.5 py-2 text-center text-xs font-bold transition lg:w-full ${!selectedBrandId
                       ? "border-[#E8547A] bg-[#E8547A]/10 text-[#E8547A]"
                       : "border-black/10 text-[#0F172A] hover:border-[#E8547A]"
                     }`}
@@ -500,7 +502,7 @@ export function BachHoaBrowser({
                     key={b.id}
                     type="button"
                     onClick={() => selectBrand(b.id, b.name)}
-                    className={`rounded-lg border px-2.5 py-2 text-center text-xs font-bold transition ${selectedBrandId === b.id
+                    className={`shrink-0 rounded-lg border px-2.5 py-2 text-center text-xs font-bold transition lg:w-full ${selectedBrandId === b.id
                         ? "border-[#E8547A] bg-[#E8547A]/10 text-[#E8547A]"
                         : "border-black/10 text-[#0F172A] hover:border-[#E8547A]"
                       }`}
@@ -515,7 +517,7 @@ export function BachHoaBrowser({
       )}
 
       {toast && (
-        <div className="fixed bottom-7 right-7 z-[300] flex items-center gap-2 rounded-lg bg-[#16A34A] px-5 py-3 text-sm font-bold text-white shadow-2xl">
+        <div className="fixed inset-x-4 bottom-4 z-[300] flex items-center gap-2 rounded-lg bg-[#16A34A] px-4 py-3 text-sm font-bold text-white shadow-2xl sm:left-auto sm:right-7 sm:max-w-sm sm:px-5 sm:py-3">
           ✅ {toast}
         </div>
       )}

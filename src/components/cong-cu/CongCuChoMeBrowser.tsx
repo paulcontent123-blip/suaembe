@@ -37,9 +37,9 @@ export function CongCuChoMeBrowser({ babies }: { babies: Baby[] }) {
   const [tool, setTool] = useState<Tool>("ai-sua");
 
   return (
-    <div className="mx-auto max-w-[1120px] px-6 py-10">
+    <div className="mx-auto max-w-[1120px] px-4 py-7 sm:px-6 sm:py-10">
       <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-[#E8547A]">Công cụ thông minh</div>
-      <h1 className="mb-6 font-serif text-3xl font-black text-[#0F172A]">
+      <h1 className="mb-6 font-serif text-2xl font-black text-[#0F172A] sm:text-3xl">
         Công cụ dành cho <em className="not-italic text-[#E8547A]">Mẹ &amp; Gia đình</em>
       </h1>
 
@@ -49,7 +49,7 @@ export function CongCuChoMeBrowser({ babies }: { babies: Baby[] }) {
             key={t.id}
             type="button"
             onClick={() => setTool(t.id)}
-            className={`rounded-2xl border p-5 text-left transition ${
+            className={`rounded-2xl border p-4 text-left transition sm:p-5 ${
               tool === t.id
                 ? "border-[#E8547A] bg-[#E8547A]/5 shadow-md"
                 : "border-black/10 bg-white hover:border-[#E8547A]/40 hover:shadow-sm"

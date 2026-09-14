@@ -74,7 +74,7 @@ export function SiteFooter() {
   }
 
   return (
-    <footer className="bg-[#0F172A] px-7 pb-6 pt-10 text-white/60">
+    <footer className="bg-[#0F172A] px-4 pb-6 pt-10 text-white/60 sm:px-7">
       <div className="mx-auto max-w-[1120px]">
         <div className="mb-7 grid grid-cols-2 gap-10 border-b border-white/[0.08] pb-7 sm:grid-cols-3 lg:grid-cols-[1fr_repeat(4,auto)]">
           <div className="col-span-2 sm:col-span-3 lg:col-span-1">
@@ -118,9 +118,9 @@ export function SiteFooter() {
           ))}
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-2 text-[11.5px]">
-          <span>© 2026 SuaEmbe.com · Thành viên VEA Group · 🇻🇳</span>
-          <span className="flex items-center gap-1 text-white/60">
+        <div className="flex flex-col items-start gap-2 text-[11.5px] sm:flex-row sm:items-center sm:justify-between">
+          <span className="break-words">© 2026 SuaEmbe.com · Thành viên VEA Group · 🇻🇳</span>
+          <span className="flex flex-wrap items-center gap-1 text-white/60">
             <button type="button" onClick={showComingSoon} className="hover:text-white">
               Bảo mật · Điều khoản · Cookie
             </button>
@@ -133,7 +133,7 @@ export function SiteFooter() {
       </div>
 
       {toast && (
-        <div className="fixed bottom-7 right-7 z-[300] rounded-lg bg-[#E8547A] px-5 py-3 text-sm font-semibold text-white shadow-2xl">
+        <div className="fixed inset-x-4 bottom-4 z-[300] rounded-lg bg-[#E8547A] px-4 py-3 text-sm font-semibold text-white shadow-2xl sm:left-auto sm:right-7 sm:px-5">
           {toast}
         </div>
       )}

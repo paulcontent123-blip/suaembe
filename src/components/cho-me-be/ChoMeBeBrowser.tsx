@@ -283,11 +283,11 @@ export function ChoMeBeBrowser({
   }
 
   return (
-    <div className="mx-auto max-w-[1120px] px-7 py-10">
+    <div className="mx-auto max-w-[1120px] px-4 py-7 sm:px-7 sm:py-10">
       <div className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide text-[#E8547A]">
         <span className="h-px w-5 bg-[#E8547A]" /> Pass đồ C2C · Không cần tài khoản
       </div>
-      <h1 className="mb-3 font-serif text-3xl font-black text-[#0F172A]">
+      <h1 className="mb-3 font-serif text-2xl font-black text-[#0F172A] sm:text-3xl">
         Chợ <em className="not-italic text-[#E8547A]">Mẹ Bỉm</em> — Đa ngành hàng
       </h1>
       <p className="mb-6 max-w-xl text-sm leading-relaxed text-[#64748B]">
@@ -361,7 +361,7 @@ export function ChoMeBeBrowser({
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
             {listings.map((l) => (
               <ListingCard key={l.id} listing={l} onClick={() => setSelectedListing(l)} />
             ))}
@@ -421,7 +421,7 @@ export function ChoMeBeBrowser({
       )}
 
       {toast && (
-        <div className="fixed bottom-7 right-7 z-[300] flex items-center gap-2 rounded-lg bg-[#16A34A] px-5 py-3 text-sm font-bold text-white shadow-2xl">
+        <div className="fixed inset-x-4 bottom-4 z-[300] flex items-center gap-2 rounded-lg bg-[#16A34A] px-4 py-3 text-sm font-bold text-white shadow-2xl sm:left-auto sm:right-7 sm:px-5">
           ✅ {toast}
         </div>
       )}

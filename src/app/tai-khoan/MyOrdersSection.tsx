@@ -78,8 +78,8 @@ function OrderCard({ order, onChange }: { order: C2cOrder; onChange: (order: C2c
   return (
     <div className="rounded-xl border border-black/10 bg-white p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
-        <div>
-          <div className="text-sm font-bold text-[#0F172A]">{order.c2c_listings?.title ?? "(tin đã xoá)"}</div>
+        <div className="min-w-0">
+          <div className="break-words text-sm font-bold text-[#0F172A]">{order.c2c_listings?.title ?? "(tin đã xoá)"}</div>
           <div className="mt-0.5 text-[11.5px] text-[#64748B]">
             {order.quantity} sản phẩm ·{" "}
             {new Date(order.created_at).toLocaleDateString("vi-VN")}
@@ -141,7 +141,7 @@ export function MyOrdersSection({ initialOrders }: { initialOrders: C2cOrder[] }
   }
 
   return (
-    <div className="rounded-2xl border border-black/10 bg-white p-8 shadow-sm">
+    <div className="rounded-2xl border border-black/10 bg-white p-4 shadow-sm sm:p-8">
       <h2 className="text-lg font-bold text-[#0F172A]">Đơn hàng của tôi</h2>
       <p className="mt-1 text-xs text-[#94A3B8]">
         Các đơn đặt mua trên Chợ Mẹ & Bé (UC-12) — tự tra cứu trạng thái, thanh toán demo hoặc huỷ đơn

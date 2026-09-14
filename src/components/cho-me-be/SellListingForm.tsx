@@ -120,7 +120,7 @@ function ImageUploader({ images, onChange }: { images: string[]; onChange: (imag
   }
 
   return (
-    <div className="col-span-2 flex flex-col gap-1">
+    <div className="col-span-1 flex flex-col gap-1 sm:col-span-2">
       <span className="text-[10px] font-bold uppercase text-[#94A3B8]">Ảnh sản phẩm</span>
       {images.length > 0 && (
         <div className="mb-1 flex flex-wrap gap-1.5">
@@ -219,7 +219,7 @@ export function SellListingForm({
   }
 
   return (
-    <div className="mt-7 rounded-2xl border-[1.5px] border-[#E8547A]/25 bg-white p-6 shadow-lg">
+    <div className="mt-7 rounded-2xl border-[1.5px] border-[#E8547A]/25 bg-white p-4 shadow-lg sm:p-6">
       <div className="mb-4 flex items-center justify-between border-b border-black/10 pb-3.5">
         <div className="text-[15px] font-extrabold text-[#0F172A]">📋 Gửi form pass đồ mẹ bé</div>
         <button
@@ -245,8 +245,8 @@ export function SellListingForm({
           </button>
         </div>
       ) : (
-        <form className="grid grid-cols-2 gap-3" onSubmit={handleSubmit}>
-          <p className="col-span-2 -mt-1 mb-1 text-xs text-[#64748B]">
+        <form className="grid grid-cols-1 gap-3 sm:grid-cols-2" onSubmit={handleSubmit}>
+          <p className="col-span-1 -mt-1 mb-1 text-xs text-[#64748B] sm:col-span-2">
             Không cần tài khoản — điền thông tin bên dưới, SữaEmbe sẽ kiểm tra và đăng tin giúp bạn.
           </p>
 
@@ -272,7 +272,7 @@ export function SellListingForm({
             />
           </label>
 
-          <label className="col-span-2 flex flex-col gap-1">
+          <label className="col-span-1 flex flex-col gap-1 sm:col-span-2">
             <span className="text-[10px] font-bold uppercase text-[#94A3B8]">Tên sản phẩm *</span>
             <input
               required
@@ -375,7 +375,7 @@ export function SellListingForm({
               className={inputCls}
             />
           </label>
-          <label className="col-span-2 flex flex-col gap-1">
+          <label className="col-span-1 flex flex-col gap-1 sm:col-span-2">
             <span className="text-[10px] font-bold uppercase text-[#94A3B8]">Mô tả chi tiết</span>
             <textarea
               rows={3}
@@ -388,16 +388,16 @@ export function SellListingForm({
 
           <ImageUploader images={images} onChange={setImages} />
 
-          {error && <p className="col-span-2 text-xs text-red-600">{error}</p>}
+          {error && <p className="col-span-1 text-xs text-red-600 sm:col-span-2">{error}</p>}
 
           <button
             type="submit"
             disabled={saving}
-            className="col-span-2 mt-1 rounded-lg bg-gradient-to-r from-[#E8547A] to-[#C43A62] py-3 text-sm font-bold text-white disabled:opacity-60"
+            className="col-span-1 mt-1 rounded-lg bg-gradient-to-r from-[#E8547A] to-[#C43A62] py-3 text-sm font-bold text-white disabled:opacity-60 sm:col-span-2"
           >
             {saving ? "Đang gửi..." : "🚀 Gửi thông tin (Miễn phí)"}
           </button>
-          <p className="col-span-2 text-center text-[11px] text-[#94A3B8]">
+          <p className="col-span-1 text-center text-[11px] text-[#94A3B8] sm:col-span-2">
             Miễn phí · SữaEmbe kiểm tra và đăng tin trong 1–2 giờ
           </p>
         </form>

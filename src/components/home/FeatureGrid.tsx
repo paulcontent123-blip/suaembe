@@ -74,7 +74,7 @@ const ACCENT_BORDER = { pink: "hover:border-[#E8547A]", teal: "hover:border-[#0D
 
 export function FeatureGrid() {
   return (
-    <div className="bg-[#FDF8FA] px-7 py-16">
+    <div className="bg-[#FDF8FA] px-4 py-12 sm:px-7 sm:py-16">
       <div className="mx-auto max-w-[1120px]">
         <div className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide text-[#E8547A]">
           <span className="h-px w-5 bg-[#E8547A]" /> Tính năng nổi bật
@@ -89,7 +89,7 @@ export function FeatureGrid() {
             <Link
               key={f.title}
               href={f.href}
-              className={`block rounded-2xl border border-black/10 bg-white p-[22px] text-left shadow-sm transition ${ACCENT_BORDER[f.accent]}`}
+              className={`block rounded-2xl border border-black/10 bg-white p-5 text-left shadow-sm transition ${ACCENT_BORDER[f.accent]}`}
             >
               <div className="mb-2.5 text-[28px]">{f.icon}</div>
               <div className="mb-1.5 text-sm font-bold text-[#0F172A]">{f.title}</div>

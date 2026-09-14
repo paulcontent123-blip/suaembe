@@ -19,7 +19,7 @@ const ACTIVITY = [
 // điều hướng thẳng.
 export function Hero() {
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-[#FDF0F4] via-[#FFF8FA] to-[#F0FDF9] px-7 pb-15 pt-20">
+    <div className="relative overflow-hidden bg-gradient-to-br from-[#FDF0F4] via-[#FFF8FA] to-[#F0FDF9] px-4 pb-12 pt-12 sm:px-7 sm:pb-15 sm:pt-20">
       <div className="pointer-events-none absolute -right-20 -top-15 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgba(232,84,122,.1),transparent_70%)]" />
       <div className="pointer-events-none absolute -bottom-10 -left-15 h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(13,148,136,.08),transparent_70%)]" />
 
@@ -28,7 +28,7 @@ export function Hero() {
           <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-[#E8547A]/25 bg-[#E8547A]/10 px-3.5 py-1.5 text-xs font-bold text-[#E8547A]">
             🇻🇳 Dành riêng cho mẹ bỉm Việt Nam
           </div>
-          <h1 className="mb-4 font-serif text-4xl font-black leading-[1.1] text-[#0F172A] sm:text-5xl">
+          <h1 className="mb-4 font-serif text-3xl font-black leading-[1.1] text-[#0F172A] sm:text-5xl">
             Hành trình
             <br />
             nuôi con —
