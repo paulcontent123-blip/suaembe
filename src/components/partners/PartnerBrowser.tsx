@@ -690,14 +690,22 @@ export function PartnerBrowser({
       </section>
 
       <section className="mx-auto max-w-[1120px] px-4 pb-12 pt-5 sm:px-6">
-        <div className="overflow-x-auto border-b border-[#DCE3EC]">
-          <div className="flex min-w-max gap-1">
-            {TABS.map((tab) => (
-              <button key={tab.id} type="button" onClick={() => chooseTab(tab.id)} className={`border-b-2 px-3.5 py-3 text-[13px] font-semibold transition ${activeTab === tab.id ? "border-[#E8547A] text-[#E8547A]" : "border-transparent text-[#64748B] hover:text-[#E8547A]"}`}>
-                <span className="mr-1">{tab.icon}</span>{tab.label}
-              </button>
-            ))}
+        {/* relative + gradient phủ mép phải: 6 tab rộng hơn màn hình điện
+            thoại, overflow-x-auto cho vuốt ngang được nhưng không có gợi ý
+            thị giác nào — dễ khiến người dùng tưởng chỉ có 3 tab đầu. Dải mờ
+            dần này báo hiệu còn nội dung bên phải, ẩn trên sm+ vì khi đó các
+            tab thường đã vừa đủ 1 hàng. */}
+        <div className="relative">
+          <div className="overflow-x-auto border-b border-[#DCE3EC]">
+            <div className="flex min-w-max gap-1">
+              {TABS.map((tab) => (
+                <button key={tab.id} type="button" onClick={() => chooseTab(tab.id)} className={`border-b-2 px-3.5 py-3 text-[13px] font-semibold transition ${activeTab === tab.id ? "border-[#E8547A] text-[#E8547A]" : "border-transparent text-[#64748B] hover:text-[#E8547A]"}`}>
+                  <span className="mr-1">{tab.icon}</span>{tab.label}
+                </button>
+              ))}
+            </div>
           </div>
+          <div className="pointer-events-none absolute right-0 top-0 bottom-2 w-8 bg-gradient-to-l from-white to-transparent sm:hidden" />
         </div>
 
         <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
