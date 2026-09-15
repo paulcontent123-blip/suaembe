@@ -87,7 +87,13 @@ export function SiteNav({
 
   return (
     <>
-      <nav className="sticky top-0 z-[100] flex min-h-16 flex-wrap items-center gap-2 border-b border-black/10 bg-white/95 px-4 backdrop-blur-md sm:px-6">
+      {/* Không dùng backdrop-blur ở đây dù trước đây có — tổ hợp
+          "sticky" + "backdrop-filter" là lỗi dựng hình đã biết của
+          Chrome/Edge: ở 1 số mức zoom trình duyệt khác 100%, lớp compositing
+          phụ mà backdrop-filter cần không được vẽ lại đúng lúc khi cuộn,
+          khiến thanh nav biến mất tạm thời. Nền gần như đặc (bg-white/98,
+          không blur) giữ được hiệu ứng tương tự mà không kích hoạt bug này. */}
+      <nav className="sticky top-0 z-[100] flex min-h-16 flex-wrap items-center gap-2 border-b border-black/10 bg-white/98 px-4 sm:px-6">
         <Link href="/" className="mr-0 flex min-w-0 shrink items-center gap-2 sm:mr-4">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-gradient-to-br from-[#E8547A] to-[#C43A62] text-lg">
             🍼
